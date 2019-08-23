@@ -4,10 +4,10 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Backend.Models.Database;
 using Microsoft.IdentityModel.Tokens;
-using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
-namespace Core.Security
+namespace Backend.Core.Security
 {
     public class JwtSecurityTokenFactory : ISecurityTokenFactory
     {

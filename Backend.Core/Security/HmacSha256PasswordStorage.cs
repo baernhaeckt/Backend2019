@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Security.Cryptography;
-
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
-namespace Core.Security
+namespace Backend.Core.Security
 {
     public class HmacSha256PasswordStorage : IPasswordStorage
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Core.Security
+﻿namespace Backend.Core.Security
 {
     public interface IPasswordStorage
     {

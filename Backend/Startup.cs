@@ -1,5 +1,5 @@
-﻿using Core.Security;
-using AspNetCore.MongoDB;
+﻿using AspNetCore.MongoDB;
+using Backend.Core.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -36,13 +36,10 @@ namespace Backend
                     .AllowCredentials());
             });
 
-<<<<<<< HEAD
             services.AddFeatureLogin();
-=======
             services
                 .Configure<MongoDBOption>(Configuration.GetSection("MongoDBOption"))
                 .AddMongoDatabase();
->>>>>>> origin/master
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
