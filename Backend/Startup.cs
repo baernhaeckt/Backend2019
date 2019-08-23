@@ -24,6 +24,9 @@ namespace Backend
             {
                 c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info() { Title = "OekoBook" });
             });
+
+            services.AddCors();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,6 +38,8 @@ namespace Backend
             }
 
             app.UseSwagger();
+
+            app.UseCors(c => c.AllowAnyOrigin());
 
             app.UseSwaggerUI(c =>
             {
