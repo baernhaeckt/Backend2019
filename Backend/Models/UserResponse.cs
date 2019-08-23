@@ -2,7 +2,7 @@
 
 namespace Backend.Controllers
 {
-    public class User
+    public class UserResponse
     {
         public Guid Id { get; set; }
 
