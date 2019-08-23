@@ -1,4 +1,5 @@
 ﻿using Core.Security;
+using AspNetCore.MongoDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -26,9 +27,22 @@ namespace Backend
                 c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info() { Title = "OekoBook" });
             });
 
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
 
+<<<<<<< HEAD
             services.AddFeatureLogin();
+=======
+            services
+                .Configure<MongoDBOption>(Configuration.GetSection("MongoDBOption"))
+                .AddMongoDatabase();
+>>>>>>> origin/master
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,12 +55,12 @@ namespace Backend
 
             app.UseSwagger();
 
-            app.UseCors(c => c.AllowAnyOrigin());
-
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+
+            app.UseCors("CorsPolicy");
 
             app.UseMvc();
         }

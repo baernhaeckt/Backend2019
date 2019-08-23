@@ -4,7 +4,7 @@ namespace Backend.Controllers
 {
     public class TokenResponse
     {
-        public UserResponse User { get; set; }
+        public PrivateUserResponse User { get; set; }
 
         public Guid Id { get; set; }
 
