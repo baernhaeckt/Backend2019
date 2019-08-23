@@ -8,8 +8,14 @@ namespace Backend.Models.Database
     {
         public string Email { get; set; }
 
+        public string DisplayName { get; set; }
+
+        public Location Location { get; set; }
+
         public string Password { get; set; }
 
         public IEnumerable<Guid> Friends { get; set; }
+
+        public int Points { get; set; }
     }
 }

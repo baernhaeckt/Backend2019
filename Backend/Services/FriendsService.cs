@@ -35,6 +35,11 @@ namespace Backend.Services
                 throw new Core.WebException("user is already your friend", System.Net.HttpStatusCode.BadRequest);
             }
 
+            if (UserResponseRepository.GetQuerableAsync().All(u => u.Id != friendUserId.ToString()))
+            {
+                throw new Core.WebException("friend couldn't be found", System.Net.HttpStatusCode.NotFound);
+            }
+
             friends.Add(friendUserId);
             user.Friends = friends;
 
