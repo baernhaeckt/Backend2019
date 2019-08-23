@@ -42,7 +42,7 @@ namespace Backend.Controllers
             await FriendService.AddFriend(friendGuid);
         }
 
-        [HttpGet]
+        [HttpDelete]
         public async Task Delete(Guid friendGuid)
         {
             await FriendService.RemoveFriend(friendGuid);
