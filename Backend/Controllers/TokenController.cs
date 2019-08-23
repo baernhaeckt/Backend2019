@@ -3,9 +3,9 @@ using System;
 
 namespace Backend.Controllers
 {
-    [Route("api/token")]
+    [Route("api/tokens")]
     [ApiController]
-    public class TokenController : ControllerBase
+    public class TokensController : ControllerBase
     {
         [HttpGet]
         public TokenResponse Get(Guid tokenGuid)
@@ -19,7 +19,13 @@ namespace Backend.Controllers
                 User = new UserResponse
                 {
                     Id = Guid.NewGuid(),
-                    Email = "test@mail.com"
+                    Email = "test@mail.com",
+                    Points = 150,
+                    Location = new LocationResponse()
+                    {
+                        Latitude = 46.941060,
+                        Longitude = 7.442725
+                    }
                 }
             };
         }

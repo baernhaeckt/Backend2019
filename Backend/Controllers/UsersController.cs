@@ -13,7 +13,13 @@ namespace Backend.Controllers
             return new UserResponse()
             {
                 Id = Guid.NewGuid(),
-                Email = "current@test.ch"
+                Email = "current@test.ch",
+                Points = 150,
+                Location = new LocationResponse()
+                {
+                    Latitude = 46.941060,
+                    Longitude = 7.442725
+                }
             };
         }
 
@@ -23,7 +29,13 @@ namespace Backend.Controllers
             return new UserResponse()
             {
                 Id = guid,
-                Email = "user@test.ch"
+                Email = "user@test.ch",
+                Points = 150,
+                Location = new LocationResponse()
+                {
+                    Latitude = 46.941060,
+                    Longitude = 7.442725
+                }
             };
         }
     }

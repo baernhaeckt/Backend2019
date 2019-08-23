@@ -8,5 +8,9 @@ namespace Backend.Controllers
 
         public string Email { get; set; }
 
+        public int Points { get; set; }
+
+        public LocationResponse Location { get; set; }
+
     }
 }
