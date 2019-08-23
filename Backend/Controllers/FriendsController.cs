@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/friends")]
     [ApiController]
     public class FriendsController : ControllerBase
     {

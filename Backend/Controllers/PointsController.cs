@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ namespace Backend.Controllers
     public class PointsController : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<PointResponse> Get()
+        public IEnumerable<PointResponse> Get(Guid userId)
         {
             return new[]
             {
