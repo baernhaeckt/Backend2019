@@ -9,11 +9,11 @@ namespace Backend.Controllers
     public class FriendsController : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<UserResponse> Get()
+        public IEnumerable<PrivateUserResponse> Get()
         {
             return new[]
             {
-                new UserResponse()
+                new PrivateUserResponse()
                 {
                     Id = Guid.NewGuid(),
                     Email = "friend1@test.ch",
@@ -24,7 +24,7 @@ namespace Backend.Controllers
                         Longitude = 7.442725
                     }
                 }
-                ,new UserResponse()
+                ,new PrivateUserResponse()
                 {
                     Id = Guid.NewGuid(),
                     Email = "friend2@test.ch",
@@ -35,7 +35,7 @@ namespace Backend.Controllers
                         Longitude = 7.442725
                     }
                 }
-                ,new UserResponse()
+                ,new PrivateUserResponse()
                 {
                     Id = Guid.NewGuid(),
                     Email = "friend3@test.ch",

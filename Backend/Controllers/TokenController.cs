@@ -16,7 +16,7 @@ namespace Backend.Controllers
                 Text = "default text",
                 Points = 100,
                 Valid = true,
-                User = new UserResponse
+                User = new PrivateUserResponse
                 {
                     Id = Guid.NewGuid(),
                     Email = "test@mail.com",
