@@ -1,4 +1,5 @@
 ﻿using AspNetCore.MongoDB;
+using Backend.Core.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,7 @@ namespace Backend
                     .AllowCredentials());
             });
 
+            services.AddFeatureLogin();
             services
                 .Configure<MongoDBOption>(Configuration.GetSection("MongoDBOption"))
                 .AddMongoDatabase();
