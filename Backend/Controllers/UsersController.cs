@@ -1,7 +1,10 @@
 ﻿using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using Backend.Models;
+using System.Linq;
+using AspNetCore.MongoDB;
+using Backend.Core.Security;
+using Backend.Models.Database;
 
 namespace Backend.Controllers
 {
@@ -9,6 +12,17 @@ namespace Backend.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly IPasswordStorage _passwordStorage;
+        private readonly ISecurityTokenFactory _securityTokenFactory;
+        private readonly IMongoOperation<User> _operation;
+
+        public UsersController(IPasswordStorage passwordStorage, ISecurityTokenFactory securityTokenFactory, IMongoOperation<User> operation)
+        {
+            _passwordStorage = passwordStorage;
+            _securityTokenFactory = securityTokenFactory;
+            _operation = operation;
+        }
+
         [HttpGet("current")]
         public PrivateUserResponse Current()
         {
@@ -42,9 +56,24 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        public LoginResponse Login(string email, string password)
+        public ActionResult<LoginResponse> Login(string email, string password)
         {
-            return new LoginResponse { Token = string.Empty };
+            User user = _operation.GetQuerableAsync().FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (!_passwordStorage.Match(password, user.Password))
+            {
+                return Forbid();
+            }
+
+            string securityToken = _securityTokenFactory.Create(user);
+            return new ActionResult<LoginResponse>(new LoginResponse
+            {
+                Token = securityToken
+            });
         }
     }
 }

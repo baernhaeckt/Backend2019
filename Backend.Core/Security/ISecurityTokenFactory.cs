@@ -2,7 +2,7 @@
 
 namespace Backend.Core.Security
 {
-    interface ISecurityTokenFactory
+    public interface ISecurityTokenFactory
     {
         string Create(User user);
     }
