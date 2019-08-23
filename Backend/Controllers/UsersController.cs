@@ -5,7 +5,7 @@ using System.Linq;
 using AspNetCore.MongoDB;
 using Backend.Core.Security;
 using Backend.Models.Database;
-using Microsoft.CodeAnalysis.CodeActions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Controllers
 {
@@ -56,8 +56,9 @@ namespace Backend.Controllers
             };
         }
 
-        [HttpPost]
-        public LoginResponse Login(string email)
+        [HttpPost(nameof(Register))]
+        [AllowAnonymous]
+        public LoginResponse Register(string email)
         {
             User user = _operation.GetQuerableAsync().SingleOrDefault(u => u.Email == email);
             if (user == null)
@@ -78,7 +79,8 @@ namespace Backend.Controllers
             return new LoginResponse();
         }
 
-        [HttpPost]
+        [HttpPost(nameof(Login))]
+        [AllowAnonymous]
         public ActionResult<LoginResponse> Login(string email, string password)
         {
             User user = _operation.GetQuerableAsync().SingleOrDefault(u => u.Email == email);
