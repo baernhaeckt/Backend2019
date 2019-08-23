@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using Backend.Models;
 
 namespace Backend.Controllers
 {
@@ -25,6 +26,12 @@ namespace Backend.Controllers
                 Id = guid,
                 Email = "user@test.ch"
             };
+        }
+
+        [HttpPost]
+        public LoginResponse Login(string email, string password)
+        {
+            return new LoginResponse { Token = string.Empty };
         }
     }
 }
