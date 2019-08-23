@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Core.Security
 {
-    public class HmacSha256PasswordStorage
+    public class HmacSha256PasswordStorage : IPasswordStorage
     {
         private const int IterationCount = 10000;
 
