@@ -29,5 +29,11 @@ namespace Backend.Controllers
                 }
             };
         }
+
+         [HttpPost]
+        public Guid Create([FromBody] TokenRequest tokenRequest)
+        {
+            return Guid.NewGuid();
+        }
     }
 }
