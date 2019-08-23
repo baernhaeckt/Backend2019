@@ -6,7 +6,7 @@ namespace Backend.Models
     {
         public PrivateUserResponse User { get; set; }
 
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         public String Text { get; set; }
 

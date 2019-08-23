@@ -1,6 +1,10 @@
-﻿using Backend.Models;
+﻿using AspNetCore.MongoDB;
+using Backend.Entities;
+using Backend.Extensions;
+using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 
 namespace Backend.Controllers
 {
@@ -8,33 +12,49 @@ namespace Backend.Controllers
     [ApiController]
     public class TokensController : ControllerBase
     {
-        [HttpGet]
-        public TokenResponse Get(Guid tokenGuid)
+        private readonly IMongoOperation<Token> _operation;
+
+        public TokensController(IMongoOperation<Token> operation)
         {
+            _operation = operation;
+        }
+
+        [HttpGet]
+        public ActionResult<TokenResponse> Get(Guid tokenGuid)
+        {
+            Token token = _operation.GetQuerableAsync().SingleOrDefault(t => t.Value == tokenGuid);
+            if(token == null)
+            {
+                return NotFound();
+            }
+
+            
             return new TokenResponse()
             {
-                Id = Guid.NewGuid(),
-                Text = "default text",
-                Points = 100,
-                Valid = true,
-                User = new PrivateUserResponse
-                {
-                    Id = Guid.NewGuid(),
-                    Email = "test@mail.com",
-                    Points = 150,
-                    Location = new LocationResponse()
-                    {
-                        Latitude = 46.941060,
-                        Longitude = 7.442725
-                    }
-                }
+                Id = token.Id,
+                Text = token.Text,
+                Points = token.Points,
+                Valid = token.Valid,
             };
         }
 
-         [HttpPost]
-        public Guid Create([FromBody] TokenRequest tokenRequest)
+        [HttpPost]
+        public ActionResult Post(Guid tokenGuid)
         {
-            return Guid.NewGuid();
+            var token = _operation.GetQuerableAsync().SingleOrDefault(t => t.Value == tokenGuid);
+            if (token == null)
+            {
+                return NotFound();
+            }
+
+            if (token.Valid)
+            {
+                token.UserId = User.Id();
+            }
+
+            _operation.UpdateAsync(token.Id, token);
+
+            return Ok();
         }
     }
 }
