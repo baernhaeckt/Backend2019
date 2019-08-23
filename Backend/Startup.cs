@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.IdentityModel.Tokens;
+using Backend.Services;
 
 namespace Backend
 {
@@ -73,11 +74,14 @@ namespace Backend
             });
 
             services.AddTransient<IPrincipal>(s =>s.GetService<IHttpContextAccessor>().HttpContext.User);
+            services.AddTransient<FriendsService>();
 
             services.AddFeatureLogin();
             services
                 .Configure<MongoDBOption>(Configuration.GetSection("MongoDBOption"))
                 .AddMongoDatabase();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
