@@ -1,6 +1,4 @@
-﻿using Backend.Models;
-
-namespace Backend.Controllers
+﻿namespace Backend.Models
 {
     public class PrivateUserResponse : UserResponse
     {
