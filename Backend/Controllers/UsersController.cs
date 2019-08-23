@@ -5,6 +5,7 @@ using System.Linq;
 using AspNetCore.MongoDB;
 using Backend.Core.Security;
 using Backend.Models.Database;
+using Microsoft.CodeAnalysis.CodeActions;
 
 namespace Backend.Controllers
 {
@@ -56,9 +57,31 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
+        public LoginResponse Login(string email)
+        {
+            User user = _operation.GetQuerableAsync().SingleOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                string token = _securityTokenFactory.Create(new User
+                {
+                    Email = email
+                });
+
+                _operation.InsertOne(new User { Email = email, Password = _passwordStorage.Create("1234") });
+
+                return new LoginResponse
+                {
+                    Token = token
+                };
+            }
+
+            return new LoginResponse();
+        }
+
+        [HttpPost]
         public ActionResult<LoginResponse> Login(string email, string password)
         {
-            User user = _operation.GetQuerableAsync().FirstOrDefault(u => u.Email == email);
+            User user = _operation.GetQuerableAsync().SingleOrDefault(u => u.Email == email);
             if (user == null)
             {
                 return NotFound();
