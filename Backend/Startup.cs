@@ -1,5 +1,6 @@
 ﻿using AspNetCore.MongoDB;
 using Backend.Core.Security;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +9,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Collections.Generic;
+using System.Linq;
+using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Backend
 {
@@ -27,7 +32,17 @@ namespace Backend
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info() { Title = "OekoBook" });
+                c.SwaggerDoc("v1", new Info() { Title = "OekoBook" });
+                c.AddSecurityDefinition("Bearer",
+                new ApiKeyScheme
+                {
+                    In = "header",
+                    Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                    Name = "Authorization",
+                    Type = "apiKey"
+                });
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> { { "Bearer", Enumerable.Empty<string>() },
+                });
             });
 
             services.AddCors(options =>
@@ -37,6 +52,25 @@ namespace Backend
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials());
+            });
+
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = SecurityKeyProvider.GetSecurityKey(),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
             });
 
             services.AddTransient<IPrincipal>(s =>s.GetService<IHttpContextAccessor>().HttpContext.User);

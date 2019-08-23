@@ -21,7 +21,7 @@ namespace Backend.Core.Security
                 new Claim(JwtRegisteredClaimNames.Iat, now.ToUniversalTime().ToString(CultureInfo.CurrentCulture), ClaimValueTypes.Integer64),
             };
 
-            SymmetricSecurityKey signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("1234"));
+            SymmetricSecurityKey signingKey = SecurityKeyProvider.GetSecurityKey();
             JwtSecurityToken securityToken = new JwtSecurityToken(
                 issuer: "Greenbook",
                 audience: "Greenbok",
@@ -33,5 +33,6 @@ namespace Backend.Core.Security
 
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
         }
+
     }
 }
