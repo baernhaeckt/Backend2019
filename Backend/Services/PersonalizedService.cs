@@ -3,7 +3,6 @@ using Backend.Database;
 using System;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
 
 namespace Backend.Services
 {
@@ -15,7 +14,7 @@ namespace Backend.Services
 
         protected IMongoOperation<User> userRepository { get; }
 
-        protected User CurrentUser 
+        protected User CurrentUser
             => userRepository.GetQuerableAsync().Single(u => u.Email == currentUserId);
 
         protected PersonalizedService(IMongoOperation<User> userRepository, ClaimsPrincipal principal)

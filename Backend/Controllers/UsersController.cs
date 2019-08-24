@@ -1,12 +1,12 @@
-﻿using Backend.Models;
+﻿using AspNetCore.MongoDB;
+using Backend.Core.Security;
+using Backend.Database;
+using Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
-using AspNetCore.MongoDB;
-using Backend.Core.Security;
-using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
-using Backend.Database;
 
 namespace Backend.Controllers
 {

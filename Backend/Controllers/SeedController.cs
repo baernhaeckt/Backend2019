@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using AspNetCore.MongoDB;
+﻿using AspNetCore.MongoDB;
 using Backend.Core.Security;
 using Backend.Database;
 using Bogus;
 using Bogus.Locations;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Backend.Controllers
 {
