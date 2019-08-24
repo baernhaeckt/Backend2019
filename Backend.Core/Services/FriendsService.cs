@@ -22,8 +22,7 @@ namespace Backend.Core.Services
                 throw new WebException("email must not be empty", System.Net.HttpStatusCode.BadRequest);
             }
 
-            User friendUser = UserRepository.GetQuerableAsync()
-                .SingleOrDefault(u => u.Email.Equals(Principal.Email(), StringComparison.InvariantCultureIgnoreCase));
+            User friendUser = UserRepository.GetQuerableAsync().SingleOrDefault(u => u.Email == Principal.Email());
 
             if (friendUser == null)
             {

@@ -8,4 +8,3 @@
 
         public string DetailedAnswer { get; set; }
     }
-}
