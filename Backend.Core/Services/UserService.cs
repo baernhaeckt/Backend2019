@@ -15,7 +15,9 @@ namespace Backend.Core.Services
 
         public void Update(Backend.Models.UserUpdateRequest updateUserRequest)
         {
-
+            var user = CurrentUser;
+            user.DisplayName = updateUserRequest.DisplayName;
+            UserRepository.SaveAsync(user);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Backend.Web.Controllers
         [HttpPatch]
         public void Update(UserUpdateRequest userUpdateRequest)
         {
-
+            _userService.Update(userUpdateRequest);
         }
     }
 }
