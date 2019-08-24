@@ -34,6 +34,7 @@ namespace Backend.Core.Services
             });
 
             user.Points += token.Points;
+            user.Co2Saving += token.Co2Saving;
 
             await UserRepository.UpdateAsync(CurrentUser.Id, user);
         }
