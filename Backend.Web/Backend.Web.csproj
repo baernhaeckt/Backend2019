@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Backend.Models\Backend.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Hubs\" />
+  </ItemGroup>
+
 </Project>

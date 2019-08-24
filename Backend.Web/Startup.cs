@@ -4,7 +4,7 @@ using Backend.Core.Security;
 using Backend.Core.Services;
 using Backend.Core.Services.Awards;
 using Backend.Web.StartupTask;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Backend.Web.Setup;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
 using System.Linq;
+using Backend.Core.Hubs;
 
 namespace Backend.Web
 {
@@ -32,57 +33,13 @@ namespace Backend.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(config =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                             .RequireAuthenticatedUser()
-                             .Build();
-                config.Filters.Add(new AuthorizeFilter(policy));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvcWithCors();
+            services.AddApiDocumentation();
+            services.AddJwtAuthentication();
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info() { Title = "OekoBook" });
-                c.AddSecurityDefinition("Bearer",
-                new ApiKeyScheme
-                {
-                    In = "header",
-                    Description = "Please enter into field the word 'Bearer' following by space and JWT",
-                    Name = "Authorization",
-                    Type = "apiKey"
-                });
-                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> { { "Bearer", Enumerable.Empty<string>() },
-                });
-            });
+            services.AddNewsfeed();
+            services.AddServices();
 
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = SecurityKeyProvider.GetSecurityKey(),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
-            services.AddScoped<FriendsService>();
-            services.AddScoped<PointService>();
-            services.AddScoped<TokenService>();
-            services.AddScoped<UserService>();
-            services.AddScoped<SufficientTypeService>();
-            services.AddScoped<DbConnectionWarmup>();
-            services.AddScoped<AwardService>();
-            services.AddStartupTask<WarmupStartupTask>();
-
-            services.AddFeatureLogin();
             services.Configure<MongoDBOption>(Configuration.GetSection("MongoDBOption"))
                 .AddMongoDatabase();
         }
@@ -101,7 +58,17 @@ namespace Backend.Web
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors(x =>
+                    x.AllowAnyMethod()
+                    .WithOrigins("http://localhost:8080", "https://baernhaeckt.z16.web.core.windows.net")
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<NewsfeedHub>("/newsfeed");
+            });
+
             app.UseAuthentication();
             app.UseMvc();
         }

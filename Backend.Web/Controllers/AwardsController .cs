@@ -17,7 +17,6 @@ namespace Backend.Web.Controllers
             _userService = userService;
         }
 
-
         [HttpGet]
         public IEnumerable<AwardsResponse> Get()
         {
