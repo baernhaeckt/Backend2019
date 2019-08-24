@@ -11,8 +11,6 @@ from sklearn.metrics import mean_squared_error
 from random import seed
 from random import randint
 
-
-
 #%% Generate Data
 date = np.array('2018-01-01', dtype=np.datetime64)
 date = date + np.arange(601)
@@ -117,7 +115,10 @@ plt.plot(testPredictPlot, label="Forcast")
 plt.legend()
 plt.show()
 
-#%%
+#%% Save Model
+model_json = model.to_json()
+with open("Backend.Statistic\\model.json", "w") as json_file:
+    json_file.write(model_json)
 model.save_weights("Backend.Statistic\\model.h5")
 
 #%%
