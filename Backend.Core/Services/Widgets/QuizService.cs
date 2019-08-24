@@ -13,6 +13,8 @@ namespace Backend.Core.Services.Widgets
 {
     public class QuizService : PersonalizedService, IQuizService
     {
+        private const string DateKeyFormat = "yyyyMMdd";
+
         private IMongoOperation<QuizQuestion> QuestionRepository { get; }
         private IMongoOperation<UserQuiz> UserQuizRepository { get; }
         public UserService UserService { get; }
@@ -62,7 +64,7 @@ namespace Backend.Core.Services.Widgets
                 DetailedAnswer = question.DetailedAnswer
             };
 
-            storeAnswer(answer, questionAnswerResponse);
+            await storeAnswer(answer, questionAnswerResponse);
             if (isCorrectAnswer)
             {
                 await UserService.AddPoints(new PointAwarding
@@ -77,28 +79,28 @@ namespace Backend.Core.Services.Widgets
             return questionAnswerResponse;
         }
 
-        private void storeAnswer(QuestionAnswer answer, QuestionAnswerResponse answerResponse) 
+        private async Task storeAnswer(QuestionAnswer answer, QuestionAnswerResponse answerResponse) 
         {
-            var userQuiz = UserQuizRepository.GetQuerableAsync().FirstOrDefault(uq => uq.Id == CurrentUser.Id);
+            var userQuiz = UserQuizRepository.GetQuerableAsync().FirstOrDefault(uq => uq.UserId == CurrentUser.Id);
             if (userQuiz == null)
             {
                 userQuiz = new UserQuiz { UserId = CurrentUser.Id };
-                UserQuizRepository.SaveAsync(userQuiz);
+                userQuiz = await UserQuizRepository.SaveAsync(userQuiz);
             }
 
-            if (!userQuiz.AnswersByDay.ContainsKey(DateTime.Today))
+            if (!userQuiz.AnswersByDay.ContainsKey(DateTime.Today.ToString(DateKeyFormat)))
             {
-                userQuiz.AnswersByDay.Add(DateTime.Today, new List<UserQuizAnswer>());
+                userQuiz.AnswersByDay.Add(DateTime.Today.ToString(DateKeyFormat), new List<UserQuizAnswer>());
             }
 
-            userQuiz.AnswersByDay[DateTime.Today].Add(new UserQuizAnswer {
+            userQuiz.AnswersByDay[DateTime.Today.ToString(DateKeyFormat)].Add(new UserQuizAnswer {
                 IsCorrect = answerResponse.IsCorrect,
                 QuizQuestionId = answer.QuestionId,
                 Points = answerResponse.AwardedPoints,
                 SelectedAnswer = answer.Answers.ToList()
             });
 
-            UserQuizRepository.UpdateAsync(userQuiz.Id, userQuiz);
+            await UserQuizRepository.UpdateAsync(userQuiz.Id, userQuiz);
         }
 
         private bool IsAnswerCorrect(IEnumerable<string> correctAnswers, IEnumerable<string> userAnswers)
@@ -118,7 +120,7 @@ namespace Backend.Core.Services.Widgets
         {
             var dayWithoutTime = new DateTime(day.Year, day.Month, day.Day);
             IList<UserQuizAnswer> submittedQuestionAnswer = null;
-            if (CurrentUserQuiz?.AnswersByDay.TryGetValue(dayWithoutTime, out submittedQuestionAnswer) ?? false)
+            if (CurrentUserQuiz?.AnswersByDay.TryGetValue(dayWithoutTime.ToString(DateKeyFormat), out submittedQuestionAnswer) ?? false)
             {
                 return submittedQuestionAnswer;
             }

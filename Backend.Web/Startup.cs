@@ -2,6 +2,7 @@
 using Backend.Core.Newsfeed;
 using Backend.Web.Setup;
 using Backend.Core.Services.Widgets;
+using Backend.Web.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -62,6 +63,7 @@ namespace Backend.Web
             });
 
             app.UseAuthentication();
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseMvc();
         }
     }

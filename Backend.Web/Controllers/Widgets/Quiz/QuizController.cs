@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Backend.Web.Controllers.Widgets
 {
-    [Route("api/[quiz]")]
+    [Route("api/quiz")]
     [ApiController]
     public class QuizController : ControllerBase
     {

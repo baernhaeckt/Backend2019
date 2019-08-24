@@ -8,7 +8,7 @@ namespace Backend.Database.Widgets.Quiz
     {
         public string UserId { get; set; }
 
-        public Dictionary<DateTime, IList<UserQuizAnswer>> AnswersByDay { get; set; }
-            = new Dictionary<DateTime, IList<UserQuizAnswer>>();
+        public Dictionary<string, IList<UserQuizAnswer>> AnswersByDay { get; set; }
+            = new Dictionary<string, IList<UserQuizAnswer>>();
     }
 }
