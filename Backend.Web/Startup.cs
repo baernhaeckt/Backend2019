@@ -1,6 +1,8 @@
 ﻿using AspNetCore.MongoDB;
+using Backend.Core;
 using Backend.Core.Security;
 using Backend.Core.Services;
+using Backend.Web.StartupTask;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -74,6 +76,8 @@ namespace Backend.Web
             services.AddScoped<PointService>();
             services.AddScoped<TokenService>();
             services.AddScoped<UserService>();
+            services.AddScoped<DbConnectionWarmup>();
+            services.AddStartupTask<WarmupStartupTask>();
 
             services.AddFeatureLogin();
             services.Configure<MongoDBOption>(Configuration.GetSection("MongoDBOption"))
