@@ -1,10 +1,9 @@
-﻿using System;
-
+﻿namespace Backend.Web.Models
 namespace Backend.Web.Models
 {
     public class UserResponse
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         public string DisplayName { get; set; }
 

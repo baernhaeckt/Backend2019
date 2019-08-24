@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Web.Services;
+using Backend.Core.Services;
 
 namespace Backend.Web.Controllers
 {
@@ -26,7 +27,7 @@ namespace Backend.Web.Controllers
         {
             return FriendService.Friends.Select(u => new PrivateUserResponse()
             {
-                Id = new Guid(u.Id),
+                Id = u.Id,
                 Email = u.Email,
                 DisplayName = u.DisplayName,
                 Location = new LocationResponse
