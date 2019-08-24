@@ -1,7 +1,9 @@
-﻿using Backend.Models;
+﻿using Backend.Core.Services;
+using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Backend.Web.Controllers
 {
@@ -9,22 +11,26 @@ namespace Backend.Web.Controllers
     [ApiController]
     public class PointsController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<PointResponse> Get(Guid userId)
+        PointsController(UserService userService)
         {
-            return new[]
+            UserService = userService;
+        }
+
+        public UserService UserService { get; }
+
+        [HttpGet]
+        public async Task<IEnumerable<PointResponse>> GetAsync(string userId)
+        {
+            var pointList = await UserService.PointHistory(userId);
+            return pointList.OrderByDescending(p => p.Date).Select(p => new PointResponse
             {
-                new PointResponse()
-                {
-                    Text = "Bought some weed",
-                    Value = 15,
-                    MetaData = new List<MetaDataResponse>()
-                    {
-                        new MetaDataResponse { Key = "Type", Value = "Shopping" },
-                        new MetaDataResponse { Key = "Company", Value = "That shady dealer" },
-                    }
-                }
-            };
+                Date = p.Date,
+                Id = p.Id,
+                Text = p.Action,
+                Value = p.Point,
+                Co2Saving = p.Co2Saving,
+                SufficientType = p.SufficientType
+            }).ToList();
         }
     }
 }

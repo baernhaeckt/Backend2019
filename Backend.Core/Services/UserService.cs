@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNetCore.MongoDB;
@@ -67,6 +68,12 @@ namespace Backend.Core.Services
             user.Co2Saving += pointAwarding.Co2Saving;
 
             await UserRepository.UpdateAsync(CurrentUser.Id, user);
+        }
+
+        public async Task<IEnumerable<PointAction>> PointHistory(string userId)
+        {
+            var user = await UserRepository.GetByIdAsync(userId);
+            return user.PointActions;
         }
     }
 }
