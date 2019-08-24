@@ -1,5 +1,6 @@
 ﻿using AspNetCore.MongoDB;
 using Backend.Core.Security.Extensions;
+using Backend.Core.Services;
 using Backend.Database;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -11,17 +12,17 @@ namespace Backend.Web.Controllers
     [ApiController]
     public class ProfileController : ControllerBase
     {
-        private readonly IMongoOperation<User> _operation;
-
-        public ProfileController(IMongoOperation<User> operation)
+        public ProfileController(UserService userService)
         {
-            _operation = operation;
+            UserService = userService;
         }
 
+        public UserService UserService { get; }
+
         [HttpGet]
-        public async Task<PrivateUserResponse> CurrentAsync()
+        public PrivateUserResponse Current()
         {
-            User user = await _operation.GetByIdAsync(User.Id());
+            User user = UserService.CurrentUser;
             return new PrivateUserResponse
             {
                 Id = user.Id,
@@ -29,11 +30,17 @@ namespace Backend.Web.Controllers
                 Email = user.Email,
                 Location = new LocationResponse
                 {
-                    Latitude = user.Location.Latitude,
-                    Longitude = user.Location.Longitude
+                    Latitude = user.Location?.Latitude ?? 0.0,
+                    Longitude = user.Location?.Longitude ?? 0.0
                 },
                 Points = user.Points,
             };
+        }
+
+        [HttpPatch]
+        public void Update(UserUpdateRequest userUpdateRequest)
+        {
+
         }
     }
 }

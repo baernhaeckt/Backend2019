@@ -11,6 +11,8 @@ namespace Backend.Core.Services
         {
         }
 
+        public new User CurrentUser => base.CurrentUser;
+
         public void Update(Backend.Models.UserUpdateRequest updateUserRequest)
         {
 

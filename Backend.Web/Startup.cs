@@ -73,6 +73,7 @@ namespace Backend.Web
             services.AddScoped<FriendsService>();
             services.AddScoped<PointService>();
             services.AddScoped<TokenService>();
+            services.AddScoped<UserService>();
 
             services.AddFeatureLogin();
             services.Configure<MongoDBOption>(Configuration.GetSection("MongoDBOption"))
