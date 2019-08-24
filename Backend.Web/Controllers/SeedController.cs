@@ -18,11 +18,13 @@ namespace Backend.Web.Controllers
     {
         private readonly IPasswordStorage _passwordStorage;
         private readonly IMongoOperation<User> _operation;
+        private readonly IPaswordGenerator _paswordGenerator;
 
-        public SeedController(IPasswordStorage passwordStorage, IMongoOperation<User> operation)
+        public SeedController(IPasswordStorage passwordStorage, IMongoOperation<User> operation, IPaswordGenerator paswordGenerator)
         {
             _passwordStorage = passwordStorage;
             _operation = operation;
+            _paswordGenerator = paswordGenerator;
         }
 
         [HttpPost("users")]
@@ -41,7 +43,8 @@ namespace Backend.Web.Controllers
             Faker<User> faker = new Faker<User>()
                 .RuleFor(u => u.Id, f => ObjectId.GenerateNewId().ToString())
                 .RuleFor(u => u.Email, f => f.Internet.Email())
-                .RuleFor(u => u.Password, _passwordStorage.Create("1234"))
+                .RuleFor(u => u.Password, _passwordStorage.Create(_paswordGenerator.Generate()))
+                .RuleFor(u => u.DisplayName, f => f.Name.FirstName())
                 .RuleFor(u => u.Location, f => f.PickRandom(locations));
 
             List<User> users = faker.Generate(count);
