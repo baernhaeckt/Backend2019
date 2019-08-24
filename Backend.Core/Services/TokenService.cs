@@ -23,20 +23,39 @@ namespace Backend.Core.Services
         public async Task<string> GenerateForPartnerAsync(Guid partnerId)
         {
 
-            if (partnerId != Guid.Parse("ccc14b11-5922-4e3e-bb54-03e71facaeb3"))
+            Token token = null;
+            if (partnerId == Guid.Parse("ccc14b11-5922-4e3e-bb54-03e71facaeb3"))
             {
-                throw new WebException("Partner doesn ont exist.", System.Net.HttpStatusCode.BadRequest);
+                token = new Token();
+                token.Points = 10;
+                token.CreatedDate = DateTime.Now;
+                token.Text = "Blabla";
+                token.Value = Guid.NewGuid();
+            }
+            else if (partnerId == Guid.Parse("bcc14b11-5922-4e3e-bb54-03e71facaeb3"))
+            {
+                token = new Token();
+                token.Points = 5;
+                token.CreatedDate = DateTime.Now;
+                token.Text = "Blabla2";
+                token.Value = Guid.NewGuid();
+            }
+            else if (partnerId == Guid.Parse("acc14b11-5922-4e3e-bb54-03e71facaeb3"))
+            {
+                token = new Token();
+                token.Points = 15;
+                token.CreatedDate = DateTime.Now;
+                token.Text = "Blabla3";
+                token.Value = Guid.NewGuid();
             }
 
-            var token = new Token();
-            token.Points = 10;
-            token.CreatedDate = DateTime.Now;
-            token.Text = "Blabla";
-            token.Value = Guid.NewGuid();
+            if (token != null)
+            {
+                await _tokenRepository.InsertOneAsync(token);
+                return token.Value.ToString();
+            }
 
-            await _tokenRepository.InsertOneAsync(token);
-
-            return token.Value.ToString();
+            throw new WebException("Partner doesn ont exist.", System.Net.HttpStatusCode.BadRequest);
         }
 
         public void AssignTokenToUser(Guid tokenGuid)
