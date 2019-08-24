@@ -25,7 +25,30 @@ namespace Backend.Web.Controllers
         public async Task<IEnumerable<UserResponse>> GetGlobalAsync()
         {
             var users = await _userRepository.GetAllAsync();
+            var results = CreateResult(users);
 
+            return results.OrderByDescending(r => r.Points);
+        }
+
+        [HttpGet("local")]
+        public IEnumerable<UserResponse> GetLocal(string zip)
+        {
+            var users = _userRepository.GetQuerableAsync()
+                .Where(u => u.Location.Zip == zip);
+
+            var results = CreateResult(users);
+
+            return results.OrderByDescending(r => r.Points);
+        }
+
+        [HttpGet("friends")]
+        public IEnumerable<UserResponse> GetFriends()
+        {
+            return Enumerable.Empty<UserResponse>();
+        }
+
+        private IEnumerable<UserResponse> CreateResult(IEnumerable<User> users)
+        {
             IList<UserResponse> results = new List<UserResponse>(users.Count());
 
             foreach (var user in users)
@@ -42,19 +65,7 @@ namespace Backend.Web.Controllers
                 });
             }
 
-            return results.OrderByDescending(r => r.Points);
-        }
-
-        [HttpGet("local")]
-        public IEnumerable<UserResponse> GetLocal()
-        {
-            return Enumerable.Empty<UserResponse>();
-        }
-
-        [HttpGet("friends")]
-        public IEnumerable<UserResponse> GetFriends()
-        {
-            return Enumerable.Empty<UserResponse>();
+            return results;
         }
     }
 }
