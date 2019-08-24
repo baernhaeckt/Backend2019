@@ -30,8 +30,8 @@ namespace Backend.Web.Controllers
                 DisplayName = u.DisplayName,
                 Location = new LocationResponse
                 {
-                    Longitude = u.Location.Longitude,
-                    Latitude = u.Location.Latitude
+                    Longitude = u.Location?.Longitude ?? 0.0,
+                    Latitude = u.Location?.Latitude ?? 0.0
                 },
                 Points = u.Points
             });

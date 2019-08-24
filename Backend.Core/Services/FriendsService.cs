@@ -69,7 +69,8 @@ namespace Backend.Core.Services
                     return Enumerable.Empty<User>();
                 }
 
-                return CurrentUser.Friends.Select(refId => UserRepository.GetByIdAsync(refId.ToString()).Result);
+                var friends =  CurrentUser.Friends.Select(refId => UserRepository.GetByIdAsync(refId.ToString()).Result).ToList();
+                return friends;
             }
         }
     }
