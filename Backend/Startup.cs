@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
+using Backend.Services;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace Backend
 {
@@ -27,7 +30,13 @@ namespace Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                             .RequireAuthenticatedUser()
+                             .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSwaggerGen(c =>
             {
@@ -44,22 +53,10 @@ namespace Backend
                 });
             });
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
-            });
-
-
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
+            }).AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
@@ -72,12 +69,14 @@ namespace Backend
                 };
             });
 
-            services.AddTransient<IPrincipal>(s =>s.GetService<IHttpContextAccessor>().HttpContext.User);
+            services.AddTransient<IPrincipal>(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
+            services.AddTransient<FriendsService>();
 
             services.AddFeatureLogin();
-            services
-                .Configure<MongoDBOption>(Configuration.GetSection("MongoDBOption"))
+            services.Configure<MongoDBOption>(Configuration.GetSection("MongoDBOption"))
                 .AddMongoDatabase();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,14 +88,13 @@ namespace Backend
             }
 
             app.UseSwagger();
-
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
-            app.UseCors("CorsPolicy");
-
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
