@@ -1,6 +1,5 @@
 ﻿using AspNetCore.MongoDB;
 using Backend.Core.Security.Extensions;
-using Backend.Core.Services.Awards;
 using Backend.Database;
 using System;
 using System.Linq;

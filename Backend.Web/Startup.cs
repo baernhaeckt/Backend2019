@@ -1,7 +1,5 @@
-﻿using AspNetCore.MongoDB;
-using Backend.Core.Newsfeed;
+﻿using Backend.Core.Newsfeed;
 using Backend.Web.Setup;
-using Backend.Core.Services.Widgets;
 using Backend.Web.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,16 +23,9 @@ namespace Backend.Web
             services.AddMvcWithCors();
             services.AddApiDocumentation();
             services.AddJwtAuthentication();
-
             services.AddNewsfeed();
             services.AddServices();
-
-            services.AddScoped<IQuizService, QuizService>();
-
-            services.AddScoped<DbConnectionWarmup>();
-
-            services.Configure<MongoDBOption>(Configuration.GetSection("MongoDBOption"))
-                .AddMongoDatabase();
+            services.AddMongoDb(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,7 +39,7 @@ namespace Backend.Web
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Leaf API V1");
             });
 
             app.UseCors(x =>

@@ -2,7 +2,7 @@
 using Backend.Core.Newsfeed;
 using Backend.Core.Security;
 using Backend.Core.Services;
-using Backend.Core.Services.Awards;
+using Backend.Core.Services.Widgets;
 using Backend.Web.StartupTask;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,7 +21,9 @@ namespace Backend.Web.Setup
             services.AddScoped<SufficientTypeService>();
             services.AddScoped<DbConnectionWarmup>();
             services.AddScoped<AwardService>();
+            services.AddScoped<IQuizService, QuizService>();
             services.AddSingleton<IEventStream, SignalREventStream>();
+            services.AddScoped<DbConnectionWarmup>();
             services.AddStartupTask<WarmupStartupTask>();
         }
     }

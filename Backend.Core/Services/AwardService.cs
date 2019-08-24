@@ -4,7 +4,7 @@ using Backend.Database;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Backend.Core.Services.Awards
+namespace Backend.Core.Services
 {
     public class AwardService
     {

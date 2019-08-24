@@ -11,7 +11,7 @@ namespace Backend.Web.Setup
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info() { Title = "OekoBook" });
+                c.SwaggerDoc("v1", new Info() { Title = "Leaf" });
                 c.AddSecurityDefinition("Bearer",
                 new ApiKeyScheme
                 {
