@@ -1,4 +1,5 @@
 ﻿using AspNetCore.MongoDB;
+using Backend.Core.Services;
 using Backend.Database;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -15,8 +16,14 @@ namespace Backend.Web.Controllers
         private readonly IMongoOperation<User> _userRepository;
         private readonly IMongoOperation<Token> _tokenRepository;
 
-        public RankingsController(IMongoOperation<User> userRepository, IMongoOperation<Token> tokenRepository)
+        public FriendsService FriendsService { get; }
+
+        public RankingsController(
+            FriendsService friendsService,
+            IMongoOperation<User> userRepository, 
+            IMongoOperation<Token> tokenRepository)
         {
+            FriendsService = friendsService;
             _userRepository = userRepository;
             _tokenRepository = tokenRepository;
         }
@@ -44,7 +51,9 @@ namespace Backend.Web.Controllers
         [HttpGet("friends")]
         public IEnumerable<UserResponse> GetFriends()
         {
-            return Enumerable.Empty<UserResponse>();
+            var results = CreateResult(FriendsService.Friends.ToList());
+
+            return results.OrderByDescending(u => u.Points);
         }
 
         private IEnumerable<UserResponse> CreateResult(IEnumerable<User> users)
