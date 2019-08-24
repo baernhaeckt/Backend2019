@@ -1,6 +1,7 @@
 ﻿using AspNetCore.MongoDB;
 using System;
 using System.Collections.Generic;
+using MongoDB.Bson;
 
 namespace Backend.Database
 {
@@ -13,14 +14,6 @@ namespace Backend.Database
         public Location Location { get; set; }
 
         public string Password { get; set; }
-
-        public double Latitude { get; set; }
-
-        public double Longitude { get; set; }
-
-        public string Zip { get; set; }
-
-        public string City { get; set; }
 
         public IEnumerable<Guid> Friends { get; set; }
 
