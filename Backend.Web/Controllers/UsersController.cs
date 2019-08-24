@@ -30,14 +30,6 @@ namespace Backend.Web.Controllers
             _eventStream = eventStream;
         }
 
-        [AllowAnonymous]
-        [HttpGet("dummy")]
-        public IActionResult Dummy()
-        {
-            _eventStream.PublishAsync(new Event());
-            return Ok();
-        }
-
         [HttpPost(nameof(Register))]
         [AllowAnonymous]
         public async Task<ActionResult<LoginResponse>> Register(string email)
