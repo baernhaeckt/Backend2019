@@ -30,6 +30,7 @@ namespace Backend.Core.Services
             {
                 token = new Token();
                 token.Points = 10;
+                token.Co2Saving = 1;
                 token.CreatedDate = DateTime.Now;
                 token.Text = "Einkauf in der Palette";
                 token.Value = Guid.NewGuid();
@@ -43,6 +44,7 @@ namespace Backend.Core.Services
             {
                 token = new Token();
                 token.Points = 5;
+                token.Co2Saving = 0.1;
                 token.CreatedDate = DateTime.Now;
                 token.Text = "Nachbar über Suffizienz aufgeklärt";
                 token.Value = Guid.NewGuid();
@@ -56,6 +58,7 @@ namespace Backend.Core.Services
             {
                 token = new Token();
                 token.Points = 15;
+                token.Co2Saving = 2;
                 token.CreatedDate = DateTime.Now;
                 token.Text = "Du Teilst deine Auto mit deiner Schwester";
                 token.Value = Guid.NewGuid();

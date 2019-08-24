@@ -9,6 +9,8 @@ namespace Backend.Database
 
         public int Points { get; set; }
 
+        public double Co2Saving { get; set; }
+
         public string UserId { get; set; }
 
         public bool Valid => UserId == null;

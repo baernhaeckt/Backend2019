@@ -1,9 +1,11 @@
 ﻿namespace Backend.Models
 {
-    public class BaselinePointResponse
+    public class BaselineResponse
     {
         public string Title { get; set; }
 
         public int BaseLinePoint { get; set; }
+
+        public double BaselineCo2Saving { get; set; }
     }
 }

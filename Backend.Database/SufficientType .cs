@@ -9,5 +9,7 @@ namespace Backend.Database
         public string Description { get; set; }
 
         public int BaselinePoint { get; set; }
+
+        public double BaselineCo2Saving { get; set; }
     }
 }

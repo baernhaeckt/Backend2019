@@ -27,13 +27,14 @@ namespace Backend.Web.Controllers
         }
 
         [HttpGet("baseline")]
-        public async Task<IEnumerable<BaselinePointResponse>> GetBaseLinePoints()
+        public async Task<IEnumerable<BaselineResponse>> GetBaseLinePoints()
         {
             var sufficientTypes = await _sufficientTypeService.GetSufficientTypes();
-            return sufficientTypes.Select(s => new BaselinePointResponse
+            return sufficientTypes.Select(s => new BaselineResponse
             {
                 Title = s.Title,
-                BaseLinePoint = s.BaselinePoint
+                BaseLinePoint = s.BaselinePoint,
+                BaselineCo2Saving = s.BaselineCo2Saving
             });
         }
     }
