@@ -16,7 +16,9 @@ namespace Backend.Core.Services.Widgets
         private const string DateKeyFormat = "yyyyMMdd";
 
         private IMongoOperation<QuizQuestion> QuestionRepository { get; }
+
         private IMongoOperation<UserQuiz> UserQuizRepository { get; }
+
         public UserService UserService { get; }
 
         public QuizService(
@@ -50,11 +52,11 @@ namespace Backend.Core.Services.Widgets
             var question = QuestionRepository.GetQuerableAsync().FirstOrDefault(q => q.Id == answer.QuestionId);
             if (question == null)
             {
-                throw new WebException($"question with id: {answer.QuestionId} not found.", System.Net.HttpStatusCode.NotFound);
+                throw new WebException($"Question with id: {answer.QuestionId} not found.", System.Net.HttpStatusCode.NotFound);
             }
             if (GetUserQuizAnswerForDay(DateTime.Today).Any(q => q.QuizQuestionId == answer.QuestionId))
             {
-                throw new WebException("question has already been answered today", System.Net.HttpStatusCode.BadRequest);
+                throw new WebException("Question has already been answered today", System.Net.HttpStatusCode.BadRequest);
             }
             var isCorrectAnswer = IsAnswerCorrect(question.CorrectAnswers, answer.Answers);
             var questionAnswerResponse = new QuestionAnswerResponse
@@ -64,7 +66,7 @@ namespace Backend.Core.Services.Widgets
                 DetailedAnswer = question.DetailedAnswer
             };
 
-            await storeAnswer(answer, questionAnswerResponse);
+            await StoreAnswer(answer, questionAnswerResponse);
             if (isCorrectAnswer)
             {
                 await UserService.AddPoints(new PointAwarding
@@ -79,7 +81,7 @@ namespace Backend.Core.Services.Widgets
             return questionAnswerResponse;
         }
 
-        private async Task storeAnswer(QuestionAnswer answer, QuestionAnswerResponse answerResponse) 
+        private async Task StoreAnswer(QuestionAnswer answer, QuestionAnswerResponse answerResponse)
         {
             var userQuiz = UserQuizRepository.GetQuerableAsync().FirstOrDefault(uq => uq.UserId == CurrentUser.Id);
             if (userQuiz == null)
@@ -93,7 +95,8 @@ namespace Backend.Core.Services.Widgets
                 userQuiz.AnswersByDay.Add(DateTime.Today.ToString(DateKeyFormat), new List<UserQuizAnswer>());
             }
 
-            userQuiz.AnswersByDay[DateTime.Today.ToString(DateKeyFormat)].Add(new UserQuizAnswer {
+            userQuiz.AnswersByDay[DateTime.Today.ToString(DateKeyFormat)].Add(new UserQuizAnswer
+            {
                 IsCorrect = answerResponse.IsCorrect,
                 QuizQuestionId = answer.QuestionId,
                 Points = answerResponse.AwardedPoints,

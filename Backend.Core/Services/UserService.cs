@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNetCore.MongoDB;
 using Backend.Core.Newsfeed;
-using Backend.Core.Security.Extensions;
 using Backend.Database;
 using Backend.Models;
 
@@ -13,16 +11,16 @@ namespace Backend.Core.Services
     public class UserService : PersonalizedService
     {
         private readonly IEventStream _eventStream;
+        private readonly AwardService _awardService;
 
-        public UserService(IMongoOperation<User> userRepository, ClaimsPrincipal principal, IEventStream eventStream)
+        public UserService(IMongoOperation<User> userRepository, ClaimsPrincipal principal, IEventStream eventStream, AwardService awardService)
             : base(userRepository, principal)
         {
             _eventStream = eventStream;
+            _awardService = awardService;
         }
 
-
-
-        public async Task Update(Models.UserUpdateRequest updateUserRequest)
+        public async Task Update(UserUpdateRequest updateUserRequest)
         {
             var user = CurrentUser;
             user.DisplayName = updateUserRequest.DisplayName;
@@ -31,8 +29,7 @@ namespace Backend.Core.Services
 
         public async Task AddPoints(Token token)
         {
-            User user = CurrentUser;
-            user.PointActions.Add(new PointAction
+            CurrentUser.PointActions.Add(new PointAction
             {
                 Point = token.Points,
                 Action = token.Text,
@@ -44,19 +41,12 @@ namespace Backend.Core.Services
                 }
             });
 
-            user.Points += token.Points;
-            user.Co2Saving += token.Co2Saving;
-
-            await _eventStream.PublishAsync(new PointsReceivedEvent(user));
-            await _eventStream.PublishAsync(new FriendPointsReceivedEvent(user));
-
-            await UserRepository.UpdateAsync(CurrentUser.Id, user);
+            await Process(token.Points, token.Co2Saving, CurrentUser);
         }
 
         public async Task AddPoints(PointAwarding pointAwarding)
         {
-            User user = CurrentUser;
-            user.PointActions.Add(new PointAction
+            CurrentUser.PointActions.Add(new PointAction
             {
                 Point = pointAwarding.Points,
                 Action = pointAwarding.Text,
@@ -64,10 +54,21 @@ namespace Backend.Core.Services
                 SponsorRef = pointAwarding.Source.ToString()
             });
 
-            user.Points += pointAwarding.Points;
-            user.Co2Saving += pointAwarding.Co2Saving;
+            await Process(pointAwarding.Points, pointAwarding.Co2Saving, CurrentUser);
+        }
+
+        private async Task Process(int points, double co2saving, User user)
+        {
+            user.Points += points;
+            user.Co2Saving += co2saving;
 
             await UserRepository.UpdateAsync(CurrentUser.Id, user);
+
+            // Fire and forget.
+            _ = _eventStream.PublishAsync(new PointsReceivedEvent(user));
+            _ = _eventStream.PublishAsync(new FriendPointsReceivedEvent(user));
+
+            await _awardService.CheckForNewAwardsAsync(user);
         }
 
         public async Task<IEnumerable<PointAction>> PointHistory(string userId)
