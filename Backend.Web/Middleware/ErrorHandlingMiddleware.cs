@@ -4,7 +4,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Backend.Middleware
+namespace Backend.Web.Middleware
 {
     public class ErrorHandlingMiddleware
     {

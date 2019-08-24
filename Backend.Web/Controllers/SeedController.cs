@@ -1,15 +1,15 @@
-using System.Collections.Generic;
-using System.Linq;
 using AspNetCore.MongoDB;
-using Backend.Core.Security;
+using Backend.Core.Security.Abstraction;
 using Backend.Database;
 using Bogus;
 using Bogus.Locations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Backend.Controllers
+namespace Backend.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -36,7 +36,7 @@ namespace Backend.Controllers
                 .RuleFor(u => u.Latitude, f => f.Location().AreaCircle(46.944699, 7.443788, 10000).Latitude)
                 .RuleFor(u => u.Longitude, f => f.Location().AreaCircle(46.944699, 7.443788, 10000).Longitude);
 
-            List<Location> locations = locationFaker.Generate(100).ToList();
+            var locations = locationFaker.Generate(100).ToList();
 
             Faker<User> faker = new Faker<User>()
                 .RuleFor(u => u.Id, f => ObjectId.GenerateNewId().ToString())

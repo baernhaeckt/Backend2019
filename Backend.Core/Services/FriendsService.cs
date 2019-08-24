@@ -1,4 +1,5 @@
 ﻿using AspNetCore.MongoDB;
+using Backend.Core.Security.Extensions;
 using Backend.Database;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Backend.Web.Services
+namespace Backend.Core.Services
 {
     public class FriendsService : PersonalizedService
     {
@@ -17,40 +18,40 @@ namespace Backend.Web.Services
         public async Task AddFriend(Guid friendUserId)
         {
             User user = userRepository.GetQuerableAsync()
-                .Single(u => u.Email.Equals(currentUserId, StringComparison.InvariantCultureIgnoreCase));
+                .Single(u => u.Email.Equals(Principal.Email(), StringComparison.InvariantCultureIgnoreCase));
 
             var friends = (user.Friends ?? Enumerable.Empty<Guid>()).ToList();
             if (friends.Contains(friendUserId))
             {
-                throw new Core.WebException("user is already your friend", System.Net.HttpStatusCode.BadRequest);
+                throw new WebException("user is already your friend", System.Net.HttpStatusCode.BadRequest);
             }
 
             if (userRepository.GetQuerableAsync().All(u => u.Id != friendUserId.ToString()))
             {
-                throw new Core.WebException("friend couldn't be found", System.Net.HttpStatusCode.NotFound);
+                throw new WebException("friend couldn't be found", System.Net.HttpStatusCode.NotFound);
             }
 
             friends.Add(friendUserId);
             user.Friends = friends;
 
-            await userRepository.UpdateAsync(currentUserId, user);
+            await userRepository.UpdateAsync(user.Id, user);
         }
 
         public async Task RemoveFriend(Guid friendUserId)
         {
             User user = userRepository.GetQuerableAsync()
-                .Single(u => u.Email.Equals(currentUserId, StringComparison.InvariantCultureIgnoreCase));
+                .Single(u => u.Email.Equals(Principal.Email(), StringComparison.InvariantCultureIgnoreCase));
 
             var friends = user.Friends.ToList();
             if (!friends.Contains(friendUserId))
             {
-                throw new Core.WebException("user is not your friend", System.Net.HttpStatusCode.BadRequest);
+                throw new WebException("user is not your friend", System.Net.HttpStatusCode.BadRequest);
             }
 
             friends.Remove(friendUserId);
             user.Friends = friends;
 
-            await userRepository.UpdateAsync(currentUserId, user);
+            await userRepository.UpdateAsync(user.Id, user);
         }
 
         public IEnumerable<User> Friends

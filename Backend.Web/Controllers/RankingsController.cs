@@ -1,9 +1,9 @@
-﻿using Backend.Models;
+﻿using Backend.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Backend.Controllers
+namespace Backend.Web.Controllers
 {
     [Route("api/rankings")]
     [ApiController]

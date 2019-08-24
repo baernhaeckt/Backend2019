@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Backend.Core.Security.Abstraction;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Backend.Core.Security
 {
@@ -8,6 +9,7 @@ namespace Backend.Core.Security
         {
             services.AddSingleton<IPasswordStorage, HmacSha256PasswordStorage>();
             services.AddSingleton<ISecurityTokenFactory, JwtSecurityTokenFactory>();
+            services.AddSingleton<IPaswordGenerator, StaticPasswordGenerator>();
 
             return services;
         }

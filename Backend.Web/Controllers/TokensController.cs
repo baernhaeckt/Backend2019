@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Backend.Controllers
+namespace Backend.Web.Controllers
 {
     [Route("api/tokens")]
     [ApiController]
@@ -29,7 +29,7 @@ namespace Backend.Controllers
                 return BadRequest();
             }
 
-            Token token = new Token();
+            var token = new Token();
             token.Points = 10;
             token.CreatedDate = DateTime.Now;
             token.Text = "Blabla";

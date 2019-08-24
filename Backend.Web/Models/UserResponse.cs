@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Backend.Models
+namespace Backend.Web.Models
 {
     public class UserResponse
     {

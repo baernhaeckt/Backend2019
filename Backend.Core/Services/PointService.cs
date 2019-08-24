@@ -1,11 +1,10 @@
 ﻿using AspNetCore.MongoDB;
 using Backend.Database;
-using Backend.Web.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
-namespace Backend.Services
+namespace Backend.Core.Services
 {
     public class PointService : PersonalizedService
     {
@@ -31,7 +30,7 @@ namespace Backend.Services
             {
                 Action = pointReward.Text,
                 Point = pointReward.Value,
-                MetaData = pointReward.MetaData.Select(m => new Database.MetaData { Key = m.Key, Value = m.Value })
+                MetaData = pointReward.MetaData.Select(m => new MetaData { Key = m.Key, Value = m.Value })
             });
             user.PointActions = pointActions;
             userRepository.SaveAsync(user);

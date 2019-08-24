@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Backend.Core.Security.Abstraction;
+using Backend.Database;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
-using Backend.Database;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Backend.Core.Security
 {

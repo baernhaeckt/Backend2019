@@ -1,6 +1,8 @@
 ﻿using AspNetCore.MongoDB;
 using Backend.Core.Security;
+using Backend.Core.Security.Abstraction;
 using Backend.Services;
+using Backend.Web.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -14,9 +16,8 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 
-namespace Backend
+namespace Backend.Web
 {
     public class Startup
     {
@@ -70,15 +71,13 @@ namespace Backend
                 };
             });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<ClaimsPrincipal>(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
-            services.AddTransient<FriendsService>();
-            services.AddTransient<PointService>();
+            services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
+            services.AddScoped<FriendsService>();
+            services.AddScoped<PointService>();
 
             services.AddFeatureLogin();
             services.Configure<MongoDBOption>(Configuration.GetSection("MongoDBOption"))
                 .AddMongoDatabase();
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

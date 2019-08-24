@@ -9,6 +9,8 @@ namespace Backend.Core.Security.Extensions
     {
         public static string Id(this IPrincipal principal) => principal.GetValueFromClaim(OekoBookClaimTypes.UserId);
 
+        public static string Email(this IPrincipal principal) => principal.GetValueFromClaim(ClaimTypes.NameIdentifier);
+
         private static string GetValueFromClaim(this IPrincipal principal, string name)
         {
             var claimsIdentity = principal?.Identity as ClaimsIdentity;

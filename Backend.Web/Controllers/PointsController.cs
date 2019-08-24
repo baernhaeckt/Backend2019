@@ -1,9 +1,9 @@
-﻿using Backend.Models;
+﻿using Backend.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 
-namespace Backend.Controllers
+namespace Backend.Web.Controllers
 {
     [Route("api/users/{userId}/points")]
     [ApiController]

@@ -1,60 +1,29 @@
 ﻿using AspNetCore.MongoDB;
-using Backend.Core.Security;
+using Backend.Core.Security.Abstraction;
 using Backend.Database;
-using Backend.Models;
+using Backend.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Backend.Controllers
+namespace Backend.Web.Controllers
 {
     [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly IPaswordGenerator _passwordGenerator;
         private readonly IPasswordStorage _passwordStorage;
         private readonly ISecurityTokenFactory _securityTokenFactory;
         private readonly IMongoOperation<User> _operation;
 
-        public UsersController(IPasswordStorage passwordStorage, ISecurityTokenFactory securityTokenFactory, IMongoOperation<User> operation)
+        public UsersController(IPaswordGenerator passwordGenerator, IPasswordStorage passwordStorage, ISecurityTokenFactory securityTokenFactory, IMongoOperation<User> operation)
         {
+            _passwordGenerator = passwordGenerator;
             _passwordStorage = passwordStorage;
             _securityTokenFactory = securityTokenFactory;
             _operation = operation;
-        }
-
-        [HttpGet("current")]
-        public PrivateUserResponse Current()
-        {
-            return new PrivateUserResponse()
-            {
-                Id = Guid.NewGuid(),
-                Email = "current@test.ch",
-                Points = 150,
-                Location = new LocationResponse()
-                {
-                    Latitude = 46.941060,
-                    Longitude = 7.442725
-                }
-            };
-        }
-
-        [HttpGet]
-        public PrivateUserResponse Get(Guid guid)
-        {
-            return new PrivateUserResponse()
-            {
-                Id = guid,
-                Email = "user@test.ch",
-                Points = 150,
-                Location = new LocationResponse()
-                {
-                    Latitude = 46.941060,
-                    Longitude = 7.442725
-                }
-            };
         }
 
         [HttpPost(nameof(Register))]
@@ -67,7 +36,8 @@ namespace Backend.Controllers
                 return BadRequest();
             }
 
-            var newUser = new User { Email = email, Password = _passwordStorage.Create("1234") };
+            string newPassword = _passwordGenerator.Generate();
+            var newUser = new User { Email = email, Password = _passwordStorage.Create(newPassword) };
             await _operation.InsertOneAsync(newUser);
 
             string token = _securityTokenFactory.Create(newUser);
