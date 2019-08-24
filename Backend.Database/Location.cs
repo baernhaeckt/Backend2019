@@ -1,6 +1,8 @@
-﻿namespace Backend.Models.Database
+﻿using AspNetCore.MongoDB;
+
+namespace Backend.Database
 {
-    public class Location
+    public class Location : IMongoEntity
     {
         public double Longitude { get; set; }
 

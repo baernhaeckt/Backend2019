@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Backend.Models.Database
+namespace Backend.Database
 {
     public class User : IMongoEntity
     {
@@ -25,5 +25,7 @@ namespace Backend.Models.Database
         public IEnumerable<Guid> Friends { get; set; }
 
         public int Points { get; set; }
+
+        public IEnumerable<PointAction> PointActions { get; set; }
     }
 }

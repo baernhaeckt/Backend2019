@@ -1,5 +1,5 @@
 ﻿using AspNetCore.MongoDB;
-using Backend.Models.Database;
+using Backend.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,25 +8,15 @@ using System.Threading.Tasks;
 
 namespace Backend.Services
 {
-    public class FriendsService
+    public class FriendsService : PersonalizedService
     {
-        private String currentUserId
-        {
-            get { return Principal.Identity.Name; }
-        }
-
-        public IMongoOperation<User> UserResponseRepository { get; }
-        public IPrincipal Principal { get; }
-
         public FriendsService(IMongoOperation<User> userResponseRepository, IPrincipal principal)
-        {
-            UserResponseRepository = userResponseRepository;
-            Principal = principal;
-        }
+            : base(userResponseRepository, principal)
+        { }
 
         public async Task AddFriend(Guid friendUserId)
         {
-            User user = UserResponseRepository.GetQuerableAsync()
+            User user = userRepository.GetQuerableAsync()
                 .Single(u => u.Email.Equals(currentUserId, StringComparison.InvariantCultureIgnoreCase));
 
             var friends = user.Friends.ToList();
@@ -35,7 +25,7 @@ namespace Backend.Services
                 throw new Core.WebException("user is already your friend", System.Net.HttpStatusCode.BadRequest);
             }
 
-            if (UserResponseRepository.GetQuerableAsync().All(u => u.Id != friendUserId.ToString()))
+            if (userRepository.GetQuerableAsync().All(u => u.Id != friendUserId.ToString()))
             {
                 throw new Core.WebException("friend couldn't be found", System.Net.HttpStatusCode.NotFound);
             }
@@ -43,12 +33,12 @@ namespace Backend.Services
             friends.Add(friendUserId);
             user.Friends = friends;
 
-            await UserResponseRepository.UpdateAsync(currentUserId, user);
+            await userRepository.UpdateAsync(currentUserId, user);
         }
 
         public async Task RemoveFriend(Guid friendUserId)
         {
-            User user = UserResponseRepository.GetQuerableAsync()
+            User user = userRepository.GetQuerableAsync()
                 .Single(u => u.Email.Equals(currentUserId, StringComparison.InvariantCultureIgnoreCase));
 
             var friends = user.Friends.ToList();
@@ -60,15 +50,15 @@ namespace Backend.Services
             friends.Remove(friendUserId);
             user.Friends = friends;
 
-            await UserResponseRepository.UpdateAsync(currentUserId, user);
+            await userRepository.UpdateAsync(currentUserId, user);
         }
 
         public IEnumerable<User> Friends
         {
             get
             {
-                User user = UserResponseRepository.GetByIdAsync(currentUserId).Result;
-                return user.Friends.Select(refId => UserResponseRepository.GetByIdAsync(refId.ToString()).Result);
+                User user = userRepository.GetByIdAsync(currentUserId).Result;
+                return user.Friends.Select(refId => userRepository.GetByIdAsync(refId.ToString()).Result);
             }
         }
     }
