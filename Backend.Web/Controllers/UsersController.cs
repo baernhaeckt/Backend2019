@@ -36,7 +36,18 @@ namespace Backend.Web.Controllers
             if (users.Count() == 0)
             {
                 string newPassword = _passwordGenerator.Generate();
-                var newUser = new User { Email = email, Password = _passwordStorage.Create(newPassword) };
+                var newUser = new User {
+                    Email = email,
+                    Password = _passwordStorage.Create(newPassword),
+                    DisplayName =  "ÖkoRookie",
+                    Location = new Location
+                    {
+                        City = "Bern",
+                        Zip = "3011",
+                        Latitude = 46.944699,
+                        Longitude = 7.443788
+                    }
+                };
                 await _operation.InsertOneAsync(newUser);
 
                 string token = _securityTokenFactory.Create(newUser);

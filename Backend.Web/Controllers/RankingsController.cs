@@ -16,13 +16,16 @@ namespace Backend.Web.Controllers
         private readonly IMongoOperation<User> _userRepository;
         private readonly IMongoOperation<Token> _tokenRepository;
 
+        public UserService UserService { get; }
         public FriendsService FriendsService { get; }
 
         public RankingsController(
+            UserService userService,
             FriendsService friendsService,
             IMongoOperation<User> userRepository, 
             IMongoOperation<Token> tokenRepository)
         {
+            UserService = userService;
             FriendsService = friendsService;
             _userRepository = userRepository;
             _tokenRepository = tokenRepository;
@@ -54,6 +57,40 @@ namespace Backend.Web.Controllers
             var results = CreateResult(FriendsService.Friends.ToList());
 
             return results.OrderByDescending(u => u.Points);
+        }
+
+        [HttpGet("summary")]
+        public async Task<RankingSummary> GetSummary()
+        {
+            var currentUser = UserService.CurrentUser;
+            // TODO: Handle properly and improve performance.
+            var zipCode = currentUser.Location?.Zip ?? "3000";
+
+            var allUsers = await _userRepository.GetAllAsync();
+            var global = CreateResult(allUsers).OrderByDescending(u => u.Points);
+            var local = CreateResult(allUsers.Where(u => u.Location.Zip == zipCode)).OrderByDescending(u => u.Points);
+            var friends = CreateResult(FriendsService.Friends.ToList()).OrderByDescending(u => u.Points);
+
+            return new RankingSummary {
+                FriendRank = GetRank(friends, currentUser),
+                GlobalRank = GetRank(global, currentUser),
+                LocalRank = GetRank(local, currentUser)
+            };
+        }
+
+        private static int GetRank(IEnumerable<UserResponse> list, User user)
+        {
+            var rank = 1;
+            foreach (var u in list)
+            {
+                if (u.Id == user.Id)
+                {
+                    break;
+                }
+                rank++;
+            }
+
+            return rank;
         }
 
         private IEnumerable<UserResponse> CreateResult(IEnumerable<User> users)
