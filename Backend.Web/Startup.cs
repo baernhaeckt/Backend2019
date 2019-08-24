@@ -1,22 +1,9 @@
 ﻿using AspNetCore.MongoDB;
-using Backend.Core;
-using Backend.Core.Security;
-using Backend.Core.Services;
-using Backend.Core.Services.Awards;
-using Backend.Web.StartupTask;
 using Backend.Web.Setup;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using Swashbuckle.AspNetCore.Swagger;
-using System.Collections.Generic;
-using System.Linq;
 using Backend.Core.Hubs;
 
 namespace Backend.Web
