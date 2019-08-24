@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AspNetCore.MongoDB;
 using Backend.Core.Security.Extensions;
 using Backend.Database;
+using Backend.Models;
 
 namespace Backend.Core.Services
 {
@@ -24,7 +25,7 @@ namespace Backend.Core.Services
 
         public async Task AddPoints(Token token)
         {
-            User user = await UserRepository.GetByIdAsync(Principal.Id());
+            User user = CurrentUser;
             user.PointActions.Add(new PointAction
             {
                 Point = token.Points,
@@ -39,6 +40,23 @@ namespace Backend.Core.Services
 
             user.Points += token.Points;
             user.Co2Saving += token.Co2Saving;
+
+            await UserRepository.UpdateAsync(CurrentUser.Id, user);
+        }
+
+        public async Task AddPoints(PointAwarding pointAwarding)
+        {
+            User user = CurrentUser;
+            user.PointActions.Add(new PointAction
+            {
+                Point = pointAwarding.Points,
+                Action = pointAwarding.Text,
+                Co2Saving = pointAwarding.Co2Saving,
+                SponsorRef = pointAwarding.Source.ToString()
+            });
+
+            user.Points += pointAwarding.Points;
+            user.Co2Saving += pointAwarding.Co2Saving;
 
             await UserRepository.UpdateAsync(CurrentUser.Id, user);
         }
