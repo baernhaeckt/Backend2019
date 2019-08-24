@@ -42,7 +42,7 @@ namespace Backend.Web.Controllers
                 });
             }
 
-            return results;
+            return results.OrderByDescending(r => r.Points);
         }
 
         [HttpGet("local")]
