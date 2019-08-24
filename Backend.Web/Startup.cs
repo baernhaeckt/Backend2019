@@ -57,12 +57,13 @@ namespace Backend.Web
                     .AllowAnyHeader()
                     .AllowCredentials());
 
+            app.UseAuthentication();
+
             app.UseSignalR(routes =>
             {
                 routes.MapHub<NewsfeedHub>("/newsfeed");
             });
 
-            app.UseAuthentication();
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseMvc();
         }
