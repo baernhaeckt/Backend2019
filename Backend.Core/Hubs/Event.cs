@@ -2,6 +2,11 @@
 {
     public class Event
     {
-        public string Title { get; set; }
+        public string title { get; set; }
+
+        public string message { get; set; }
+
+        // success oder info
+        public string variant { get; set; }
     }
 }

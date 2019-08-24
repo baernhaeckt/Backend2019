@@ -31,7 +31,7 @@ namespace Backend.Core.Services.Awards
                 user.Awards.Add(new FirstTokenAward());
                 await _userRepository.UpdateAsync(user.Id, user);
 
-                await _eventStream.PublishAsync(new Event { Title = AwardKind.FirstLogin.ToString() });
+                await _eventStream.PublishAsync(new Event { title = AwardKind.FirstLogin.ToString() });
             }
         }
     }
