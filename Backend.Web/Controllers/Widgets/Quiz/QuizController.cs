@@ -37,7 +37,8 @@ namespace Backend.Web.Controllers.Widgets
                 CorrectAnswers = new[] { "34" },
                 IncorrectAnswers = new[] { "64", "50", "25", "10", "82" },
                 DetailedAnswer = "Zu krumm, zu klein, zu hässlich: Die Gründe für das Wegwerfen von Lebensmitteln sind unzählig, sinnvoll sind sie oft nicht. Beispielsweise werden von 100 geernteten Kartoffeln nur 34 tatsächlich gegessen. 66 Kartoffeln werden aussortiert, obwohl sie geniessbar wären. Foodwaste ist eine unnötige Verschwendung von Ressourcen, Energie und Geld. Quelle: https://www.wwf.ch/de/unsere-ziele/foodwaste",
-                Points = 1                
+
+                Points = 1
             });
             QuizService.Insert(new Database.Widgets.Quiz.QuizQuestion()
             {

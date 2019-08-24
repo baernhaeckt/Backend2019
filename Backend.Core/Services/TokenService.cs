@@ -12,14 +12,12 @@ namespace Backend.Core.Services
     {
         private readonly IMongoOperation<Token> _tokenRepository;
         private readonly ClaimsPrincipal _claimsPrincipal;
-        private readonly AwardService _awardService;
         private readonly UserService _userService;
 
-        public TokenService(IMongoOperation<Token> tokenRepository, ClaimsPrincipal claimsPrincipal, AwardService awardService, UserService userService)
+        public TokenService(IMongoOperation<Token> tokenRepository, ClaimsPrincipal claimsPrincipal, UserService userService)
         {
             _tokenRepository = tokenRepository;
             _claimsPrincipal = claimsPrincipal;
-            _awardService = awardService;
             _userService = userService;
         }
 
@@ -95,10 +93,7 @@ namespace Backend.Core.Services
             }
 
             await _tokenRepository.UpdateAsync(token.Id, token);
-
             await _userService.AddPoints(token);
-
-            await _awardService.CheckForNewAwardsAsync(token);
         }
     }
 }

@@ -19,11 +19,10 @@ namespace Backend.Core.Services
             _eventStream = eventStream;
         }
 
-        public async Task CheckForNewAwardsAsync(Token newToken)
+        public async Task CheckForNewAwardsAsync(User user)
         {
             // Yes. We are aware that this method contains horrible code.
-            var allTokensFromUser = _tokenRepository.GetQuerableAsync().Where(t => t.UserId == newToken.UserId);
-            var user = await _userRepository.GetByIdAsync(newToken.UserId);
+            var allTokensFromUser = _tokenRepository.GetQuerableAsync().Where(t => t.UserId == user.Id);
 
             Award newAward = null;
             if (allTokensFromUser.Count() > 1 && user.Awards.All(a => a.Kind != AwardKind.Onboarding))
