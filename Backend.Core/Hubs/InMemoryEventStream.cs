@@ -14,7 +14,7 @@ namespace Backend.Core.Hubs
 
         public async Task PublishAsync(Event @event)
         {
-           await _hubContext.Clients.All.SendAsync("newEvent", "1");
+           await _hubContext.Clients.All.SendAsync("newEvent", @event);
         }
     }
 }
