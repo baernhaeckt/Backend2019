@@ -3,24 +3,23 @@ using Newtonsoft.Json;
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using Backend.Core;
 
 namespace Backend.Middleware
 {
     public class ErrorHandlingMiddleware
     {
-        private readonly RequestDelegate next;
+        private readonly RequestDelegate _next;
 
         public ErrorHandlingMiddleware(RequestDelegate next)
         {
-            this.next = next;
+            _next = next;
         }
 
-        public async Task Invoke(HttpContext context /* other dependencies */)
+        public async Task Invoke(HttpContext context)
         {
             try
             {
-                await next(context);
+                await _next(context);
             }
             catch (Exception ex)
             {
@@ -30,7 +29,7 @@ namespace Backend.Middleware
 
         private static Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
-            var code = ex is Core.WebException 
+            var code = ex is Core.WebException
                     ? ((Core.WebException)ex).HttpStatusCode
                     : HttpStatusCode.InternalServerError;
 
