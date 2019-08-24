@@ -14,5 +14,7 @@ namespace Backend.Database
         public bool Valid => UserId == null;
 
         public Guid Value { get; set; }
+
+        public SufficientType SufficientType { get; set; }
     }
 }

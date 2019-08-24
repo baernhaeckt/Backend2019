@@ -29,24 +29,39 @@ namespace Backend.Core.Services
                 token = new Token();
                 token.Points = 10;
                 token.CreatedDate = DateTime.Now;
-                token.Text = "Blabla";
+                token.Text = "Einkauf in der Palette";
                 token.Value = Guid.NewGuid();
+                token.SufficientType = new SufficientType
+                {
+                    Title = "Verpackung",
+                    Description = "Du hast Verpackungslos eingekauft."
+                };
             }
             else if (partnerId == Guid.Parse("bcc14b11-5922-4e3e-bb54-03e71facaeb3"))
             {
                 token = new Token();
                 token.Points = 5;
                 token.CreatedDate = DateTime.Now;
-                token.Text = "Blabla2";
+                token.Text = "Nachbar über Suffizienz aufgeklärt";
                 token.Value = Guid.NewGuid();
+                token.SufficientType = new SufficientType
+                {
+                    Title = "Wissen",
+                    Description = "Du hast dein Suffizienz mit anderen geteilt."
+                };
             }
             else if (partnerId == Guid.Parse("acc14b11-5922-4e3e-bb54-03e71facaeb3"))
             {
                 token = new Token();
                 token.Points = 15;
                 token.CreatedDate = DateTime.Now;
-                token.Text = "Blabla3";
+                token.Text = "Du Teilst deine Auto mit deiner Schwester";
                 token.Value = Guid.NewGuid();
+                token.SufficientType = new SufficientType
+                {
+                    Title = "Teilen",
+                    Description = "Du hast deinen Besitz mit anderen geteilt."
+                };
             }
 
             if (token != null)
