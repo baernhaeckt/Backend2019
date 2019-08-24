@@ -1,7 +1,10 @@
-﻿using Backend.Web.Models;
+﻿using AspNetCore.MongoDB;
+using Backend.Database;
+using Backend.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Backend.Web.Controllers
 {
@@ -9,10 +12,37 @@ namespace Backend.Web.Controllers
     [ApiController]
     public class RankingsController : ControllerBase
     {
-        [HttpGet("global")]
-        public IEnumerable<UserResponse> GetGlobal()
+        private readonly IMongoOperation<User> _userRepository;
+        private readonly IMongoOperation<Token> _tokenRepository;
+
+        public RankingsController(IMongoOperation<User> userRepository, IMongoOperation<Token> tokenRepository)
         {
-            return Enumerable.Empty<UserResponse>();
+            _userRepository = userRepository;
+            _tokenRepository = tokenRepository;
+        }
+
+        [HttpGet("global")]
+        public async Task<IEnumerable<UserResponse>> GetGlobalAsync()
+        {
+            var users = await _userRepository.GetAllAsync();
+
+            IList<UserResponse> results = new List<UserResponse>(users.Count());
+
+            foreach (var user in users)
+            {
+                int pointsForUser = _tokenRepository.GetQuerableAsync()
+                    .Where(t => t.UserId == user.Id)
+                    .Sum(u => u.Points);
+
+                results.Add(new UserResponse
+                {
+                    Id = user.Id,
+                    DisplayName = user.DisplayName,
+                    Points = pointsForUser
+                });
+            }
+
+            return results;
         }
 
         [HttpGet("local")]
