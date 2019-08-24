@@ -76,6 +76,7 @@ namespace Backend.Web
             services.AddScoped<PointService>();
             services.AddScoped<TokenService>();
             services.AddScoped<UserService>();
+            services.AddScoped<SufficientTypeService>();
             services.AddScoped<DbConnectionWarmup>();
             services.AddStartupTask<WarmupStartupTask>();
 
