@@ -12,11 +12,11 @@ namespace Backend.Core.Services
 
         protected IMongoOperation<User> UserRepository { get; }
 
-        protected User CurrentUser => UserRepository.GetQuerableAsync().Single(u => u.Email == Principal.Email());
+        public User CurrentUser => UserRepository.GetQuerableAsync().Single(u => u.Email == Principal.Email());
 
         protected PersonalizedService(IMongoOperation<User> userRepository, ClaimsPrincipal principal)
         {
-            this.UserRepository = userRepository;
+            UserRepository = userRepository;
             Principal = principal;
         }
     }

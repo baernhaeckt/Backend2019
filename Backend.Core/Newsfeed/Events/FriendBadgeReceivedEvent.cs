@@ -1,12 +1,14 @@
-﻿namespace Backend.Core.Newsfeed
+﻿using Backend.Database;
+
+namespace Backend.Core.Newsfeed
 {
-    public class FriendBadgeReceivedEvent : Event
+    public class FriendBadgeReceivedEvent : FriendEvent
     {
-        public FriendBadgeReceivedEvent()
+        public FriendBadgeReceivedEvent(User user) :
+            base(user)
         {
             title = "Freund Award";
             message = "Hei, einer deiner Freunde hat einen Award erhalten!";
-            variant = "info";
         }
     }
 }

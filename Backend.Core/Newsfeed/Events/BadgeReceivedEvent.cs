@@ -1,12 +1,14 @@
-﻿namespace Backend.Core.Newsfeed
+﻿using Backend.Database;
+
+namespace Backend.Core.Newsfeed
 {
-    public class BadgeReceivedEvent : Event
+    public class BadgeReceivedEvent : OwnEvent
     {
-        public BadgeReceivedEvent()
+        public BadgeReceivedEvent(User user)
+            : base(user)
         {
             title = "Award erhalten";
             message = "Gratulation, du hast einen neuen Award erhalten!";
-            variant = "success";
         }
     }
 }

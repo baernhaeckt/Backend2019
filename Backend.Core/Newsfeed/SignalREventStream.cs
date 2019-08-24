@@ -14,7 +14,10 @@ namespace Backend.Core.Newsfeed
 
         public async Task PublishAsync(Event @event)
         {
-           await _hubContext.Clients.All.SendAsync("newEvent", @event);
+            foreach (var user in @event.Audience)
+            {
+                await _hubContext.Clients.Group(user).SendAsync("newEvent", @event);
+            }
         }
     }
 }

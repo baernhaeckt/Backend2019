@@ -31,7 +31,8 @@ namespace Backend.Core.Services.Awards
                 user.Awards.Add(new FirstTokenAward());
                 await _userRepository.UpdateAsync(user.Id, user);
 
-                await _eventStream.PublishAsync(new BadgeReceivedEvent());
+                await _eventStream.PublishAsync(new BadgeReceivedEvent(user));
+                await _eventStream.PublishAsync(new FriendBadgeReceivedEvent(user));
             }
         }
     }

@@ -1,12 +1,14 @@
-﻿namespace Backend.Core.Newsfeed
+﻿using Backend.Database;
+
+namespace Backend.Core.Newsfeed
 {
-    public class FriendPointsReceivedEvent : Event
+    public class FriendPointsReceivedEvent : FriendEvent
     {
-        public FriendPointsReceivedEvent()
+        public FriendPointsReceivedEvent(User user) :
+            base(user)
         {
             title = "Freund Punkte";
             message = "Hei, einer deiner Freunde hat Punkte erhalten!";
-            variant = "info";
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Backend.Core.Services;
+﻿using Backend.Core.Security.Extensions;
+using Backend.Core.Services;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

@@ -1,4 +1,6 @@
-﻿namespace Backend.Core.Newsfeed
+﻿using System.Collections.Generic;
+
+namespace Backend.Core.Newsfeed
 {
     public class Event
     {
@@ -8,5 +10,7 @@
 
         // success oder info
         public string variant { get; protected set; }
+
+        public IList<string> Audience { get; } = new List<string>();
     }
 }

@@ -1,12 +1,14 @@
-﻿namespace Backend.Core.Newsfeed
+﻿using Backend.Database;
+
+namespace Backend.Core.Newsfeed
 {
-    public class PointsReceivedEvent : Event
+    public class PointsReceivedEvent : OwnEvent
     {
-        public PointsReceivedEvent()
+        public PointsReceivedEvent(User user)
+            : base(user)
         {
             title = "Punkte erhalten";
             message = "Gratulation, du hast neue Punkte erhalten!";
-            variant = "success";
         }
     }
 }

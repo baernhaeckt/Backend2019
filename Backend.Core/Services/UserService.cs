@@ -1,6 +1,8 @@
-﻿using System.Security.Claims;
+﻿using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNetCore.MongoDB;
+using Backend.Core.Newsfeed;
 using Backend.Core.Security.Extensions;
 using Backend.Database;
 using Backend.Models;
@@ -9,12 +11,15 @@ namespace Backend.Core.Services
 {
     public class UserService : PersonalizedService
     {
-        public UserService(IMongoOperation<User> userRepository, ClaimsPrincipal principal) 
+        private readonly IEventStream _eventStream;
+
+        public UserService(IMongoOperation<User> userRepository, ClaimsPrincipal principal, IEventStream eventStream)
             : base(userRepository, principal)
         {
+            _eventStream = eventStream;
         }
 
-        public new User CurrentUser => base.CurrentUser;
+
 
         public async Task Update(Models.UserUpdateRequest updateUserRequest)
         {
@@ -40,6 +45,9 @@ namespace Backend.Core.Services
 
             user.Points += token.Points;
             user.Co2Saving += token.Co2Saving;
+
+            await _eventStream.PublishAsync(new PointsReceivedEvent(user));
+            await _eventStream.PublishAsync(new FriendPointsReceivedEvent(user));
 
             await UserRepository.UpdateAsync(CurrentUser.Id, user);
         }
