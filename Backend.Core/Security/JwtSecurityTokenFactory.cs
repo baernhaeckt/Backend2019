@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Backend.Models.Database;
+using System.Text;
+using Backend.Database;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Backend.Core.Security

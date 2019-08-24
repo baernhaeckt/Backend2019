@@ -3,13 +3,14 @@ using Backend.Database;
 using Backend.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Principal;
 
 namespace Backend.Services
 {
     public class PointService : PersonalizedService
     {
-        public PointService(IMongoOperation<User> userRepository, IPrincipal principal)
+        public PointService(IMongoOperation<User> userRepository, ClaimsPrincipal principal)
             : base(userRepository, principal)
         { }
         

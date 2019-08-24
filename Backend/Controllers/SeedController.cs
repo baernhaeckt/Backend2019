@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AspNetCore.MongoDB;
 using Backend.Core.Security;
-using Backend.Models.Database;
+using Backend.Database;
 using Bogus;
 using Bogus.Locations;
 using Microsoft.AspNetCore.Mvc;

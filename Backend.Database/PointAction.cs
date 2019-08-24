@@ -15,6 +15,6 @@ namespace Backend.Database
 
         public String SponsorRef { get; set; }
 
-        DateTime Date { get; set; } = DateTime.Now
+        DateTime Date { get; set; } = DateTime.Now;
     }
 }

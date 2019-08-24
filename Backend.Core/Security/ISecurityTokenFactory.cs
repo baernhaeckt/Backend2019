@@ -1,4 +1,4 @@
-﻿using Backend.Models.Database;
+﻿using Backend.Database;
 
 namespace Backend.Core.Security
 {

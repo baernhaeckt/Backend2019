@@ -1,4 +1,6 @@
-﻿namespace Backend.Database
+﻿using AspNetCore.MongoDB;
+
+namespace Backend.Database
 {
     public class MetaData : IMongoEntity
     {

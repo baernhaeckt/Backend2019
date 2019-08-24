@@ -3,14 +3,14 @@ using Backend.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Backend.Services
 {
     public class FriendsService : PersonalizedService
     {
-        public FriendsService(IMongoOperation<User> userResponseRepository, IPrincipal principal)
+        public FriendsService(IMongoOperation<User> userResponseRepository, ClaimsPrincipal principal)
             : base(userResponseRepository, principal)
         { }
 
@@ -19,7 +19,7 @@ namespace Backend.Services
             User user = userRepository.GetQuerableAsync()
                 .Single(u => u.Email.Equals(currentUserId, StringComparison.InvariantCultureIgnoreCase));
 
-            var friends = user.Friends.ToList();
+            var friends = (user.Friends ?? Enumerable.Empty<Guid>()).ToList();
             if (friends.Contains(friendUserId))
             {
                 throw new Core.WebException("user is already your friend", System.Net.HttpStatusCode.BadRequest);
@@ -57,8 +57,12 @@ namespace Backend.Services
         {
             get
             {
-                User user = userRepository.GetByIdAsync(currentUserId).Result;
-                return user.Friends.Select(refId => userRepository.GetByIdAsync(refId.ToString()).Result);
+                if (CurrentUser.Friends == null)
+                {
+                    return Enumerable.Empty<User>();
+                }
+
+                return CurrentUser.Friends.Select(refId => userRepository.GetByIdAsync(refId.ToString()).Result);
             }
         }
     }

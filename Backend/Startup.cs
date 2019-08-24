@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using System.Security.Claims;
 
 namespace Backend
 {
@@ -69,9 +70,10 @@ namespace Backend
                     ValidateAudience = false
                 };
             });
-
-            services.AddTransient<IPrincipal>(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<ClaimsPrincipal>(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
             services.AddTransient<FriendsService>();
+            services.AddTransient<PointService>();
 
             services.AddFeatureLogin();
             services.Configure<MongoDBOption>(Configuration.GetSection("MongoDBOption"))

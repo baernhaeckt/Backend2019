@@ -4,9 +4,9 @@ using System;
 using System.Linq;
 using AspNetCore.MongoDB;
 using Backend.Core.Security;
-using Backend.Models.Database;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
+using Backend.Database;
 
 namespace Backend.Controllers
 {
