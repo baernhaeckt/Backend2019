@@ -2,15 +2,14 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Backend.Web
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
-            await CreateWebHostBuilder(args).Build().RunWithTasksAsync(CancellationToken.None);
+            CreateWebHostBuilder(args).Build().RunWithTasksAsync(CancellationToken.None).Wait();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
