@@ -1,7 +1,7 @@
 ﻿using AspNetCore.MongoDB;
 using System;
 
-namespace Backend.Entities
+namespace Backend.Database
 {
     public class Token : IMongoEntity
     {
@@ -11,7 +11,7 @@ namespace Backend.Entities
 
         public string UserId { get; set; }
 
-        public bool Valid => UserId != null;
+        public bool Valid => UserId == null;
 
         public Guid Value { get; set; }
     }

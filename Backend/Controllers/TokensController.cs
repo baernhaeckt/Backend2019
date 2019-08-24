@@ -1,10 +1,11 @@
 ﻿using AspNetCore.MongoDB;
-using Backend.Entities;
-using Backend.Extensions;
-using Backend.Models;
+using Backend.Core.Security.Extensions;
+using Backend.Database;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Backend.Controllers
 {
@@ -20,22 +21,23 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
-        public ActionResult<TokenResponse> Get(Guid tokenGuid)
+        [AllowAnonymous]
+        public async Task<ActionResult<string>> Get(Guid partnerId)
         {
-            Token token = _operation.GetQuerableAsync().SingleOrDefault(t => t.Value == tokenGuid);
-            if(token == null)
+            if (partnerId != Guid.Parse("ccc14b11-5922-4e3e-bb54-03e71facaeb3"))
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            
-            return new TokenResponse()
-            {
-                Id = token.Id,
-                Text = token.Text,
-                Points = token.Points,
-                Valid = token.Valid,
-            };
+            Token token = new Token();
+            token.Points = 10;
+            token.CreatedDate = DateTime.Now;
+            token.Text = "Blabla";
+            token.Value = Guid.NewGuid();
+
+            await _operation.InsertOneAsync(token);
+
+            return token.Value.ToString();
         }
 
         [HttpPost]

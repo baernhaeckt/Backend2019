@@ -3,11 +3,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 
-namespace Backend.Extensions
+namespace Backend.Core.Security.Extensions
 {
     public static class PrincipalExtensions
     {
-        public static string Id(this IPrincipal principal) => principal.GetValueFromClaim("Id");
+        public static string Id(this IPrincipal principal) => principal.GetValueFromClaim(OekoBookClaimTypes.UserId);
 
         private static string GetValueFromClaim(this IPrincipal principal, string name)
         {
