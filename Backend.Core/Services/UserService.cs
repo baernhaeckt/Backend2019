@@ -15,11 +15,11 @@ namespace Backend.Core.Services
 
         public new User CurrentUser => base.CurrentUser;
 
-        public void Update(Backend.Models.UserUpdateRequest updateUserRequest)
+        public async Task Update(Models.UserUpdateRequest updateUserRequest)
         {
             var user = CurrentUser;
             user.DisplayName = updateUserRequest.DisplayName;
-            UserRepository.SaveAsync(user);
+            await UserRepository.UpdateAsync(user.Id, user);
         }
 
         public async Task AddPoints(Token token)

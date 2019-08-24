@@ -2,6 +2,7 @@
 using Backend.Database;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Backend.Web.Controllers
 {
@@ -36,9 +37,9 @@ namespace Backend.Web.Controllers
         }
 
         [HttpPatch]
-        public void Update(UserUpdateRequest userUpdateRequest)
+        public async Task Update([FromBody] UserUpdateRequest userUpdateRequest)
         {
-            _userService.Update(userUpdateRequest);
+            await _userService.Update(userUpdateRequest);
         }
     }
 }
