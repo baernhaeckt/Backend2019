@@ -53,7 +53,7 @@ def create_figure(dataset, pastPredict, futurePredict, scaler):
     
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
-    axis.plot(scaler.inverse_transform(dataset[:-4]), label="Original")
+    axis.plot(scaler.inverse_transform(dataset[:-20]), label="Original")
     axis.plot(futurePredictPlot, label="Trend")
     axis.legend()
     return fig
@@ -74,7 +74,6 @@ def create_dataset(dataset, look_back=1):
 
 def split(dataset):
     past_size = int(len(dataset) * 0.67)
-    future_size = len(dataset) - past_size
     past, future = dataset[0:past_size,:], dataset[past_size:len(dataset),:]
     return past, future
 
