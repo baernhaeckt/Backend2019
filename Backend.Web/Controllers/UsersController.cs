@@ -4,6 +4,7 @@ using Backend.Database;
 using Backend.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,37 +31,50 @@ namespace Backend.Web.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<LoginResponse>> Register(string email)
         {
-            User user = _operation.GetQuerableAsync().SingleOrDefault(u => u.Email == email);
-            if (user != null)
+            IEnumerable<User> users = _operation.GetQuerableAsync().Where(u => u.Email == email);
+            if (users.Count() == 0)
             {
-                return BadRequest();
+                string newPassword = _passwordGenerator.Generate();
+                var newUser = new User { Email = email, Password = _passwordStorage.Create(newPassword) };
+                await _operation.InsertOneAsync(newUser);
+
+                string token = _securityTokenFactory.Create(newUser);
+                return new LoginResponse { Token = token };
             }
-
-            string newPassword = _passwordGenerator.Generate();
-            var newUser = new User { Email = email, Password = _passwordStorage.Create(newPassword) };
-            await _operation.InsertOneAsync(newUser);
-
-            string token = _securityTokenFactory.Create(newUser);
-            return new LoginResponse { Token = token };
+            if (users.Count() == 1)
+            {
+                // This user is already registered.
+                // Show password input form.
+                return new LoginResponse();
+            }
+         
+            // This means invalid data.
+            return BadRequest();
         }
 
         [HttpPost(nameof(Login))]
         [AllowAnonymous]
         public ActionResult<LoginResponse> Login(string email, string password)
         {
-            User user = _operation.GetQuerableAsync().SingleOrDefault(u => u.Email == email);
-            if (user == null)
+            IEnumerable<User> users = _operation.GetQuerableAsync().Where(u => u.Email == email);
+            if (users.Count() == 0)
             {
                 return NotFound();
             }
 
-            if (!_passwordStorage.Match(password, user.Password))
+            if (users.Count() == 1)
             {
-                return Forbid();
+                if (!_passwordStorage.Match(password, users.Single().Password))
+                {
+                    return Forbid();
+                }
+
+                string securityToken = _securityTokenFactory.Create(users.Single());
+                return new ActionResult<LoginResponse>(new LoginResponse { Token = securityToken });
             }
 
-            string securityToken = _securityTokenFactory.Create(user);
-            return new ActionResult<LoginResponse>(new LoginResponse { Token = securityToken });
+            // This means invalid data.
+            return BadRequest();
         }
     }
 }
