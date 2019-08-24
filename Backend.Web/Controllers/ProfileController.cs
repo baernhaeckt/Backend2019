@@ -1,7 +1,7 @@
 ﻿using AspNetCore.MongoDB;
 using Backend.Core.Security.Extensions;
 using Backend.Database;
-using Backend.Web.Models;
+using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

@@ -15,29 +15,36 @@ namespace Backend.Core.Services
             : base(userResponseRepository, principal)
         { }
 
-        public async Task AddFriend(Guid friendUserId)
+        public async Task AddFriend(string friendEmail)
         {
-            User user = UserRepository.GetQuerableAsync()
-                .Single(u => u.Email.Equals(Principal.Email(), StringComparison.InvariantCultureIgnoreCase));
+            if (String.IsNullOrEmpty(friendEmail))
+            {
+                throw new WebException("email must not be empty", System.Net.HttpStatusCode.BadRequest);
+            }
 
-            var friends = (user.Friends ?? Enumerable.Empty<Guid>()).ToList();
-            if (friends.Contains(friendUserId))
+            User friendUser = UserRepository.GetQuerableAsync()
+                .SingleOrDefault(u => u.Email.Equals(Principal.Email(), StringComparison.InvariantCultureIgnoreCase));
+
+            if (friendUser == null)
+            {
+                // TODO: Invite to Platform
+                throw new WebException($"no user with email: {friendEmail} found.", System.Net.HttpStatusCode.BadRequest);
+            }
+
+            var friends = (CurrentUser.Friends ?? Enumerable.Empty<string>()).ToList();
+            if (friends.Contains(friendUser.Id))
             {
                 throw new WebException("user is already your friend", System.Net.HttpStatusCode.BadRequest);
             }
-
-            if (UserRepository.GetQuerableAsync().All(u => u.Id != friendUserId.ToString()))
-            {
-                throw new WebException("friend couldn't be found", System.Net.HttpStatusCode.NotFound);
-            }
-
-            friends.Add(friendUserId);
+            
+            friends.Add(friendUser.Id);
+            var user = CurrentUser;
             user.Friends = friends;
 
             await UserRepository.UpdateAsync(user.Id, user);
         }
 
-        public async Task RemoveFriend(Guid friendUserId)
+        public async Task RemoveFriend(string friendUserId)
         {
             User user = UserRepository.GetQuerableAsync()
                 .Single(u => u.Email.Equals(Principal.Email(), StringComparison.InvariantCultureIgnoreCase));

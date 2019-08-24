@@ -1,7 +1,7 @@
 ﻿using AspNetCore.MongoDB;
 using Backend.Core.Security.Abstraction;
 using Backend.Database;
-using Backend.Web.Models;
+using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -75,6 +75,12 @@ namespace Backend.Web.Controllers
 
             // This means invalid data.
             return BadRequest();
+        }
+
+        [HttpPatch]
+        public void Update(UserUpdateRequest userUpdateRequest)
+        {
+
         }
     }
 }

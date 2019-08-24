@@ -1,6 +1,6 @@
 ﻿using AspNetCore.MongoDB;
 using Backend.Database;
-using Backend.Web.Models;
+using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;

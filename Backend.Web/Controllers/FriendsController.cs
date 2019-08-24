@@ -1,7 +1,6 @@
-﻿using Backend.Web.Models;
+﻿using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,15 +38,15 @@ namespace Backend.Web.Controllers
         }
 
         [HttpPost]
-        public async Task Create(Guid friendGuid)
+        public async Task Create(string friendEmail)
         {
-            await FriendService.AddFriend(friendGuid);
+            await FriendService.AddFriend(friendEmail);
         }
 
         [HttpDelete]
-        public async Task Delete(Guid friendGuid)
+        public async Task Delete(string friendUserId)
         {
-            await FriendService.RemoveFriend(friendGuid);
+            await FriendService.RemoveFriend(friendUserId);
         }
     }
 }

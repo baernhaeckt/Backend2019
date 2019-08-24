@@ -14,7 +14,7 @@ namespace Backend.Database
 
         public string Password { get; set; }
 
-        public IEnumerable<Guid> Friends { get; set; }
+        public IEnumerable<string> Friends { get; set; }
 
         public int Points { get; set; }
 
