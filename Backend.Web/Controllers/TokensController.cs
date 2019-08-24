@@ -22,6 +22,6 @@ namespace Backend.Web.Controllers
         public async Task<ActionResult<string>> Get(Guid partnerId) => await _tokenGenerationService.GenerateForPartnerAsync(partnerId);
 
         [HttpPost]
-        public void Post(Guid tokenGuid) => _tokenGenerationService.AssignTokenToUser(tokenGuid);
+        public async Task PostAsync(Guid tokenGuid) => await _tokenGenerationService.AssignTokenToUserAsync(tokenGuid);
     }
 }

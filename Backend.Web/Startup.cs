@@ -2,6 +2,7 @@
 using Backend.Core;
 using Backend.Core.Security;
 using Backend.Core.Services;
+using Backend.Core.Services.Awards;
 using Backend.Web.StartupTask;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -78,6 +79,7 @@ namespace Backend.Web
             services.AddScoped<UserService>();
             services.AddScoped<SufficientTypeService>();
             services.AddScoped<DbConnectionWarmup>();
+            services.AddScoped<AwardService>();
             services.AddStartupTask<WarmupStartupTask>();
 
             services.AddFeatureLogin();

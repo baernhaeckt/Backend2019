@@ -1,6 +1,6 @@
 ﻿using AspNetCore.MongoDB;
-using Backend.Core;
 using Backend.Core.Security.Extensions;
+using Backend.Core.Services.Awards;
 using Backend.Database;
 using System;
 using System.Linq;
@@ -13,11 +13,13 @@ namespace Backend.Core.Services
     {
         private readonly IMongoOperation<Token> _tokenRepository;
         private readonly ClaimsPrincipal _claimsPrincipal;
+        private readonly AwardService _awardService;
 
-        public TokenService(IMongoOperation<Token> tokenRepository, ClaimsPrincipal claimsPrincipal)
+        public TokenService(IMongoOperation<Token> tokenRepository, ClaimsPrincipal claimsPrincipal, AwardService awardService)
         {
             _tokenRepository = tokenRepository;
             _claimsPrincipal = claimsPrincipal;
+            _awardService = awardService;
         }
 
         public async Task<string> GenerateForPartnerAsync(Guid partnerId)
@@ -73,7 +75,7 @@ namespace Backend.Core.Services
             throw new WebException("Partner doesn ont exist.", System.Net.HttpStatusCode.BadRequest);
         }
 
-        public void AssignTokenToUser(Guid tokenGuid)
+        public async Task AssignTokenToUserAsync(Guid tokenGuid)
         {
             var token = _tokenRepository.GetQuerableAsync().SingleOrDefault(t => t.Value == tokenGuid);
             if (token == null)
@@ -86,7 +88,9 @@ namespace Backend.Core.Services
                 token.UserId = _claimsPrincipal.Id();
             }
 
-            _tokenRepository.UpdateAsync(token.Id, token);
+            await _tokenRepository.UpdateAsync(token.Id, token);
+
+            await _awardService.CheckForNewAwardsAsync(token);
         }
     }
 }

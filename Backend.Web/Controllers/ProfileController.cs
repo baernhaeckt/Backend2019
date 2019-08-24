@@ -1,10 +1,7 @@
-﻿using AspNetCore.MongoDB;
-using Backend.Core.Security.Extensions;
-using Backend.Core.Services;
+﻿using Backend.Core.Services;
 using Backend.Database;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace Backend.Web.Controllers
 {
@@ -12,17 +9,18 @@ namespace Backend.Web.Controllers
     [ApiController]
     public class ProfileController : ControllerBase
     {
+        private readonly UserService _userService;
+
         public ProfileController(UserService userService)
         {
-            UserService = userService;
+            _userService = userService;
         }
 
-        public UserService UserService { get; }
 
         [HttpGet]
-        public PrivateUserResponse Current()
+        public PrivateUserResponse Get()
         {
-            User user = UserService.CurrentUser;
+            User user = _userService.CurrentUser;
             return new PrivateUserResponse
             {
                 Id = user.Id,
