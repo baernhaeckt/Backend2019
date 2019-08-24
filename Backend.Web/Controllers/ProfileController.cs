@@ -1,8 +1,9 @@
 ﻿using AspNetCore.MongoDB;
+using Backend.Core.Security.Extensions;
 using Backend.Database;
 using Backend.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using System.Threading.Tasks;
 
 namespace Backend.Web.Controllers
 {
@@ -18,10 +19,21 @@ namespace Backend.Web.Controllers
         }
 
         [HttpGet]
-        public PrivateUserResponse Current()
+        public async Task<PrivateUserResponse> CurrentAsync()
         {
-            // TODO: Implement.
-            throw new NotImplementedException();
+            User user = await _operation.GetByIdAsync(User.Id());
+            return new PrivateUserResponse
+            {
+                Id = user.Id,
+                DisplayName = user.DisplayName,
+                Email = user.Email,
+                Location = new LocationResponse
+                {
+                    Latitude = user.Location.Latitude,
+                    Longitude = user.Location.Longitude
+                },
+                Points = user.Points,
+            };
         }
     }
 }
