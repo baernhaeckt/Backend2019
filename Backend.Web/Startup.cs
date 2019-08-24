@@ -1,10 +1,10 @@
 ﻿using AspNetCore.MongoDB;
+using Backend.Core.Newsfeed;
 using Backend.Web.Setup;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Backend.Core.Hubs;
 
 namespace Backend.Web
 {

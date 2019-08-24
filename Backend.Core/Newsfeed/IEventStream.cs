@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Backend.Core.Hubs
+namespace Backend.Core.Newsfeed
 {
     public interface IEventStream
     {

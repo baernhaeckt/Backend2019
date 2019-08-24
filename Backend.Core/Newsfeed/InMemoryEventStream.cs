@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 
-namespace Backend.Core.Hubs
+namespace Backend.Core.Newsfeed
 {
     public class SignalREventStream : IEventStream
     {

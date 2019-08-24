@@ -1,5 +1,5 @@
 ﻿using AspNetCore.MongoDB;
-using Backend.Core.Hubs;
+using Backend.Core.Newsfeed;
 using Backend.Core.Security.Abstraction;
 using Backend.Database;
 using Backend.Models;
@@ -19,7 +19,6 @@ namespace Backend.Web.Controllers
         private readonly IPasswordStorage _passwordStorage;
         private readonly ISecurityTokenFactory _securityTokenFactory;
         private readonly IMongoOperation<User> _operation;
-        private readonly IEventStream _eventStream;
 
         public UsersController(IPaswordGenerator passwordGenerator, IPasswordStorage passwordStorage, ISecurityTokenFactory securityTokenFactory, IMongoOperation<User> operation, IEventStream eventStream)
         {
@@ -27,7 +26,6 @@ namespace Backend.Web.Controllers
             _passwordStorage = passwordStorage;
             _securityTokenFactory = securityTokenFactory;
             _operation = operation;
-            _eventStream = eventStream;
         }
 
         [HttpPost(nameof(Register))]

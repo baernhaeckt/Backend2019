@@ -1,5 +1,5 @@
 ﻿using AspNetCore.MongoDB;
-using Backend.Core.Hubs;
+using Backend.Core.Newsfeed;
 using Backend.Database;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,7 +31,7 @@ namespace Backend.Core.Services.Awards
                 user.Awards.Add(new FirstTokenAward());
                 await _userRepository.UpdateAsync(user.Id, user);
 
-                await _eventStream.PublishAsync(new Event { title = AwardKind.FirstLogin.ToString() });
+                await _eventStream.PublishAsync(new BadgeReceivedEvent());
             }
         }
     }

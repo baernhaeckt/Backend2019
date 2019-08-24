@@ -1,5 +1,5 @@
 ﻿using Backend.Core;
-using Backend.Core.Hubs;
+using Backend.Core.Newsfeed;
 using Backend.Core.Security;
 using Backend.Core.Services;
 using Backend.Core.Services.Awards;
