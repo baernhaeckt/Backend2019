@@ -17,7 +17,7 @@ namespace Backend.Core.Services
 
         public async Task AddFriend(Guid friendUserId)
         {
-            User user = userRepository.GetQuerableAsync()
+            User user = UserRepository.GetQuerableAsync()
                 .Single(u => u.Email.Equals(Principal.Email(), StringComparison.InvariantCultureIgnoreCase));
 
             var friends = (user.Friends ?? Enumerable.Empty<Guid>()).ToList();
@@ -26,7 +26,7 @@ namespace Backend.Core.Services
                 throw new WebException("user is already your friend", System.Net.HttpStatusCode.BadRequest);
             }
 
-            if (userRepository.GetQuerableAsync().All(u => u.Id != friendUserId.ToString()))
+            if (UserRepository.GetQuerableAsync().All(u => u.Id != friendUserId.ToString()))
             {
                 throw new WebException("friend couldn't be found", System.Net.HttpStatusCode.NotFound);
             }
@@ -34,12 +34,12 @@ namespace Backend.Core.Services
             friends.Add(friendUserId);
             user.Friends = friends;
 
-            await userRepository.UpdateAsync(user.Id, user);
+            await UserRepository.UpdateAsync(user.Id, user);
         }
 
         public async Task RemoveFriend(Guid friendUserId)
         {
-            User user = userRepository.GetQuerableAsync()
+            User user = UserRepository.GetQuerableAsync()
                 .Single(u => u.Email.Equals(Principal.Email(), StringComparison.InvariantCultureIgnoreCase));
 
             var friends = user.Friends.ToList();
@@ -51,7 +51,7 @@ namespace Backend.Core.Services
             friends.Remove(friendUserId);
             user.Friends = friends;
 
-            await userRepository.UpdateAsync(user.Id, user);
+            await UserRepository.UpdateAsync(user.Id, user);
         }
 
         public IEnumerable<User> Friends
@@ -63,7 +63,7 @@ namespace Backend.Core.Services
                     return Enumerable.Empty<User>();
                 }
 
-                return CurrentUser.Friends.Select(refId => userRepository.GetByIdAsync(refId.ToString()).Result);
+                return CurrentUser.Friends.Select(refId => UserRepository.GetByIdAsync(refId.ToString()).Result);
             }
         }
     }

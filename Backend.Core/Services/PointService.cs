@@ -33,7 +33,7 @@ namespace Backend.Core.Services
                 MetaData = pointReward.MetaData.Select(m => new MetaData { Key = m.Key, Value = m.Value })
             });
             user.PointActions = pointActions;
-            userRepository.SaveAsync(user);
+            UserRepository.SaveAsync(user);
         }
     }
 }
