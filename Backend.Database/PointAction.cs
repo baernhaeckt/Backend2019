@@ -17,5 +17,7 @@ namespace Backend.Database
         public String SponsorRef { get; set; }
 
         DateTime Date { get; set; } = DateTime.Now;
+
+        public UserSufficientType SufficientType { get; set; }
     }
 }

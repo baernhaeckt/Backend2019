@@ -30,7 +30,11 @@ namespace Backend.Core.Services
                 Point = token.Points,
                 Action = token.Text,
                 Co2Saving = token.Co2Saving,
-                SponsorRef = token.Partner
+                SponsorRef = token.Partner,
+                SufficientType = new UserSufficientType
+                {
+                    Title = token.SufficientType.Title
+                }
             });
 
             user.Points += token.Points;

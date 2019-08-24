@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Services;
+using Backend.Database;
 using Backend.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,18 @@ namespace Backend.Web.Controllers
                 Title = s.Title,
                 BaseLinePoint = s.BaselinePoint,
                 BaselineCo2Saving = s.BaselineCo2Saving
+            });
+        }
+
+        [HttpGet("user")]
+        public async Task<IEnumerable<UserSufficientResponse>> GetUserPoints()
+        {
+            IEnumerable<UserSufficientType> userSufficientTypes = await _sufficientTypeService.GetSufficientTypesFromUser();
+            return userSufficientTypes.Select(u => new UserSufficientResponse
+            {
+                Title = u.Title,
+                Point = u.Point,
+                Co2Saving = u.Co2Saving
             });
         }
     }

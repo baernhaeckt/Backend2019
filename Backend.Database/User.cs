@@ -11,6 +11,7 @@ namespace Backend.Database
 
         public string DisplayName { get; set; }
 
+
         public Location Location { get; set; }
 
         public string Password { get; set; }
