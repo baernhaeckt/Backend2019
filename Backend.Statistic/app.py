@@ -53,6 +53,7 @@ def create_figure(dataset, pastPredict, futurePredict, scaler):
     
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
+    axis.set_title("Leaf Point Statistik 2019")
     axis.plot(scaler.inverse_transform(dataset[:-20]), label="Original")
     axis.plot(futurePredictPlot, label="Trend")
     axis.legend()
