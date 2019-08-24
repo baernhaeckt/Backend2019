@@ -1,6 +1,4 @@
-﻿using AspNetCore.MongoDB;
-
-namespace Backend.Models
+﻿namespace Backend.Models
 {
     public class LoginResponse
     {

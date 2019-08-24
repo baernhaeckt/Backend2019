@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Backend.Models;
+﻿using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace Backend.Controllers
 {

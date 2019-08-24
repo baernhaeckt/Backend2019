@@ -4,7 +4,6 @@ using Backend.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
 
 namespace Backend.Services
 {
@@ -13,7 +12,7 @@ namespace Backend.Services
         public PointService(IMongoOperation<User> userRepository, ClaimsPrincipal principal)
             : base(userRepository, principal)
         { }
-        
+
         public int Points
         {
             get => CurrentUser.PointActions.Sum(a => a.Point);
