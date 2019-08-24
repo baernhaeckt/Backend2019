@@ -6,6 +6,7 @@ using AspNetCore.MongoDB;
 using Backend.Core.Security;
 using Backend.Models.Database;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
 namespace Backend.Controllers
 {
@@ -58,25 +59,19 @@ namespace Backend.Controllers
 
         [HttpPost(nameof(Register))]
         [AllowAnonymous]
-        public LoginResponse Register(string email)
+        public async Task<ActionResult<LoginResponse>> Register(string email)
         {
             User user = _operation.GetQuerableAsync().SingleOrDefault(u => u.Email == email);
-            if (user == null)
+            if (user != null)
             {
-                string token = _securityTokenFactory.Create(new User
-                {
-                    Email = email
-                });
-
-                _operation.InsertOne(new User { Email = email, Password = _passwordStorage.Create("1234") });
-
-                return new LoginResponse
-                {
-                    Token = token
-                };
+                return BadRequest();
             }
 
-            return new LoginResponse();
+            var newUser = new User { Email = email, Password = _passwordStorage.Create("1234") };
+            await _operation.InsertOneAsync(newUser);
+
+            string token = _securityTokenFactory.Create(newUser);
+            return new LoginResponse { Token = token };
         }
 
         [HttpPost(nameof(Login))]
@@ -95,10 +90,7 @@ namespace Backend.Controllers
             }
 
             string securityToken = _securityTokenFactory.Create(user);
-            return new ActionResult<LoginResponse>(new LoginResponse
-            {
-                Token = securityToken
-            });
+            return new ActionResult<LoginResponse>(new LoginResponse { Token = securityToken });
         }
     }
 }

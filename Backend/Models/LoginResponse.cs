@@ -2,7 +2,7 @@
 
 namespace Backend.Models
 {
-    public class LoginResponse : IMongoEntity
+    public class LoginResponse
     {
         public string Token { get; set; }
     }
