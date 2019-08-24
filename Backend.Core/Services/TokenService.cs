@@ -14,12 +14,14 @@ namespace Backend.Core.Services
         private readonly IMongoOperation<Token> _tokenRepository;
         private readonly ClaimsPrincipal _claimsPrincipal;
         private readonly AwardService _awardService;
+        private readonly UserService _userService;
 
-        public TokenService(IMongoOperation<Token> tokenRepository, ClaimsPrincipal claimsPrincipal, AwardService awardService)
+        public TokenService(IMongoOperation<Token> tokenRepository, ClaimsPrincipal claimsPrincipal, AwardService awardService, UserService userService)
         {
             _tokenRepository = tokenRepository;
             _claimsPrincipal = claimsPrincipal;
             _awardService = awardService;
+            _userService = userService;
         }
 
         public async Task<string> GenerateForPartnerAsync(Guid partnerId)
@@ -29,6 +31,7 @@ namespace Backend.Core.Services
             if (partnerId == Guid.Parse("ccc14b11-5922-4e3e-bb54-03e71facaeb3"))
             {
                 token = new Token();
+                token.Partner = "Palette";
                 token.Points = 10;
                 token.Co2Saving = 1;
                 token.CreatedDate = DateTime.Now;
@@ -43,6 +46,7 @@ namespace Backend.Core.Services
             else if (partnerId == Guid.Parse("bcc14b11-5922-4e3e-bb54-03e71facaeb3"))
             {
                 token = new Token();
+                token.Partner = "Mein Nachbar";
                 token.Points = 5;
                 token.Co2Saving = 0.1;
                 token.CreatedDate = DateTime.Now;
@@ -57,6 +61,7 @@ namespace Backend.Core.Services
             else if (partnerId == Guid.Parse("acc14b11-5922-4e3e-bb54-03e71facaeb3"))
             {
                 token = new Token();
+                token.Partner = "Meine Schwester";
                 token.Points = 15;
                 token.Co2Saving = 2;
                 token.CreatedDate = DateTime.Now;
@@ -92,6 +97,8 @@ namespace Backend.Core.Services
             }
 
             await _tokenRepository.UpdateAsync(token.Id, token);
+
+            await _userService.AddPoints(token);
 
             await _awardService.CheckForNewAwardsAsync(token);
         }

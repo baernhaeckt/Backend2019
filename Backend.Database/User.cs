@@ -19,7 +19,7 @@ namespace Backend.Database
 
         public int Points { get; set; }
 
-        public IEnumerable<PointAction> PointActions { get; set; }
+        public IList<PointAction> PointActions { get; set; } = Enumerable.Empty<PointAction>().ToList();
 
         public IList<Award> Awards { get; set; } = Enumerable.Empty<Award>().ToList();
     }

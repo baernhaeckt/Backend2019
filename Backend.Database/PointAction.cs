@@ -8,6 +8,8 @@ namespace Backend.Database
     {
         public int Point { get; set; }
 
+        public double Co2Saving { get; set; }
+
         public string Action { get; set; }
 
         public IEnumerable<MetaData> MetaData { get; set; }
