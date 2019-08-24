@@ -68,7 +68,7 @@ namespace Backend.Web.Controllers
 
             var allUsers = await _userRepository.GetAllAsync();
             var global = CreateResult(allUsers).OrderByDescending(u => u.Points);
-            var local = CreateResult(allUsers.Where(u => u.Location.Zip == zipCode)).OrderByDescending(u => u.Points);
+            var local = CreateResult(allUsers.Where(u => u.Location != null && u.Location.Zip == zipCode)).OrderByDescending(u => u.Points);
             var friends = CreateResult(FriendsService.Friends.ToList()).OrderByDescending(u => u.Points);
 
             return new RankingSummary {
