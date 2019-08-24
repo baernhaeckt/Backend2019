@@ -1,9 +1,11 @@
-﻿namespace Backend.Models.Widgets.Quiz
+﻿using System.Collections.Generic;
+
+namespace Backend.Models.Widgets.Quiz
 {
     public class QuestionAnswer
     {
         public string QuestionId { get; set; }
 
-        public string Answer { get; set; }
+        public IEnumerable<string> Answers { get; set; }
     }
 }
