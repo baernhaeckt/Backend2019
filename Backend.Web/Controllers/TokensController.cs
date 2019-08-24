@@ -1,10 +1,7 @@
-﻿using AspNetCore.MongoDB;
-using Backend.Core.Security.Extensions;
-using Backend.Database;
+﻿using Backend.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Backend.Web.Controllers
@@ -13,50 +10,18 @@ namespace Backend.Web.Controllers
     [ApiController]
     public class TokensController : ControllerBase
     {
-        private readonly IMongoOperation<Token> _operation;
+        private readonly TokenService _tokenGenerationService;
 
-        public TokensController(IMongoOperation<Token> operation)
+        public TokensController(TokenService tokenGenerationService)
         {
-            _operation = operation;
+            _tokenGenerationService = tokenGenerationService;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<string>> Get(Guid partnerId)
-        {
-            if (partnerId != Guid.Parse("ccc14b11-5922-4e3e-bb54-03e71facaeb3"))
-            {
-                return BadRequest();
-            }
-
-            var token = new Token();
-            token.Points = 10;
-            token.CreatedDate = DateTime.Now;
-            token.Text = "Blabla";
-            token.Value = Guid.NewGuid();
-
-            await _operation.InsertOneAsync(token);
-
-            return token.Value.ToString();
-        }
+        public async Task<ActionResult<string>> Get(Guid partnerId) => await _tokenGenerationService.GenerateForPartnerAsync(partnerId);
 
         [HttpPost]
-        public ActionResult Post(Guid tokenGuid)
-        {
-            var token = _operation.GetQuerableAsync().SingleOrDefault(t => t.Value == tokenGuid);
-            if (token == null)
-            {
-                return NotFound();
-            }
-
-            if (token.Valid)
-            {
-                token.UserId = User.Id();
-            }
-
-            _operation.UpdateAsync(token.Id, token);
-
-            return Ok();
-        }
+        public void Post(Guid tokenGuid) => _tokenGenerationService.AssignTokenToUser(tokenGuid);
     }
 }
