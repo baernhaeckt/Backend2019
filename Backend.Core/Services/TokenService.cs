@@ -25,7 +25,6 @@ namespace Backend.Core.Services
 
         public async Task<string> GenerateForPartnerAsync(Guid partnerId)
         {
-
             Token token = null;
             if (partnerId == Guid.Parse("ccc14b11-5922-4e3e-bb54-03e71facaeb3"))
             {
@@ -79,7 +78,7 @@ namespace Backend.Core.Services
                 return token.Value.ToString();
             }
 
-            throw new WebException("Partner doesn ont exist.", System.Net.HttpStatusCode.BadRequest);
+            throw new WebException("Partner doesn't exist.", System.Net.HttpStatusCode.BadRequest);
         }
 
         public async Task AssignTokenToUserAsync(Guid tokenGuid)
@@ -87,7 +86,7 @@ namespace Backend.Core.Services
             var token = _tokenRepository.GetQuerableAsync().SingleOrDefault(t => t.Value == tokenGuid);
             if (token == null)
             {
-                throw new WebException("No token found.", System.Net.HttpStatusCode.NotFound);
+                throw new WebException("Token not found.", System.Net.HttpStatusCode.NotFound);
             }
 
             if (token.Valid)

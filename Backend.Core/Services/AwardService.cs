@@ -21,14 +21,25 @@ namespace Backend.Core.Services
 
         public async Task CheckForNewAwardsAsync(Token newToken)
         {
+            // Yes. We are aware that this method contains horrible code.
             var allTokensFromUser = _tokenRepository.GetQuerableAsync().Where(t => t.UserId == newToken.UserId);
             var user = await _userRepository.GetByIdAsync(newToken.UserId);
 
-            if (allTokensFromUser.Count() > 1 && user.Awards.All(a => a.Kind != AwardKind.FirstLogin))
+            Award newAward = null;
+            if (allTokensFromUser.Count() > 1 && user.Awards.All(a => a.Kind != AwardKind.Onboarding))
             {
                 // This is the first token the user gets, so this is worth an award.
-                user.Awards.Any(a => a.Kind == AwardKind.FirstLogin);
-                user.Awards.Add(new FirstTokenAward());
+                newAward = new OnBoardingAward();
+            }
+
+            if(allTokensFromUser.Count(t => t.SufficientType.Title == "Verpackung") >= 2 && user.Awards.All(a => a.Kind != AwardKind.TrashHero))
+            {
+                newAward = new TrashHeroAward();
+            }
+
+            if (newAward != null)
+            {
+                user.Awards.Add(newAward);
                 await _userRepository.UpdateAsync(user.Id, user);
 
                 await _eventStream.PublishAsync(new BadgeReceivedEvent(user));

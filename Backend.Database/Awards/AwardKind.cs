@@ -2,7 +2,7 @@
 {
     public enum AwardKind
     {
-        FirstLogin,
-
+        Onboarding,
+        TrashHero
     }
 }
