@@ -1,5 +1,4 @@
 ﻿namespace Backend.Web.Models
-namespace Backend.Web.Models
 {
     public class UserResponse
     {
