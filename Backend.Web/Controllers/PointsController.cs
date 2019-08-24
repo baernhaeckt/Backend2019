@@ -11,7 +11,7 @@ namespace Backend.Web.Controllers
     [ApiController]
     public class PointsController : ControllerBase
     {
-        PointsController(UserService userService)
+        public PointsController(UserService userService)
         {
             UserService = userService;
         }
@@ -22,7 +22,7 @@ namespace Backend.Web.Controllers
         public async Task<IEnumerable<PointResponse>> GetAsync(string userId)
         {
             var pointList = await UserService.PointHistory(userId);
-            return pointList.OrderByDescending(p => p.Date).Select(p => new PointResponse
+            return pointList.OrderByDescending(p => p.Date).Take(25).Select(p => new PointResponse
             {
                 Date = p.Date,
                 Id = p.Id,
