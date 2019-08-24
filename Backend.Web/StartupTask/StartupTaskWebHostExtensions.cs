@@ -7,7 +7,7 @@ namespace Backend.Web.StartupTask
 {
     public static class StartupTaskWebHostExtensions
     {
-        public static async Task RunWithTasksAsync(this IWebHost webHost, CancellationToken cancellationToken = default)
+        public static async Task RunWithTasksAsync(this IWebHost webHost, CancellationToken cancellationToken)
         {
             // Load all tasks from DI
             using (var scope = webHost.Services.CreateScope())

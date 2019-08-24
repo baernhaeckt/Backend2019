@@ -5,6 +5,6 @@ namespace Backend.Web.StartupTask
 {
     public interface IStartupTask
     {
-        Task ExecuteAsync(CancellationToken cancellationToken = default);
+        Task ExecuteAsync(CancellationToken cancellationToken);
     }
 }
