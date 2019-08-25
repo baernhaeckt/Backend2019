@@ -3,6 +3,7 @@ using Backend.Core.Security.Abstraction;
 using Backend.Core.Startup;
 using Backend.Database;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,6 +27,12 @@ namespace Backend.Core.Seed
 
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
+            var greta = UserRepository.GetQuerableAsync().FirstOrDefault(u => u.Email == "greta@bfh.ch");
+            if (greta != null)
+            {
+                return;
+            }
+
             await UserRepository.SaveAsync(new User()
             {
                 DisplayName = "Greta",
@@ -151,8 +158,6 @@ namespace Backend.Core.Seed
                     Description = "Du hast grün eingekauft."
                 }
             });
-
-            throw new NotImplementedException();
         }
     }
 }
