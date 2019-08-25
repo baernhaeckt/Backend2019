@@ -46,7 +46,7 @@ namespace Backend.Core.Seed
                     Longitude = 7.443788
                 },
                 Co2Saving = 140,
-                PointActions = new []
+                PointActions = new[]
                 {
                     new PointAction()
                     {

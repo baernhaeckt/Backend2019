@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using AspNetCore.MongoDB;
+﻿using AspNetCore.MongoDB;
 using Backend.Core.Startup;
 using Backend.Database;
 using MongoDB.Driver;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Backend.Core.Seed
 {

@@ -1,10 +1,10 @@
-﻿using Backend.Models;
+﻿using Backend.Core.Services;
+using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Backend.Core.Services;
 
 namespace Backend.Web.Controllers
 {

@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using Backend.Core.Security.Extensions;
+﻿using Backend.Core.Security.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
 
 namespace Backend.Core.Newsfeed
 {

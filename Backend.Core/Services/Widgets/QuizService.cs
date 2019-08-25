@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using AspNetCore.MongoDB;
+﻿using AspNetCore.MongoDB;
 using Backend.Database;
 using Backend.Database.Widgets.Quiz;
 using Backend.Models;
 using Backend.Models.Widgets.Quiz;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Backend.Core.Services.Widgets
 {
@@ -15,11 +15,11 @@ namespace Backend.Core.Services.Widgets
     {
         private const string DateKeyFormat = "yyyyMMdd";
 
-        private IMongoOperation<QuizQuestion> _questionRepository;
+        private readonly IMongoOperation<QuizQuestion> _questionRepository;
 
-        private IMongoOperation<UserQuiz> _userQuizRepository;
+        private readonly IMongoOperation<UserQuiz> _userQuizRepository;
 
-        private UserService _userService;
+        private readonly UserService _userService;
 
         public QuizService(
                 IMongoOperation<QuizQuestion> questionRepository,

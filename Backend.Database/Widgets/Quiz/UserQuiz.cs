@@ -1,5 +1,4 @@
 ﻿using AspNetCore.MongoDB;
-using System;
 using System.Collections.Generic;
 
 namespace Backend.Database.Widgets.Quiz

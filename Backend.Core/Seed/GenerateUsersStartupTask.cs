@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using AspNetCore.MongoDB;
+﻿using AspNetCore.MongoDB;
 using Backend.Core.Security.Abstraction;
 using Backend.Core.Startup;
 using Backend.Database;
@@ -11,6 +6,11 @@ using Bogus;
 using Bogus.Locations;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Backend.Core.Seed
 {

@@ -1,6 +1,6 @@
 ﻿using Backend.Core.Newsfeed;
-using Backend.Web.Setup;
 using Backend.Web.Middleware;
+using Backend.Web.Setup;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

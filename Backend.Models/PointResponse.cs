@@ -1,6 +1,5 @@
 ﻿using Backend.Database;
 using System;
-using System.Collections.Generic;
 
 namespace Backend.Models
 {

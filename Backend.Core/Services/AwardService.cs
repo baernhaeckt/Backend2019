@@ -31,7 +31,7 @@ namespace Backend.Core.Services
                 newAward = new OnBoardingAward();
             }
 
-            if(allTokensFromUser.Count(t => t.SufficientType.Title == "Verpackung") >= 2 && user.Awards.All(a => a.Kind != AwardKind.TrashHero))
+            if (allTokensFromUser.Count(t => t.SufficientType.Title == "Verpackung") >= 2 && user.Awards.All(a => a.Kind != AwardKind.TrashHero))
             {
                 newAward = new TrashHeroAward();
             }

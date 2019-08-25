@@ -1,5 +1,4 @@
 ﻿using AspNetCore.MongoDB;
-using Backend.Core.Newsfeed;
 using Backend.Core.Security.Abstraction;
 using Backend.Core.Services;
 using Backend.Database;
@@ -24,10 +23,10 @@ namespace Backend.Web.Controllers
         public FriendsService FriendService { get; }
 
         public UsersController(
-            IPaswordGenerator passwordGenerator, 
-            IPasswordStorage passwordStorage, 
-            ISecurityTokenFactory securityTokenFactory, 
-            IMongoOperation<User> operation, 
+            IPaswordGenerator passwordGenerator,
+            IPasswordStorage passwordStorage,
+            ISecurityTokenFactory securityTokenFactory,
+            IMongoOperation<User> operation,
             FriendsService friendService)
         {
             _passwordGenerator = passwordGenerator;
@@ -45,10 +44,11 @@ namespace Backend.Web.Controllers
             if (users.Count() == 0)
             {
                 string newPassword = _passwordGenerator.Generate();
-                var newUser = new User {
+                var newUser = new User
+                {
                     Email = email,
                     Password = _passwordStorage.Create(newPassword),
-                    DisplayName =  "ÖkoRookie",
+                    DisplayName = "ÖkoRookie",
                     Location = new Location
                     {
                         City = "Bern",
@@ -75,7 +75,7 @@ namespace Backend.Web.Controllers
                 // Show password input form.
                 return new LoginResponse();
             }
-         
+
             // This means invalid data.
             return BadRequest();
         }
