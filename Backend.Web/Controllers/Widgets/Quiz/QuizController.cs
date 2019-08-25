@@ -38,7 +38,7 @@ namespace Backend.Web.Controllers.Widgets
                 IncorrectAnswers = new[] { "64", "50", "25", "10", "82" },
                 DetailedAnswer = "Zu krumm, zu klein, zu hässlich: Die Gründe für das Wegwerfen von Lebensmitteln sind unzählig, sinnvoll sind sie oft nicht. Beispielsweise werden von 100 geernteten Kartoffeln nur 34 tatsächlich gegessen. 66 Kartoffeln werden aussortiert, obwohl sie geniessbar wären. Foodwaste ist eine unnötige Verschwendung von Ressourcen, Energie und Geld. Quelle: https://www.wwf.ch/de/unsere-ziele/foodwaste",
 
-                Points = 1
+                Points = 2
             });
             QuizService.Insert(new Database.Widgets.Quiz.QuizQuestion()
             {
@@ -51,7 +51,7 @@ namespace Backend.Web.Controllers.Widgets
                 bis 2030 weltweit die Verluste von Lebensmitteln zu halbieren.Nur: An verbindlichen Zielvorgaben und konkreten Umsetzungsmassnahmen fehlt es weiterhin.Die WWF - Foodwaste - Petition von 2014,
                 die genau dies für Industrie und Handel forderte,
                 wurde von National - und Ständerat abgelehnt. Quelle: https://www.wwf.ch/de/unsere-ziele/foodwaste",
-                Points = 1
+                Points = 2
             });
         }
     }

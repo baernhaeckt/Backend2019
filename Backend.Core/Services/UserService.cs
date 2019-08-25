@@ -29,7 +29,8 @@ namespace Backend.Core.Services
 
         public async Task AddPoints(Token token)
         {
-            CurrentUser.PointActions.Add(new PointAction
+            var user = CurrentUser;
+            user.PointActions.Add(new PointAction
             {
                 Point = token.Points,
                 Action = token.Text,
@@ -41,12 +42,13 @@ namespace Backend.Core.Services
                 }
             });
 
-            await Process(token.Points, token.Co2Saving, CurrentUser);
+            await Process(token.Points, token.Co2Saving, user);
         }
 
         public async Task AddPoints(PointAwarding pointAwarding)
         {
-            CurrentUser.PointActions.Add(new PointAction
+            var user = CurrentUser;
+            user.PointActions.Add(new PointAction
             {
                 Point = pointAwarding.Points,
                 Action = pointAwarding.Text,
@@ -54,7 +56,7 @@ namespace Backend.Core.Services
                 SponsorRef = pointAwarding.Source.ToString()
             });
 
-            await Process(pointAwarding.Points, pointAwarding.Co2Saving, CurrentUser);
+            await Process(pointAwarding.Points, pointAwarding.Co2Saving, user);
         }
 
         private async Task Process(int points, double co2saving, User user)
@@ -62,7 +64,7 @@ namespace Backend.Core.Services
             user.Points += points;
             user.Co2Saving += co2saving;
 
-            await UserRepository.UpdateAsync(CurrentUser.Id, user);
+            await UserRepository.UpdateAsync(user.Id, user);
 
             // Fire and forget.
             _ = _eventStream.PublishAsync(new PointsReceivedEvent(user));
