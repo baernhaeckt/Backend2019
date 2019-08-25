@@ -4,11 +4,11 @@ namespace Backend.Core.Newsfeed
 {
     public class PointsReceivedEvent : OwnEvent
     {
-        public PointsReceivedEvent(User user)
+        public PointsReceivedEvent(User user, int points)
             : base(user)
         {
             title = "Punkte erhalten";
-            message = "Gratulation, du hast neue Punkte erhalten!";
+            message = "Gratulation, du hast " + points + " neue Punkte erhalten!";
         }
     }
 }

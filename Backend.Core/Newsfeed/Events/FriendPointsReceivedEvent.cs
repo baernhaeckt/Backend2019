@@ -4,11 +4,11 @@ namespace Backend.Core.Newsfeed
 {
     public class FriendPointsReceivedEvent : FriendEvent
     {
-        public FriendPointsReceivedEvent(User user) :
+        public FriendPointsReceivedEvent(User user, int points) :
             base(user)
         {
-            title = "Freund Punkte";
-            message = "Hei, einer deiner Freunde hat Punkte erhalten!";
+            title = "Neue Punkte";
+            message = "Dein Freund " + user.DisplayName + " hat " + points + " Suffizienz Punkte erhalten!";
         }
     }
 }

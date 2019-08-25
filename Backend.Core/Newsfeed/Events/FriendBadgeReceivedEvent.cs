@@ -4,11 +4,11 @@ namespace Backend.Core.Newsfeed
 {
     public class FriendBadgeReceivedEvent : FriendEvent
     {
-        public FriendBadgeReceivedEvent(User user) :
+        public FriendBadgeReceivedEvent(User user, Award award) :
             base(user)
         {
-            title = "Freund Award";
-            message = "Hei, einer deiner Freunde hat einen Award erhalten!";
+            title = "Neuer Award";
+            message = "Dein Freund " + user.DisplayName + " hat den Award '" + award.Name + "' erhalten!";
         }
     }
 }

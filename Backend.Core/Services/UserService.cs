@@ -67,8 +67,8 @@ namespace Backend.Core.Services
             await UserRepository.UpdateAsync(user.Id, user);
 
             // Fire and forget.
-            _ = _eventStream.PublishAsync(new PointsReceivedEvent(user));
-            _ = _eventStream.PublishAsync(new FriendPointsReceivedEvent(user));
+            await _eventStream.PublishAsync(new PointsReceivedEvent(user, points));
+            await _eventStream.PublishAsync(new FriendPointsReceivedEvent(user, points));
 
             await _awardService.CheckForNewAwardsAsync(user);
         }

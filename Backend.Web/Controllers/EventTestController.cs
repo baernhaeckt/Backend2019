@@ -1,5 +1,6 @@
 ﻿using Backend.Core.Newsfeed;
 using Backend.Core.Services;
+using Backend.Database;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Web.Controllers
@@ -20,25 +21,25 @@ namespace Backend.Web.Controllers
         [HttpGet(nameof(PointsReceived))]
         public void PointsReceived()
         {
-            _eventStream.PublishAsync(new PointsReceivedEvent(_userService.CurrentUser));
+            _eventStream.PublishAsync(new PointsReceivedEvent(_userService.CurrentUser, 5));
         }
 
         [HttpGet(nameof(BadgeReceived))]
         public void BadgeReceived()
         {
-            _eventStream.PublishAsync(new BadgeReceivedEvent(_userService.CurrentUser));
+            _eventStream.PublishAsync(new BadgeReceivedEvent(_userService.CurrentUser, new TrashHeroAward()));
         }
 
         [HttpGet(nameof(FriendBadgeReceived))]
         public void FriendBadgeReceived()
         {
-            _eventStream.PublishAsync(new FriendBadgeReceivedEvent(_userService.CurrentUser));
+            _eventStream.PublishAsync(new FriendBadgeReceivedEvent(_userService.CurrentUser, new TrashHeroAward()));
         }
 
         [HttpGet(nameof(FriendPointsReceived))]
         public void FriendPointsReceived()
         {
-            _eventStream.PublishAsync(new FriendPointsReceivedEvent(_userService.CurrentUser));
+            _eventStream.PublishAsync(new FriendPointsReceivedEvent(_userService.CurrentUser, 5));
         }
     }
 }
