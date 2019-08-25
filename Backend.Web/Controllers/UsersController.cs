@@ -1,6 +1,7 @@
 ﻿using AspNetCore.MongoDB;
 using Backend.Core.Newsfeed;
 using Backend.Core.Security.Abstraction;
+using Backend.Core.Services;
 using Backend.Database;
 using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -20,12 +21,20 @@ namespace Backend.Web.Controllers
         private readonly ISecurityTokenFactory _securityTokenFactory;
         private readonly IMongoOperation<User> _operation;
 
-        public UsersController(IPaswordGenerator passwordGenerator, IPasswordStorage passwordStorage, ISecurityTokenFactory securityTokenFactory, IMongoOperation<User> operation, IEventStream eventStream)
+        public FriendsService FriendService { get; }
+
+        public UsersController(
+            IPaswordGenerator passwordGenerator, 
+            IPasswordStorage passwordStorage, 
+            ISecurityTokenFactory securityTokenFactory, 
+            IMongoOperation<User> operation, 
+            FriendsService friendService)
         {
             _passwordGenerator = passwordGenerator;
             _passwordStorage = passwordStorage;
             _securityTokenFactory = securityTokenFactory;
             _operation = operation;
+            FriendService = friendService;
         }
 
         [HttpPost(nameof(Register))]
@@ -48,7 +57,14 @@ namespace Backend.Web.Controllers
                         Longitude = 7.443788
                     }
                 };
-                await _operation.InsertOneAsync(newUser);
+                newUser = await _operation.SaveAsync(newUser);
+
+                // Only for Presentation
+                var gretaUser = _operation.GetQuerableAsync().FirstOrDefault(u => u.Email == "greta@bfh.ch");
+                if (gretaUser != null)
+                {
+                    await FriendService.ConnectFriends(newUser.Id, "greta@bfh.ch");
+                }
 
                 string token = _securityTokenFactory.Create(newUser);
                 return new LoginResponse { Token = token };

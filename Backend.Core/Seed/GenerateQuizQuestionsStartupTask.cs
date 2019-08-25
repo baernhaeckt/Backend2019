@@ -6,7 +6,7 @@ using Backend.Core.Startup;
 using Backend.Database.Widgets.Quiz;
 using MongoDB.Driver;
 
-namespace Backend.Core
+namespace Backend.Core.Seed
 {
     public class GenerateQuizQuestionsStartupTask : IStartupTask
     {

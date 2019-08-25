@@ -11,7 +11,7 @@ using Bogus.Locations;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace Backend.Core
+namespace Backend.Core.Seed
 {
     public class GenerateUsersStartupTask : IStartupTask
     {
