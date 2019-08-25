@@ -87,11 +87,13 @@ namespace Backend.Core.Services
                 throw new WebException("Token not found.", System.Net.HttpStatusCode.NotFound);
             }
 
-            if (token.Valid)
+            if (!token.Valid)
             {
-                token.UserId = _claimsPrincipal.Id();
+                throw new WebException("Token already used.", System.Net.HttpStatusCode.BadRequest);
             }
 
+
+            token.UserId = _claimsPrincipal.Id();
             await _tokenRepository.UpdateAsync(token.Id, token);
             await _userService.AddPoints(token);
         }
