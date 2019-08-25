@@ -31,7 +31,7 @@ namespace Backend.Core.Seed
 
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            if (_userRepository.Count(FilterDefinition<User>.Empty) != 0)
+            if (_userRepository.Count(FilterDefinition<User>.Empty) >= SeedCount)
             {
                 return;
             }
