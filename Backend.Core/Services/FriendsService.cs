@@ -1,5 +1,4 @@
 ﻿using AspNetCore.MongoDB;
-using Backend.Core.Security.Extensions;
 using Backend.Database;
 using System;
 using System.Collections.Generic;
@@ -27,7 +26,7 @@ namespace Backend.Core.Services
             if (friendUser == null)
             {
                 // TODO: Invite to Platform
-                throw new WebException($"no user with email: {friendEmail} found.", System.Net.HttpStatusCode.BadRequest);
+                throw new WebException($"No user with email: {friendEmail} found.", System.Net.HttpStatusCode.BadRequest);
             }
 
             if (CurrentUser.Id == friendUser.Id)
@@ -62,7 +61,7 @@ namespace Backend.Core.Services
             var friends = user.Friends.ToList();
             if (!friends.Contains(friendUserId))
             {
-                throw new WebException("user is not your friend", System.Net.HttpStatusCode.BadRequest);
+                throw new WebException("User is not your friend", System.Net.HttpStatusCode.BadRequest);
             }
 
             friends.Remove(friendUserId);
@@ -80,18 +79,14 @@ namespace Backend.Core.Services
             }
         }
 
-        public IEnumerable<User> Friends
+        public IEnumerable<User> GetFriends()
         {
-            get
+            if (CurrentUser.Friends == null)
             {
-                if (CurrentUser.Friends == null)
-                {
-                    return Enumerable.Empty<User>();
-                }
-
-                var friends =  CurrentUser.Friends.Select(refId => UserRepository.GetByIdAsync(refId.ToString()).Result).ToList();
-                return friends;
+                return Enumerable.Empty<User>();
             }
+
+            return CurrentUser.Friends.Select(refId => UserRepository.GetByIdAsync(refId.ToString()).Result).ToList();
         }
     }
 }

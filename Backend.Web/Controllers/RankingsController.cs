@@ -15,17 +15,14 @@ namespace Backend.Web.Controllers
     {
         private readonly UserService _userService;
         private readonly IMongoOperation<User> _userRepository;
+        private readonly FriendsService _friendsService;
         private readonly IMongoOperation<Token> _tokenRepository;
 
-        public FriendsService FriendsService { get; }
-
-        public RankingsController(
-            UserService userService,
-            IMongoOperation<User> userRepository, 
-            IMongoOperation<Token> tokenRepository)
+        public RankingsController(UserService userService, IMongoOperation<User> userRepository, FriendsService friendsService, IMongoOperation<Token> tokenRepository)
         {
             _userService = userService;
             _userRepository = userRepository;
+            _friendsService = friendsService;
             _tokenRepository = tokenRepository;
         }
 
@@ -52,7 +49,7 @@ namespace Backend.Web.Controllers
         [HttpGet("friends")]
         public IEnumerable<UserResponse> GetFriends()
         {
-            var results = CreateResult(FriendsService.Friends.ToList());
+            var results = CreateResult(_friendsService.GetFriends().ToList());
 
             return results.OrderByDescending(u => u.Points);
         }
@@ -66,9 +63,10 @@ namespace Backend.Web.Controllers
             var allUsers = await _userRepository.GetAllAsync();
             var global = CreateResult(allUsers).OrderByDescending(u => u.Points);
             var local = CreateResult(allUsers.Where(u => u.Location != null && u.Location.Zip == zipCode)).OrderByDescending(u => u.Points);
-            var friends = CreateResult(FriendsService.Friends.ToList()).OrderByDescending(u => u.Points);
+            var friends = CreateResult(_friendsService.GetFriends()).OrderByDescending(u => u.Points);
 
-            return new RankingSummary {
+            return new RankingSummary
+            {
                 FriendRank = GetRank(friends, currentUser),
                 GlobalRank = GetRank(global, currentUser),
                 LocalRank = GetRank(local, currentUser)

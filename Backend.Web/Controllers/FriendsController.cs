@@ -23,7 +23,7 @@ namespace Backend.Web.Controllers
         [HttpGet]
         public IEnumerable<PrivateUserResponse> Get()
         {
-            return FriendService.Friends.Select(u => new PrivateUserResponse()
+            return FriendService.GetFriends().Select(u => new PrivateUserResponse()
             {
                 Id = u.Id,
                 Email = u.Email,
