@@ -16,7 +16,7 @@ namespace Backend.Core.Seed
 {
     public class GenerateUsersStartupTask : IStartupTask
     {
-        private const int SeedCount = 80;
+        private const int SeedCount = 20;
 
         private readonly IPasswordStorage _passwordStorage;
         private readonly IMongoOperation<User> _userRepository;
