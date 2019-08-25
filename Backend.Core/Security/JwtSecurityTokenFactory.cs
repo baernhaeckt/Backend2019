@@ -11,6 +11,13 @@ namespace Backend.Core.Security
 {
     public class JwtSecurityTokenFactory : ISecurityTokenFactory
     {
+        private readonly ISecurityKeyProvider _securityKeyProvider;
+
+        public JwtSecurityTokenFactory(ISecurityKeyProvider securityKeyProvider)
+        {
+            _securityKeyProvider = securityKeyProvider;
+        }
+
         public string Create(User user)
         {
             DateTime now = DateTime.Now;
@@ -22,10 +29,10 @@ namespace Backend.Core.Security
                 new Claim(JwtRegisteredClaimNames.Iat, now.ToUniversalTime().ToString(CultureInfo.CurrentCulture), ClaimValueTypes.Integer64),
             };
 
-            SymmetricSecurityKey signingKey = SecurityKeyProvider.GetSecurityKey();
+            SymmetricSecurityKey signingKey = _securityKeyProvider.GetSecurityKey();
             JwtSecurityToken securityToken = new JwtSecurityToken(
-                issuer: "OekoBook",
-                audience: "OekoBook",
+                issuer: "Leaf",
+                audience: "Leaf",
                 claims: claims,
                 notBefore: now,
                 expires: now.AddMinutes(20),

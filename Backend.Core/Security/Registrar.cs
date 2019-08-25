@@ -10,6 +10,7 @@ namespace Backend.Core.Security
             services.AddSingleton<IPasswordStorage, HmacSha256PasswordStorage>();
             services.AddSingleton<ISecurityTokenFactory, JwtSecurityTokenFactory>();
             services.AddSingleton<IPaswordGenerator, StaticPasswordGenerator>();
+            services.AddSingleton<ISecurityKeyProvider, SymmetricSecurityKeyProvider>();
 
             return services;
         }

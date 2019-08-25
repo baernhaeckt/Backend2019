@@ -18,13 +18,16 @@ namespace Backend.Web.Setup
             {
                 options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
+                using (var scope = services.BuildServiceProvider().CreateScope())
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = SecurityKeyProvider.GetSecurityKey(),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = scope.ServiceProvider.GetRequiredService<ISecurityKeyProvider>().GetSecurityKey(),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                }
 
                 // We have to hook the OnMessageReceived event in order to
                 // allow the JWT authentication handler to read the access token from the query string 

@@ -1,10 +1,18 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 namespace Backend.Core.Security
 {
-    public static class SecurityKeyProvider
+    public class SymmetricSecurityKeyProvider : ISecurityKeyProvider
     {
-        public static SymmetricSecurityKey GetSecurityKey() => new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is my custom Secret key for authneticatio"));
+        private readonly IConfiguration _configuration;
+
+        public SymmetricSecurityKeyProvider(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        public SymmetricSecurityKey GetSecurityKey() => new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
     }
 }
