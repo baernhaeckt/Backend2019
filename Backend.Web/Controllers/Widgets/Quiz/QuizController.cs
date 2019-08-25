@@ -9,29 +9,29 @@ namespace Backend.Web.Controllers.Widgets
     [ApiController]
     public class QuizController : ControllerBase
     {
-        public IQuizService QuizService { get; }
+        private readonly IQuizService _quizService;
 
         public QuizController(IQuizService quizService)
         {
-            QuizService = quizService;
+            _quizService = quizService;
         }
 
         [HttpGet("question")]
         public async Task<QuestionResponse> Get()
         {
-            return await QuizService.Get();
+            return await _quizService.Get();
         }
 
         [HttpPost("question")]
         public async Task<QuestionAnswerResponse> Answer(QuestionAnswer questionAnswer)
         {
-            return await QuizService.Answer(questionAnswer);
+            return await _quizService.Answer(questionAnswer);
         }
 
         [HttpGet("seed")]
         public void Seed()
         {
-            QuizService.Insert(new Database.Widgets.Quiz.QuizQuestion()
+            _quizService.Insert(new Database.Widgets.Quiz.QuizQuestion()
             {
                 Question = "Von 100 gesammelten Kartoffeln wieviele werden tatsächlich gegessen?",
                 CorrectAnswers = new[] { "34" },
@@ -40,7 +40,7 @@ namespace Backend.Web.Controllers.Widgets
 
                 Points = 2
             });
-            QuizService.Insert(new Database.Widgets.Quiz.QuizQuestion()
+            _quizService.Insert(new Database.Widgets.Quiz.QuizQuestion()
             {
                 Question = "Wenn wir unseren Food Waste um einen Drittel reduzieren würde, was für einem CO2 Gewinn würde dies bedeuten?",
                 CorrectAnswers = new[] { "gleichviel wie 500'000 Autos" },

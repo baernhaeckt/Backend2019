@@ -3,6 +3,5 @@
     public class UserUpdateRequest
     {
         public string DisplayName { get; set; }
-
     }
 }

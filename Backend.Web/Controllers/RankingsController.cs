@@ -13,20 +13,18 @@ namespace Backend.Web.Controllers
     [ApiController]
     public class RankingsController : ControllerBase
     {
+        private readonly UserService _userService;
         private readonly IMongoOperation<User> _userRepository;
         private readonly IMongoOperation<Token> _tokenRepository;
 
-        public UserService UserService { get; }
         public FriendsService FriendsService { get; }
 
         public RankingsController(
             UserService userService,
-            FriendsService friendsService,
             IMongoOperation<User> userRepository, 
             IMongoOperation<Token> tokenRepository)
         {
-            UserService = userService;
-            FriendsService = friendsService;
+            _userService = userService;
             _userRepository = userRepository;
             _tokenRepository = tokenRepository;
         }
@@ -62,8 +60,7 @@ namespace Backend.Web.Controllers
         [HttpGet("summary")]
         public async Task<RankingSummary> GetSummary()
         {
-            var currentUser = UserService.CurrentUser;
-            // TODO: Handle properly and improve performance.
+            var currentUser = _userService.CurrentUser;
             var zipCode = currentUser.Location?.Zip ?? "3000";
 
             var allUsers = await _userRepository.GetAllAsync();
