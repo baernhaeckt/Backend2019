@@ -91,7 +91,8 @@ namespace Backend.Core.Seed
                 Question = "Wie lange müsste man auf Fleisch verzichten, um einen Flug von Frankfurt nach Madrid wieder auszugleichen?",
                 CorrectAnswers = new [] { "Je nach Fleischart 1 - 2.5 Jahre" },
                 IncorrectAnswers = new [] { "Je nach Fleischart 9 - 16 Monate", "2 Monate" },
-                DetailedAnswer = "Um diesen Flug auszugleichen musst du auf 51kg Rind oder 160kg Geflügel verzichten."
+                DetailedAnswer = "Um diesen Flug auszugleichen musst du auf 51kg Rind oder 160kg Geflügel verzichten.",
+                Points = 2
             });
 
             questions.Add(new QuizQuestion
@@ -99,7 +100,8 @@ namespace Backend.Core.Seed
                 Question = "Was ist bei der Jagd auf Garnelen und Plattfische ein Problem?",
                 CorrectAnswers = new [] { "Die Fangschiffe brauchen exorbitant viel Treibstoff." },
                 IncorrectAnswers = new [] { "Es werden zu 70 Prozent Jungtiere gefangen.", "Es fällt viel Beifang an." },
-                DetailedAnswer = "Bis zu 80 Prozent der gefangenen Tiere gehen als Beifang wieder über Bord, wobei viele Tiere tot oder schwer verletzt sind. Achten Sie bei Fisch auf das Siegel des Marine Stewardship Council (MSC), einer gemeinnützigen Organisation, die sich für nachhaltige Fischerei einsetzt."
+                DetailedAnswer = "Bis zu 80 Prozent der gefangenen Tiere gehen als Beifang wieder über Bord, wobei viele Tiere tot oder schwer verletzt sind. Achten Sie bei Fisch auf das Siegel des Marine Stewardship Council (MSC), einer gemeinnützigen Organisation, die sich für nachhaltige Fischerei einsetzt.",
+                Points = 2
             });
 
             questions.Add(new QuizQuestion
@@ -107,7 +109,8 @@ namespace Backend.Core.Seed
                 Question = "Was versteht man unter Greenwashing?",
                 CorrectAnswers = new [] { "grüne Augenwischerei" },
                 IncorrectAnswers = new [] { "nachhaltig produzierte Waschmaschinen", "besondere Autowaschanlagen" },
-                DetailedAnswer = "Natürlich haben die Hersteller erkannt, das sich mit dem Naturtrend gut verdienen lässt. Greenwashing kommt z.B. auch in der Kosmetik-Industrie vor, wo der Begriff Bio nicht geschützt ist. Etwas Bio-Öl in die Creme geben, schon wird das Ganze als Natur- oder Bio-Produkt verkauft. Achten Sie auch hier auf Prüfsiegel wie BDIH oder Eco Control."
+                DetailedAnswer = "Natürlich haben die Hersteller erkannt, das sich mit dem Naturtrend gut verdienen lässt. Greenwashing kommt z.B. auch in der Kosmetik-Industrie vor, wo der Begriff Bio nicht geschützt ist. Etwas Bio-Öl in die Creme geben, schon wird das Ganze als Natur- oder Bio-Produkt verkauft. Achten Sie auch hier auf Prüfsiegel wie BDIH oder Eco Control.",
+                Points = 2
             });
 
             await _quizQuestionRepository.InsertManyAsync(questions);
