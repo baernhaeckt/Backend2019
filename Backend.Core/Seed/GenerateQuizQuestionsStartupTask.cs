@@ -107,7 +107,7 @@ namespace Backend.Core.Seed
                 Question = "Was versteht man unter Greenwashing?",
                 CorrectAnswers = new [] { "grüne Augenwischerei" },
                 IncorrectAnswers = new [] { "nachhaltig produzierte Waschmaschinen", "besondere Autowaschanlagen" },
-                DetailedAnswer = "Natürlich haben die Hersteller erkannt, das sich mit dem Naturtrend gut verdienen lässt. Greenwashing kommt z.B. auch in der Kosmetik-Industrie vor, wo der Begriff "Bio" nicht geschützt ist. Etwas Bio-Öl in die Creme geben, schon wird das Ganze als Natur- oder Bio-Produkt verkauft. Achten Sie auch hier auf Prüfsiegel wie BDIH oder Eco Control."
+                DetailedAnswer = "Natürlich haben die Hersteller erkannt, das sich mit dem Naturtrend gut verdienen lässt. Greenwashing kommt z.B. auch in der Kosmetik-Industrie vor, wo der Begriff Bio nicht geschützt ist. Etwas Bio-Öl in die Creme geben, schon wird das Ganze als Natur- oder Bio-Produkt verkauft. Achten Sie auch hier auf Prüfsiegel wie BDIH oder Eco Control."
             });
 
             await _quizQuestionRepository.InsertManyAsync(questions);
