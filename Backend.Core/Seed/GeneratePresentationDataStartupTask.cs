@@ -1,17 +1,14 @@
 ﻿using AspNetCore.MongoDB;
 using Backend.Core.Security.Abstraction;
-using Backend.Core.Services;
 using Backend.Core.Startup;
 using Backend.Database;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Backend.Core.Seed
 {
-    class GeneratePresentationDataStartupTask : IStartupTask
+    public class GeneratePresentationDataStartupTask : IStartupTask
     {
         public GeneratePresentationDataStartupTask(
             IMongoOperation<User> userRepository,

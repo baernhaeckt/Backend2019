@@ -1,6 +1,6 @@
-﻿using Backend.Core;
-using Backend.Core.Newsfeed;
+﻿using Backend.Core.Newsfeed;
 using Backend.Core.Security;
+using Backend.Core.Seed;
 using Backend.Core.Services;
 using Backend.Core.Services.Widgets;
 using Backend.Web.StartupTask;
@@ -25,6 +25,7 @@ namespace Backend.Web.Setup
 
             services.AddStartupTask<GenerateQuizQuestionsStartupTask>();
             services.AddStartupTask<GenerateSufficientTypesStartupTask>();
+            services.AddStartupTask<GeneratePresentationDataStartupTask>();
         }
     }
 }
