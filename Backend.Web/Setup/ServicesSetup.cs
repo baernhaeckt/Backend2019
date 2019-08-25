@@ -24,6 +24,7 @@ namespace Backend.Web.Setup
             services.AddSingleton<IEventStream, SignalREventStream>();
 
             services.AddStartupTask<GenerateQuizQuestionsStartupTask>();
+            services.AddStartupTask<GenerateUsersStartupTask>();
             services.AddStartupTask<GenerateSufficientTypesStartupTask>();
             services.AddStartupTask<GeneratePresentationDataStartupTask>();
         }

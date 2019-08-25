@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNetCore.MongoDB;
@@ -43,6 +45,17 @@ namespace Backend.Core.Services
             });
 
             await Process(token.Points, token.Co2Saving, user);
+        }
+
+        public IEnumerable<User> GetByPlz(string zip)
+        {
+            return UserRepository.GetQuerableAsync()
+               .Where(u => u.Location.Zip == zip);
+        }
+
+        public async Task<IEnumerable<User>> GetAllAsync()
+        {
+            return await UserRepository.GetAllAsync();
         }
 
         public async Task AddPoints(PointAwarding pointAwarding)

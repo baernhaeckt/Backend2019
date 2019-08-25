@@ -14,14 +14,12 @@ namespace Backend.Web.Controllers
     public class RankingsController : ControllerBase
     {
         private readonly UserService _userService;
-        private readonly IMongoOperation<User> _userRepository;
         private readonly FriendsService _friendsService;
         private readonly IMongoOperation<Token> _tokenRepository;
 
-        public RankingsController(UserService userService, IMongoOperation<User> userRepository, FriendsService friendsService, IMongoOperation<Token> tokenRepository)
+        public RankingsController(UserService userService, FriendsService friendsService, IMongoOperation<Token> tokenRepository)
         {
             _userService = userService;
-            _userRepository = userRepository;
             _friendsService = friendsService;
             _tokenRepository = tokenRepository;
         }
@@ -29,7 +27,7 @@ namespace Backend.Web.Controllers
         [HttpGet("global")]
         public async Task<IEnumerable<UserResponse>> GetGlobalAsync()
         {
-            var users = await _userRepository.GetAllAsync();
+            var users = await _userService.GetAllAsync();
             var results = CreateResult(users);
 
             return results.OrderByDescending(r => r.Points);
@@ -38,8 +36,7 @@ namespace Backend.Web.Controllers
         [HttpGet("local")]
         public IEnumerable<UserResponse> GetLocal(string zip)
         {
-            var users = _userRepository.GetQuerableAsync()
-                .Where(u => u.Location.Zip == zip);
+            IEnumerable<User> users = _userService.GetByPlz(zip);
 
             var results = CreateResult(users);
 
@@ -60,7 +57,7 @@ namespace Backend.Web.Controllers
             var currentUser = _userService.CurrentUser;
             var zipCode = currentUser.Location?.Zip ?? "3000";
 
-            var allUsers = await _userRepository.GetAllAsync();
+            var allUsers = await _userService.GetAllAsync();
             var global = CreateResult(allUsers).OrderByDescending(u => u.Points);
             var local = CreateResult(allUsers.Where(u => u.Location != null && u.Location.Zip == zipCode)).OrderByDescending(u => u.Points);
             var friends = CreateResult(_friendsService.GetFriends()).OrderByDescending(u => u.Points);

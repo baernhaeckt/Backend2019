@@ -40,14 +40,12 @@ namespace Backend.Core.Services
             }
 
             var user = await UserRepository.GetByIdAsync(userId);
-            var friends = (user.Friends ?? Enumerable.Empty<string>()).ToList();
-            if (friends.Contains(friendUser.Id))
+            if (user.Friends.Contains(friendUser.Id))
             {
                 throw new WebException("user is already your friend", System.Net.HttpStatusCode.BadRequest);
             }
 
-            friends.Add(friendUser.Id);
-            user.Friends = friends;
+            user.Friends.Add(friendUser.Id);
             await UserRepository.UpdateAsync(user.Id, user);
 
             var friendsFriend = (friendUser.Friends ?? Enumerable.Empty<string>()).ToList();
@@ -75,11 +73,9 @@ namespace Backend.Core.Services
 
             User exFriend = await UserRepository.GetByIdAsync(friendUserId);
 
-            var exFriendFriends = exFriend.Friends.ToList();
-            if (exFriendFriends.Contains(CurrentUser.Id))
+            if (exFriend.Friends.Contains(CurrentUser.Id))
             {
-                exFriendFriends.Remove(CurrentUser.Id);
-                exFriend.Friends = exFriendFriends;
+                exFriend.Friends.Remove(CurrentUser.Id);
                 await UserRepository.UpdateAsync(exFriend.Id, exFriend);
             }
         }

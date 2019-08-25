@@ -14,7 +14,7 @@ namespace Backend.Database
 
         public string Password { get; set; }
 
-        public IEnumerable<string> Friends { get; set; }
+        public IList<string> Friends { get; set; } = Enumerable.Empty<string>().ToList();
 
         public int Points { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace Backend.Core.Seed
 {
     public class GenerateUsersStartupTask : IStartupTask
     {
-        private const int SeedCount = 40;
+        private const int SeedCount = 80;
 
         private readonly IPasswordStorage _passwordStorage;
         private readonly IMongoOperation<User> _userRepository;
@@ -27,7 +28,6 @@ namespace Backend.Core.Seed
             _userRepository = userRepository;
             _paswordGenerator = paswordGenerator;
         }
-
 
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
@@ -54,6 +54,17 @@ namespace Backend.Core.Seed
                 .RuleFor(u => u.Location, f => f.PickRandom(locations));
 
             List<User> users = faker.Generate(SeedCount);
+
+            // Random generate friendships
+            var random = new Random();
+            foreach (var user in users)
+            {
+                for (int i = 0; i < 12; i++)
+                {
+                    int index = random.Next(users.Count);
+                    user.Friends.Add(users[index].Id);
+                }
+            }
 
             await _userRepository.InsertManyAsync(users);
         }
