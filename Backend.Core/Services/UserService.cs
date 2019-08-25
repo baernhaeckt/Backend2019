@@ -53,7 +53,11 @@ namespace Backend.Core.Services
                 Point = pointAwarding.Points,
                 Action = pointAwarding.Text,
                 Co2Saving = pointAwarding.Co2Saving,
-                SponsorRef = pointAwarding.Source.ToString()
+                SponsorRef = pointAwarding.Source.ToString(),
+                SufficientType = new UserSufficientType
+                {
+                    Title = "Wissen"
+                }
             });
 
             await Process(pointAwarding.Points, pointAwarding.Co2Saving, user);
