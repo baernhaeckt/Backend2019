@@ -15,11 +15,11 @@ namespace Backend.Core.Services.Widgets
     {
         private const string DateKeyFormat = "yyyyMMdd";
 
-        private IMongoOperation<QuizQuestion> QuestionRepository { get; }
+        private IMongoOperation<QuizQuestion> _questionRepository;
 
-        private IMongoOperation<UserQuiz> UserQuizRepository { get; }
+        private IMongoOperation<UserQuiz> _userQuizRepository;
 
-        public UserService UserService { get; }
+        private UserService _userService;
 
         public QuizService(
                 IMongoOperation<QuizQuestion> questionRepository,
@@ -29,17 +29,17 @@ namespace Backend.Core.Services.Widgets
                 ClaimsPrincipal principal)
             : base(userRepository, principal)
         {
-            QuestionRepository = questionRepository;
-            UserQuizRepository = userQuizRepository;
-            UserService = userService;
+            _questionRepository = questionRepository;
+            _userQuizRepository = userQuizRepository;
+            _userService = userService;
         }
 
-        private UserQuiz CurrentUserQuiz => UserQuizRepository.GetQuerableAsync()
+        private UserQuiz CurrentUserQuiz => _userQuizRepository.GetQuerableAsync()
             .SingleOrDefault(uq => uq.UserId == CurrentUser.Id);
 
         public async Task<QuestionResponse> Get()
         {
-            var questions = await QuestionRepository.GetAllAsync();
+            var questions = await _questionRepository.GetAllAsync();
             var answeredQuestions = GetUserQuizAnswerForDay(DateTime.Today);
             var unansweredQuestions = questions.Where(q => answeredQuestions.All(aQ => aQ.QuizQuestionId != q.Id)).ToList();
             unansweredQuestions.Shuffle();
@@ -49,7 +49,7 @@ namespace Backend.Core.Services.Widgets
 
         public async Task<QuestionAnswerResponse> Answer(QuestionAnswer answer)
         {
-            var question = QuestionRepository.GetQuerableAsync().FirstOrDefault(q => q.Id == answer.QuestionId);
+            var question = _questionRepository.GetQuerableAsync().FirstOrDefault(q => q.Id == answer.QuestionId);
             if (question == null)
             {
                 throw new WebException($"Question with id: {answer.QuestionId} not found.", System.Net.HttpStatusCode.NotFound);
@@ -69,7 +69,7 @@ namespace Backend.Core.Services.Widgets
             await StoreAnswer(answer, questionAnswerResponse);
             if (isCorrectAnswer)
             {
-                await UserService.AddPoints(new PointAwarding
+                await _userService.AddPoints(new PointAwarding
                 {
                     Points = question.Points,
                     Co2Saving = 0.0,
@@ -83,11 +83,11 @@ namespace Backend.Core.Services.Widgets
 
         private async Task StoreAnswer(QuestionAnswer answer, QuestionAnswerResponse answerResponse)
         {
-            var userQuiz = UserQuizRepository.GetQuerableAsync().FirstOrDefault(uq => uq.UserId == CurrentUser.Id);
+            var userQuiz = _userQuizRepository.GetQuerableAsync().FirstOrDefault(uq => uq.UserId == CurrentUser.Id);
             if (userQuiz == null)
             {
                 userQuiz = new UserQuiz { UserId = CurrentUser.Id };
-                userQuiz = await UserQuizRepository.SaveAsync(userQuiz);
+                userQuiz = await _userQuizRepository.SaveAsync(userQuiz);
             }
 
             if (!userQuiz.AnswersByDay.ContainsKey(DateTime.Today.ToString(DateKeyFormat)))
@@ -103,7 +103,7 @@ namespace Backend.Core.Services.Widgets
                 SelectedAnswer = answer.Answers.ToList()
             });
 
-            await UserQuizRepository.UpdateAsync(userQuiz.Id, userQuiz);
+            await _userQuizRepository.UpdateAsync(userQuiz.Id, userQuiz);
         }
 
         private bool IsAnswerCorrect(IEnumerable<string> correctAnswers, IEnumerable<string> userAnswers)
@@ -135,7 +135,7 @@ namespace Backend.Core.Services.Widgets
         {
             return GetUserQuizAnswerForDay(day).Select(sqa =>
             {
-                var question = QuestionRepository.GetByIdAsync(sqa.QuizQuestionId).Result;
+                var question = _questionRepository.GetByIdAsync(sqa.QuizQuestionId).Result;
 
                 return new SubmittedQuestionAnswer
                 {
@@ -160,11 +160,6 @@ namespace Backend.Core.Services.Widgets
                 Question = quizQuestion.Question,
                 Answers = allAnswers
             };
-        }
-
-        public void Insert(QuizQuestion question)
-        {
-            QuestionRepository.SaveAsync(question);
         }
     }
 }

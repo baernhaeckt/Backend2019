@@ -1,35 +1,41 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using AspNetCore.MongoDB;
 using Backend.Core.Security.Abstraction;
+using Backend.Core.Startup;
 using Backend.Database;
 using Bogus;
 using Bogus.Locations;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using System.Collections.Generic;
-using System.Linq;
+using MongoDB.Driver;
 
-namespace Backend.Web.Controllers
+namespace Backend.Core
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [AllowAnonymous]
-    public class SeedController : ControllerBase
+    public class GenerateUsersStartupTask : IStartupTask
     {
+        private const int SeedCount = 40;
+
         private readonly IPasswordStorage _passwordStorage;
-        private readonly IMongoOperation<User> _operation;
+        private readonly IMongoOperation<User> _userRepository;
         private readonly IPaswordGenerator _paswordGenerator;
 
-        public SeedController(IPasswordStorage passwordStorage, IMongoOperation<User> operation, IPaswordGenerator paswordGenerator)
+        public GenerateUsersStartupTask(IPasswordStorage passwordStorage, IMongoOperation<User> userRepository, IPaswordGenerator paswordGenerator)
         {
             _passwordStorage = passwordStorage;
-            _operation = operation;
+            _userRepository = userRepository;
             _paswordGenerator = paswordGenerator;
         }
 
-        [HttpPost("users")]
-        public void SeedUsers(int count)
+
+        public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
+            if (_userRepository.Count(FilterDefinition<User>.Empty) != 0)
+            {
+                return;
+            }
+
             IList<string> zips = new[] { "3001", "3006", "3010", "3013", "3018", "3027", "3004", "3007", "3011", "3014" };
 
             Faker<Location> locationFaker = new Faker<Location>()
@@ -47,8 +53,9 @@ namespace Backend.Web.Controllers
                 .RuleFor(u => u.DisplayName, f => f.Name.FirstName())
                 .RuleFor(u => u.Location, f => f.PickRandom(locations));
 
-            List<User> users = faker.Generate(count);
-            _operation.InsertMany(users);
+            List<User> users = faker.Generate(SeedCount);
+
+            await _userRepository.InsertManyAsync(users);
         }
     }
 }

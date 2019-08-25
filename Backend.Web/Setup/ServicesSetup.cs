@@ -19,12 +19,12 @@ namespace Backend.Web.Setup
             services.AddScoped<TokenService>();
             services.AddScoped<UserService>();
             services.AddScoped<SufficientTypeService>();
-            services.AddScoped<DbConnectionWarmup>();
             services.AddScoped<AwardService>();
             services.AddScoped<IQuizService, QuizService>();
             services.AddSingleton<IEventStream, SignalREventStream>();
-            services.AddScoped<DbConnectionWarmup>();
-            services.AddStartupTask<WarmupStartupTask>();
+
+            services.AddStartupTask<GenerateQuizQuestionsStartupTask>();
+            services.AddStartupTask<GenerateSufficientTypesStartupTask>();
         }
     }
 }

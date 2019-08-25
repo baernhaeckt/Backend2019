@@ -19,12 +19,6 @@ namespace Backend.Web.Controllers
             _sufficientTypeService = sufficientTypeService;
         }
 
-        [HttpPost("seed")]
-        public void Seed()
-        {
-            _sufficientTypeService.GenerateSufficientTypes();
-        }
-
         [HttpGet("baseline")]
         public async Task<IEnumerable<BaselineResponse>> GetBaseLinePoints()
         {

@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="28.0.2" />
+    <PackageReference Include="Bogus.Locations" Version="28.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 

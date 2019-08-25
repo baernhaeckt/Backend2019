@@ -1,37 +1,32 @@
-﻿using Backend.Core.Services.Widgets;
-using Backend.Models.Widgets.Quiz;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using AspNetCore.MongoDB;
+using Backend.Core.Startup;
+using Backend.Database.Widgets.Quiz;
+using MongoDB.Driver;
 
-namespace Backend.Web.Controllers.Widgets
+namespace Backend.Core
 {
-    [Route("api/widgets/quiz")]
-    [ApiController]
-    public class QuizController : ControllerBase
+    public class GenerateQuizQuestionsStartupTask : IStartupTask
     {
-        private readonly IQuizService _quizService;
+        private readonly IMongoOperation<QuizQuestion> _quizQuestionRepository;
 
-        public QuizController(IQuizService quizService)
+        public GenerateQuizQuestionsStartupTask(IMongoOperation<QuizQuestion> quizQuestionRepository)
         {
-            _quizService = quizService;
+            _quizQuestionRepository = quizQuestionRepository;
         }
 
-        [HttpGet("question")]
-        public async Task<QuestionResponse> Get()
+        public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            return await _quizService.Get();
-        }
+            if (_quizQuestionRepository.Count(FilterDefinition<QuizQuestion>.Empty) != 0)
+            {
+                return;
+            }
 
-        [HttpPost("question")]
-        public async Task<QuestionAnswerResponse> Answer(QuestionAnswer questionAnswer)
-        {
-            return await _quizService.Answer(questionAnswer);
-        }
+            IList<QuizQuestion> questions = new List<QuizQuestion>();
 
-        [HttpGet("seed")]
-        public void Seed()
-        {
-            _quizService.Insert(new Database.Widgets.Quiz.QuizQuestion()
+            questions.Add(new QuizQuestion
             {
                 Question = "Von 100 gesammelten Kartoffeln wieviele werden tatsächlich gegessen?",
                 CorrectAnswers = new[] { "34" },
@@ -40,7 +35,8 @@ namespace Backend.Web.Controllers.Widgets
 
                 Points = 2
             });
-            _quizService.Insert(new Database.Widgets.Quiz.QuizQuestion()
+
+            questions.Add(new QuizQuestion
             {
                 Question = "Wenn wir unseren Food Waste um einen Drittel reduzieren würde, was für einem CO2 Gewinn würde dies bedeuten?",
                 CorrectAnswers = new[] { "gleichviel wie 500'000 Autos" },
@@ -53,6 +49,8 @@ namespace Backend.Web.Controllers.Widgets
                 wurde von National - und Ständerat abgelehnt. Quelle: https://www.wwf.ch/de/unsere-ziele/foodwaste",
                 Points = 2
             });
+
+            await _quizQuestionRepository.InsertManyAsync(questions);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Backend.Database.Widgets.Quiz;
-using Backend.Models.Widgets.Quiz;
+﻿using Backend.Models.Widgets.Quiz;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,7 +14,5 @@ namespace Backend.Core.Services.Widgets
         IEnumerable<SubmittedQuestionAnswer> SubmittedAnswersForToday { get; }
 
         IEnumerable<SubmittedQuestionAnswer> GetSubmittedAnswersForDay(DateTime day);
-
-        void Insert(QuizQuestion question);
     }
 }

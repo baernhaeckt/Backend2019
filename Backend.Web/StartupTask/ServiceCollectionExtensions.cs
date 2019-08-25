@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Backend.Core.Startup;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Backend.Web.StartupTask
 {
