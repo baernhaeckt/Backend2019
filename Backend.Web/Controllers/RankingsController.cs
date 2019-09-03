@@ -91,9 +91,7 @@ namespace Backend.Web.Controllers
 
             foreach (var user in users)
             {
-                int pointsForUser = _tokenRepository.GetQuerableAsync()
-                    .Where(t => t.UserId == user.Id)
-                    .Sum(u => u.Points);
+                int pointsForUser = user.PointActions.Sum(p => p.Point);
 
                 results.Add(new UserResponse
                 {
