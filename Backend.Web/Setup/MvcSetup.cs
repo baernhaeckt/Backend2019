@@ -10,11 +10,11 @@ namespace Backend.Web.Setup
     {
         public static void AddMvcWithCors(this IServiceCollection services)
         {
-            services.AddMvc(config =>
+            services.AddControllers(config =>
             {
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddCors();
 

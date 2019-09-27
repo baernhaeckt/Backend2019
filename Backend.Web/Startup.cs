@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Backend.Web
 {
@@ -21,7 +22,7 @@ namespace Backend.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvcWithCors();
-            services.AddApiDocumentation();
+            //services.AddApiDocumentation(); Wait for Swagger v5
             services.AddJwtAuthentication();
             services.AddNewsfeed();
             services.AddServices();
@@ -29,18 +30,21 @@ namespace Backend.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Leaf API V1");
-            });
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+
+            // Wait for Swagger v5
+            //app.UseSwagger();
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Leaf API V1");
+            //});
 
             app.UseCors(x =>
                     x.AllowAnyMethod()
@@ -49,14 +53,14 @@ namespace Backend.Web
                     .AllowCredentials());
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseSignalR(routes =>
+            app.UseRouting();
+            app.UseEndpoints(endpoints => 
             {
-                routes.MapHub<NewsfeedHub>("/newsfeed");
+                endpoints.MapControllers();
+                endpoints.MapHub<NewsfeedHub>("/newsfeed");
             });
-
-            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-            app.UseMvc();
         }
     }
 }
