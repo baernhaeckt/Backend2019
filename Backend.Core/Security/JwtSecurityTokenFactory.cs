@@ -23,7 +23,7 @@ namespace Backend.Core.Security
             DateTime now = DateTime.Now;
             List<Claim> claims = new List<Claim>
             {
-                new Claim(OekoBookClaimTypes.UserId, user.Id),
+                new Claim(LeafClaimTypes.UserId, user.Id),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, now.ToUniversalTime().ToString(CultureInfo.CurrentCulture), ClaimValueTypes.Integer64),

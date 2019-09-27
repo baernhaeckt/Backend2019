@@ -1,9 +1,9 @@
 ﻿namespace Backend.Core.Security
 {
-    public static class OekoBookClaimTypes
+    public static class LeafClaimTypes
     {
-        public const string OekoBookClaimTypeNamespace = "http://schemas.oekobook.com/";
+        public const string LeafClaimTypeNamespace = "http://schemas.leaf.com/";
 
-        public const string UserId = OekoBookClaimTypeNamespace + "UserId";
+        public const string UserId = LeafClaimTypeNamespace + "UserId";
     }
 }
