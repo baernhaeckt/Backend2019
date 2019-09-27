@@ -1,4 +1,4 @@
-﻿using Backend.Core.Security;
+﻿using Backend.Core.Security.Abstraction;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;

@@ -30,7 +30,7 @@ namespace Backend.Core.Security
             };
 
             SymmetricSecurityKey signingKey = _securityKeyProvider.GetSecurityKey();
-            JwtSecurityToken securityToken = new JwtSecurityToken(
+            var securityToken = new JwtSecurityToken(
                 issuer: "Leaf",
                 audience: "Leaf",
                 claims: claims,
