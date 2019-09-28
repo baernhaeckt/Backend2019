@@ -37,9 +37,6 @@ namespace Backend.Web.Controllers
         }
 
         [HttpPatch]
-        public async Task Update([FromBody] UserUpdateRequest userUpdateRequest)
-        {
-            await _userService.Update(userUpdateRequest);
-        }
+        public async Task Update([FromBody] UserUpdateRequest userUpdateRequest) => await _userService.Update(userUpdateRequest);
     }
 }

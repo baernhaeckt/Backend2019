@@ -34,7 +34,7 @@ namespace Backend.Core.Security
         {
             // generate a 128-bit salt using a secure PRNG
             var salt = new byte[128 / 8];
-            using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+            using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(salt);
                 return salt;

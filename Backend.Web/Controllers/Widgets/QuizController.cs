@@ -17,15 +17,9 @@ namespace Backend.Web.Controllers.Widgets
         }
 
         [HttpGet("question")]
-        public async Task<QuestionResponse> Get()
-        {
-            return await _quizService.Get();
-        }
+        public async Task<QuestionResponse> Get() => await _quizService.Get();
 
         [HttpPost("question")]
-        public async Task<QuestionAnswerResponse> Answer(QuestionAnswer questionAnswer)
-        {
-            return await _quizService.Answer(questionAnswer);
-        }
+        public async Task<QuestionAnswerResponse> Answer(QuestionAnswer questionAnswer) => await _quizService.Answer(questionAnswer);
     }
 }

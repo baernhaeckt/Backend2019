@@ -12,17 +12,17 @@ namespace Backend.Web.Controllers
     [ApiController]
     public class PointsController : ControllerBase
     {
+        private readonly UserService _userService;
+
         public PointsController(UserService userService)
         {
-            UserService = userService;
+            _userService = userService;
         }
-
-        public UserService UserService { get; }
 
         [HttpGet]
         public async Task<IEnumerable<PointResponse>> GetAsync(Guid userId)
         {
-            var pointList = await UserService.PointHistory(userId);
+            var pointList = await _userService.PointHistory(userId);
             return pointList.OrderByDescending(p => p.Date).Take(25).Select(p => new PointResponse
             {
                 Date = p.Date,

@@ -16,17 +16,13 @@ namespace Backend.Web.Controllers
         private readonly ISecurityTokenFactory _securityTokenFactory;
         private readonly UserService _userService;
 
-        public FriendsService FriendService { get; }
-
         public UsersController(
             IPasswordStorage passwordStorage,
             ISecurityTokenFactory securityTokenFactory,
-            FriendsService friendService,
             UserService userService)
         {
             _passwordStorage = passwordStorage;
             _securityTokenFactory = securityTokenFactory;
-            FriendService = friendService;
             _userService = userService;
         }
 

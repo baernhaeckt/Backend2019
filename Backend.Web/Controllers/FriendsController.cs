@@ -15,17 +15,17 @@ namespace Backend.Web.Controllers
     [ApiController]
     public class FriendsController : ControllerBase
     {
-        public FriendsService FriendService { get; }
+        private readonly FriendsService _friendService;
 
         public FriendsController(FriendsService friendService)
         {
-            FriendService = friendService;
+            _friendService = friendService;
         }
 
         [HttpGet]
         public async Task<IEnumerable<PrivateUserResponse>> GetAsync()
         {
-            IEnumerable<User> result = await FriendService.GetFriends();
+            IEnumerable<User> result = await _friendService.GetFriends();
             return result.Select(u => new PrivateUserResponse()
             {
                 Id = u.Id,
@@ -41,9 +41,9 @@ namespace Backend.Web.Controllers
         }
 
         [HttpPost]
-        public async Task Create(string friendEmail) => await FriendService.AddFriend(friendEmail);
+        public async Task Create(string friendEmail) => await _friendService.AddFriend(friendEmail);
 
         [HttpDelete]
-        public async Task Delete(Guid friendUserId) => await FriendService.RemoveFriend(friendUserId);
+        public async Task Delete(Guid friendUserId) => await _friendService.RemoveFriend(friendUserId);
     }
 }
