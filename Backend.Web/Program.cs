@@ -1,7 +1,5 @@
-﻿using Backend.Web.StartupTask;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using System.Threading;
 
 namespace Backend.Web
 {
@@ -9,11 +7,14 @@ namespace Backend.Web
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().RunWithTasksAsync(CancellationToken.None).Wait();
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webHost => webHost.UseStartup<Startup>());
+                .ConfigureWebHostDefaults(webHost =>
+                {
+                    webHost.UseStartup<Startup>();
+                });
     }
 }

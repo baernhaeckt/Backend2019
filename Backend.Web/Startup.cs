@@ -1,6 +1,7 @@
 ﻿using Backend.Core.Newsfeed;
 using Backend.Web.Middleware;
 using Backend.Web.Setup;
+using Backend.Web.StartupTask;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,8 @@ namespace Backend.Web
             services.AddNewsfeed();
             services.AddServices();
             services.AddMongoDb(Configuration);
+
+            services.AddHostedService<StartupTaskRunner>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

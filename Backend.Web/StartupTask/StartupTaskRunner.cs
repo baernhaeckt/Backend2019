@@ -1,18 +1,27 @@
 ﻿using Backend.Core.Startup;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Backend.Web.StartupTask
 {
-    public static class StartupTaskWebHostExtensions
+    public class StartupTaskRunner : IHostedService
     {
-        public static async Task RunWithTasksAsync(this IHost host, CancellationToken cancellationToken)
+        private readonly IServiceProvider _serviceProvider;
+
+        public StartupTaskRunner(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
             // Load all tasks from DI
-            using (var scope = host.Services.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 var startupTasks = scope.ServiceProvider.GetServices<IStartupTask>();
 
@@ -21,10 +30,9 @@ namespace Backend.Web.StartupTask
                 {
                     await startupTask.ExecuteAsync(cancellationToken);
                 }
-
-                // Start the tasks as normal
-                await host.RunAsync(cancellationToken);
             }
         }
+
+        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
     }
 }
