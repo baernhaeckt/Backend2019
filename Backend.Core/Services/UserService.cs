@@ -1,7 +1,9 @@
 ﻿using AspNetCore.MongoDB;
 using Backend.Core.Newsfeed;
+using Backend.Core.Security.Abstraction;
 using Backend.Database;
 using Backend.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -11,13 +13,21 @@ namespace Backend.Core.Services
 {
     public class UserService : PersonalizedService
     {
+        private readonly IMongoOperation<User> _userRepository;
         private readonly IEventStream _eventStream;
+        private readonly ISecurityTokenFactory _securityTokenFactory;
+        private readonly IPasswordGenerator _passwordGenerator;
+        private readonly IPasswordStorage _passwordStorage;
         private readonly AwardService _awardService;
 
-        public UserService(IMongoOperation<User> userRepository, ClaimsPrincipal principal, IEventStream eventStream, AwardService awardService)
+        public UserService(IMongoOperation<User> userRepository, ClaimsPrincipal principal, IEventStream eventStream, ISecurityTokenFactory securityTokenFactory, IPasswordGenerator passwordGenerator, IPasswordStorage passwordStorage, AwardService awardService)
             : base(userRepository, principal)
         {
+            _userRepository = userRepository;
             _eventStream = eventStream;
+            _securityTokenFactory = securityTokenFactory;
+            _passwordGenerator = passwordGenerator;
+            _passwordStorage = passwordStorage;
             _awardService = awardService;
         }
 
@@ -46,10 +56,42 @@ namespace Backend.Core.Services
             await Process(token.Points, token.Co2Saving, user);
         }
 
+        public User GetByEmail(string email)
+        {
+            return _userRepository.GetQuerableAsync().Single(u => u.Email == email);
+        }
+
         public IEnumerable<User> GetByPlz(string zip)
         {
             return UserRepository.GetQuerableAsync()
                .Where(u => u.Location.Zip == zip);
+        }
+
+        public bool IsRegistered(string email)
+        {
+            return _userRepository.GetQuerableAsync().Any(u => u.Email == email);
+        }
+
+        public async Task<string> RegisterAsync(string email)
+        {
+            string newPassword = _passwordGenerator.Generate();
+            var newUser = new User
+            {
+                Email = email,
+                Password = _passwordStorage.Create(newPassword),
+                DisplayName = "ÖkoRookie",
+                Location = new Location
+                {
+                    City = "Bern",
+                    Zip = "3011",
+                    Latitude = 46.944699,
+                    Longitude = 7.443788
+                }
+            };
+            newUser = await _userRepository.SaveAsync(newUser);
+
+            string token = _securityTokenFactory.Create(newUser);
+            return token;
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()
