@@ -1,8 +1,8 @@
-﻿using AspNetCore.MongoDB;
+﻿
 
 namespace Backend.Database
 {
-    public class SufficientType : IMongoEntity
+    public class SufficientType : Entity
     {
         public string Title { get; set; }
 

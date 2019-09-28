@@ -1,6 +1,7 @@
 ﻿using Backend.Core.Security.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Threading.Tasks;
 
 namespace Backend.Core.Newsfeed
@@ -10,9 +11,9 @@ namespace Backend.Core.Newsfeed
     {
         public override Task OnConnectedAsync()
         {
-            string userId = Context.User.Id();
+            Guid userId = Context.User.Id();
 
-            Groups.AddToGroupAsync(Context.ConnectionId, userId);
+            Groups.AddToGroupAsync(Context.ConnectionId, userId.ToString());
 
             return base.OnConnectedAsync();
         }

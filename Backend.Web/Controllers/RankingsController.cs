@@ -1,5 +1,4 @@
-﻿using AspNetCore.MongoDB;
-using Backend.Core.Services;
+﻿using Backend.Core.Services;
 using Backend.Database;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -15,13 +14,11 @@ namespace Backend.Web.Controllers
     {
         private readonly UserService _userService;
         private readonly FriendsService _friendsService;
-        private readonly IMongoOperation<Token> _tokenRepository;
 
-        public RankingsController(UserService userService, FriendsService friendsService, IMongoOperation<Token> tokenRepository)
+        public RankingsController(UserService userService, FriendsService friendsService)
         {
             _userService = userService;
             _friendsService = friendsService;
-            _tokenRepository = tokenRepository;
         }
 
         [HttpGet("global")]
@@ -34,9 +31,9 @@ namespace Backend.Web.Controllers
         }
 
         [HttpGet("local")]
-        public IEnumerable<UserResponse> GetLocal(string zip)
+        public async Task<IEnumerable<UserResponse>> GetLocalAsync(string zip)
         {
-            IEnumerable<User> users = _userService.GetByPlz(zip);
+            IEnumerable<User> users = await _userService.GetByPlzAsync(zip);
 
             var results = CreateResult(users);
 
@@ -44,9 +41,9 @@ namespace Backend.Web.Controllers
         }
 
         [HttpGet("friends")]
-        public IEnumerable<UserResponse> GetFriends()
+        public async Task<IEnumerable<UserResponse>> GetFriendsAsync()
         {
-            var results = CreateResult(_friendsService.GetFriends().ToList());
+            var results = CreateResult((await _friendsService.GetFriends()));
 
             return results.OrderByDescending(u => u.Points);
         }
@@ -60,7 +57,7 @@ namespace Backend.Web.Controllers
             var allUsers = await _userService.GetAllAsync();
             var global = CreateResult(allUsers).OrderByDescending(u => u.Points);
             var local = CreateResult(allUsers.Where(u => u.Location != null && u.Location.Zip == zipCode)).OrderByDescending(u => u.Points);
-            var friends = CreateResult(_friendsService.GetFriends()).OrderByDescending(u => u.Points);
+            var friends = CreateResult(await _friendsService.GetFriends()).OrderByDescending(u => u.Points);
 
             return new RankingSummary
             {
@@ -87,6 +84,7 @@ namespace Backend.Web.Controllers
 
         private IEnumerable<UserResponse> CreateResult(IEnumerable<User> users)
         {
+            users = users.ToList();
             IList<UserResponse> results = new List<UserResponse>(users.Count());
 
             foreach (var user in users)

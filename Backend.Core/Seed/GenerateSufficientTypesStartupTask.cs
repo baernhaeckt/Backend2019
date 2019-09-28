@@ -1,7 +1,6 @@
-﻿using AspNetCore.MongoDB;
-using Backend.Core.Startup;
+﻿using Backend.Core.Startup;
 using Backend.Database;
-using MongoDB.Driver;
+using Backend.Database.Abstraction;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,16 +9,16 @@ namespace Backend.Core.Seed
 {
     public class GenerateSufficientTypesStartupTask : IStartupTask
     {
-        private readonly IMongoOperation<SufficientType> _sufficientTypeRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GenerateSufficientTypesStartupTask(IMongoOperation<SufficientType> sufficientTypeRepository)
+        public GenerateSufficientTypesStartupTask(IUnitOfWork unitOfWork)
         {
-            _sufficientTypeRepository = sufficientTypeRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            if (_sufficientTypeRepository.Count(FilterDefinition<SufficientType>.Empty) != 0)
+            if (await _unitOfWork.CountAsync<SufficientType>() != 0)
             {
                 return;
             }
@@ -70,7 +69,7 @@ namespace Backend.Core.Seed
                 }
             };
 
-            await _sufficientTypeRepository.InsertManyAsync(sufficientTypes);
+            await _unitOfWork.InsertManyAsync(sufficientTypes);
         }
     }
 }

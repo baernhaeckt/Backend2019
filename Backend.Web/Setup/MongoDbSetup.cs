@@ -1,4 +1,6 @@
-﻿using AspNetCore.MongoDB;
+﻿using Backend.Core.Seed;
+using Backend.Core.Startup;
+using Backend.Database.Framework;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,8 +10,8 @@ namespace Backend.Web.Setup
     {
         public static void AddMongoDb(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<MongoDBOption>(configuration.GetSection("MongoDBOption"))
-                .AddMongoDatabase();
+            services.AddMongoDbPersistance(configuration);
+            services.AddSingleton<IStartupTask, MongoDbSetupStartupTask>();
         }
     }
 }

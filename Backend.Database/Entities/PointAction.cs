@@ -1,10 +1,10 @@
-﻿using AspNetCore.MongoDB;
+﻿
 using System;
 using System.Collections.Generic;
 
 namespace Backend.Database
 {
-    public class PointAction : IMongoEntity
+    public class PointAction : Entity
     {
         public int Point { get; set; }
 

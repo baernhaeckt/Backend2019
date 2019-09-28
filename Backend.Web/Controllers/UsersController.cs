@@ -34,7 +34,7 @@ namespace Backend.Web.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<LoginResponse>> Register(string email)
         {
-            if (_userService.IsRegistered(email))
+            if (!await _userService.IsRegisteredAsync(email))
             {
                 string token = await _userService.RegisterAsync(email);
                 return new LoginResponse { Token = token };
@@ -47,11 +47,11 @@ namespace Backend.Web.Controllers
 
         [HttpPost(nameof(Login))]
         [AllowAnonymous]
-        public ActionResult<LoginResponse> Login(string email, string password)
+        public async Task<ActionResult<LoginResponse>> Login(string email, string password)
         {
-            if (_userService.IsRegistered(email))
+            if (await _userService.IsRegisteredAsync(email))
             {
-                User user = _userService.GetByEmail(email);
+                User user = await _userService.GetByEmailAsync(email);
                 if (!_passwordStorage.Match(password, user.Password))
                 {
                     return Forbid();

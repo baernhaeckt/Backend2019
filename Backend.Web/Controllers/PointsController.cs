@@ -1,6 +1,7 @@
 ﻿using Backend.Core.Services;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace Backend.Web.Controllers
         public UserService UserService { get; }
 
         [HttpGet]
-        public async Task<IEnumerable<PointResponse>> GetAsync(string userId)
+        public async Task<IEnumerable<PointResponse>> GetAsync(Guid userId)
         {
             var pointList = await UserService.PointHistory(userId);
             return pointList.OrderByDescending(p => p.Date).Take(25).Select(p => new PointResponse

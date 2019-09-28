@@ -1,5 +1,5 @@
-﻿using AspNetCore.MongoDB;
-using Backend.Database;
+﻿using Backend.Database;
+using Backend.Database.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +10,8 @@ namespace Backend.Core.Services
 {
     public class FriendsService : PersonalizedService
     {
-        public FriendsService(IMongoOperation<User> userResponseRepository, ClaimsPrincipal principal)
-            : base(userResponseRepository, principal)
+        public FriendsService(IUnitOfWork unitOfWork, ClaimsPrincipal principal)
+            : base(unitOfWork, principal)
         { }
 
         public async Task AddFriend(string friendEmail)
@@ -19,15 +19,14 @@ namespace Backend.Core.Services
             await ConnectFriends(CurrentUser.Id, friendEmail);
         }
 
-        public async Task ConnectFriends(string userId, string friendEmail)
+        public async Task ConnectFriends(Guid userId, string friendEmail)
         {
-            if (String.IsNullOrEmpty(friendEmail))
+            if (string.IsNullOrEmpty(friendEmail))
             {
-                throw new WebException("email must not be empty", System.Net.HttpStatusCode.BadRequest);
+                throw new WebException("Email must not be empty", System.Net.HttpStatusCode.BadRequest);
             }
 
-            User friendUser = UserRepository.GetQuerableAsync().SingleOrDefault(u => u.Email == friendEmail);
-
+            User friendUser = await UnitOfWork.GetByEmailAsync(friendEmail);
             if (friendUser == null)
             {
                 // TODO: Invite to Platform
@@ -36,28 +35,28 @@ namespace Backend.Core.Services
 
             if (userId == friendUser.Id)
             {
-                throw new WebException($"can't be your own friend.", System.Net.HttpStatusCode.BadRequest);
+                throw new WebException($"Can't be your own friend.", System.Net.HttpStatusCode.BadRequest);
             }
 
-            var user = await UserRepository.GetByIdAsync(userId);
+            var user = await UnitOfWork.GetAsync<User>(userId);
             if (user.Friends.Contains(friendUser.Id))
             {
-                throw new WebException("user is already your friend", System.Net.HttpStatusCode.BadRequest);
+                throw new WebException("User is already your friend", System.Net.HttpStatusCode.BadRequest);
             }
 
             user.Friends.Add(friendUser.Id);
-            await UserRepository.UpdateAsync(user.Id, user);
+            await UnitOfWork.UpdateAsync(user);
 
-            var friendsFriend = (friendUser.Friends ?? Enumerable.Empty<string>()).ToList();
+            var friendsFriend = (friendUser.Friends ?? Enumerable.Empty<Guid>()).ToList();
             if (!friendsFriend.Contains(user.Id))
             {
                 friendsFriend.Add(user.Id);
                 friendUser.Friends = friendsFriend;
-                await UserRepository.UpdateAsync(friendUser.Id, friendUser);
+                await UnitOfWork.UpdateAsync(friendUser);
             }
         }
 
-        public async Task RemoveFriend(string friendUserId)
+        public async Task RemoveFriend(Guid friendUserId)
         {
             User user = CurrentUser;
 
@@ -69,25 +68,31 @@ namespace Backend.Core.Services
 
             friends.Remove(friendUserId);
             user.Friends = friends;
-            await UserRepository.UpdateAsync(user.Id, user);
+            await UnitOfWork.UpdateAsync(user);
 
-            User exFriend = await UserRepository.GetByIdAsync(friendUserId);
+            User exFriend = await UnitOfWork.GetAsync<User>(friendUserId);
 
             if (exFriend.Friends.Contains(CurrentUser.Id))
             {
                 exFriend.Friends.Remove(CurrentUser.Id);
-                await UserRepository.UpdateAsync(exFriend.Id, exFriend);
+                await UnitOfWork.UpdateAsync(exFriend);
             }
         }
 
-        public IEnumerable<User> GetFriends()
+        public async Task<IEnumerable<User>> GetFriends()
         {
             if (CurrentUser.Friends == null)
             {
                 return Enumerable.Empty<User>();
             }
 
-            return CurrentUser.Friends.Select(refId => UserRepository.GetByIdAsync(refId.ToString()).Result).ToList();
+            IList<User> friends = new List<User>(CurrentUser.Friends.Count);
+            foreach (var friend in CurrentUser.Friends)
+            {
+                friends.Add(await UnitOfWork.GetAsync<User>(friend));
+            }
+
+            return friends;
         }
     }
 }

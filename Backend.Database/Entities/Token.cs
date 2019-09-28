@@ -1,9 +1,9 @@
-﻿using AspNetCore.MongoDB;
+﻿
 using System;
 
 namespace Backend.Database
 {
-    public class Token : IMongoEntity
+    public class Token : Entity
     {
         public string Partner { get; set; }
 
@@ -13,9 +13,9 @@ namespace Backend.Database
 
         public double Co2Saving { get; set; }
 
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
-        public bool Valid => UserId == null;
+        public bool Valid => UserId == Guid.Empty;
 
         public Guid Value { get; set; }
 

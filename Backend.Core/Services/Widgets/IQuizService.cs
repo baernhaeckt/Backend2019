@@ -11,8 +11,8 @@ namespace Backend.Core.Services.Widgets
 
         Task<QuestionAnswerResponse> Answer(QuestionAnswer answer);
 
-        IEnumerable<SubmittedQuestionAnswer> SubmittedAnswersForToday { get; }
+        Task<IEnumerable<SubmittedQuestionAnswer>> SubmittedAnswersForToday();
 
-        IEnumerable<SubmittedQuestionAnswer> GetSubmittedAnswersForDay(DateTime day);
+        Task<IEnumerable<SubmittedQuestionAnswer>> GetSubmittedAnswersForDayAsync(DateTime day);
     }
 }

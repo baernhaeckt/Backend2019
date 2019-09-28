@@ -21,9 +21,9 @@ namespace Backend.Core.Security
         public string Create(User user)
         {
             DateTime now = DateTime.Now;
-            List<Claim> claims = new List<Claim>
+            var claims = new List<Claim>
             {
-                new Claim(LeafClaimTypes.UserId, user.Id),
+                new Claim(LeafClaimTypes.UserId, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, now.ToUniversalTime().ToString(CultureInfo.CurrentCulture), ClaimValueTypes.Integer64),

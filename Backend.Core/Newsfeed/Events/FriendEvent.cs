@@ -8,7 +8,7 @@ namespace Backend.Core.Newsfeed
         public FriendEvent(User user)
         {
             variant = "info";
-            foreach (var friend in user.Friends ?? Enumerable.Empty<string>())
+            foreach (var friend in user.Friends)
             {
                 Audience.Add(friend);
             }

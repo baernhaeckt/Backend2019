@@ -1,8 +1,7 @@
-﻿using AspNetCore.MongoDB;
-using Backend.Core.Security.Extensions;
+﻿using Backend.Core.Security.Extensions;
 using Backend.Database;
+using Backend.Database.Abstraction;
 using System;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -10,13 +9,13 @@ namespace Backend.Core.Services
 {
     public class TokenService
     {
-        private readonly IMongoOperation<Token> _tokenRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ClaimsPrincipal _claimsPrincipal;
         private readonly UserService _userService;
 
-        public TokenService(IMongoOperation<Token> tokenRepository, ClaimsPrincipal claimsPrincipal, UserService userService)
+        public TokenService(IUnitOfWork unitOfWork, ClaimsPrincipal claimsPrincipal, UserService userService)
         {
-            _tokenRepository = tokenRepository;
+            _unitOfWork = unitOfWork;
             _claimsPrincipal = claimsPrincipal;
             _userService = userService;
         }
@@ -30,7 +29,6 @@ namespace Backend.Core.Services
                 token.Partner = "Palette";
                 token.Points = 10;
                 token.Co2Saving = 1;
-                token.CreatedDate = DateTime.Now;
                 token.Text = "Einkauf in der Palette";
                 token.Value = Guid.NewGuid();
                 token.SufficientType = new SufficientType
@@ -45,7 +43,6 @@ namespace Backend.Core.Services
                 token.Partner = "Mein Nachbar";
                 token.Points = 5;
                 token.Co2Saving = 0.1;
-                token.CreatedDate = DateTime.Now;
                 token.Text = "Nachbar über Suffizienz aufgeklärt";
                 token.Value = Guid.NewGuid();
                 token.SufficientType = new SufficientType
@@ -60,7 +57,6 @@ namespace Backend.Core.Services
                 token.Partner = "Meine Schwester";
                 token.Points = 15;
                 token.Co2Saving = 2;
-                token.CreatedDate = DateTime.Now;
                 token.Text = "Du Teilst deine Auto mit deiner Schwester";
                 token.Value = Guid.NewGuid();
                 token.SufficientType = new SufficientType
@@ -72,7 +68,7 @@ namespace Backend.Core.Services
 
             if (token != null)
             {
-                await _tokenRepository.InsertOneAsync(token);
+                await _unitOfWork.InsertAsync(token);
                 return token.Value.ToString();
             }
 
@@ -81,7 +77,7 @@ namespace Backend.Core.Services
 
         public async Task AssignTokenToUserAsync(Guid tokenGuid)
         {
-            var token = _tokenRepository.GetQuerableAsync().SingleOrDefault(t => t.Value == tokenGuid);
+            Token token = await _unitOfWork.SingleOrDefaultAsync<Token>(t => t.Value == tokenGuid);
             if (token == null)
             {
                 throw new WebException("Token not found.", System.Net.HttpStatusCode.NotFound);
@@ -92,9 +88,8 @@ namespace Backend.Core.Services
                 throw new WebException("Token already used.", System.Net.HttpStatusCode.BadRequest);
             }
 
-
             token.UserId = _claimsPrincipal.Id();
-            await _tokenRepository.UpdateAsync(token.Id, token);
+            await _unitOfWork.UpdateAsync(token);
             await _userService.AddPoints(token);
         }
     }

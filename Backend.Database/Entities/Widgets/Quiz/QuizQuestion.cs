@@ -1,9 +1,9 @@
-﻿using AspNetCore.MongoDB;
+﻿
 using System.Collections.Generic;
 
 namespace Backend.Database.Widgets.Quiz
 {
-    public class QuizQuestion : IMongoEntity
+    public class QuizQuestion : Entity
     {
         public string Question { get; set; }
 

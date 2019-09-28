@@ -23,10 +23,10 @@ namespace Backend.Web.Setup
             services.AddScoped<IQuizService, QuizService>();
             services.AddSingleton<IEventStream, SignalREventStream>();
 
+            // Data seeding
             services.AddStartupTask<GenerateQuizQuestionsStartupTask>();
             services.AddStartupTask<GenerateUsersStartupTask>();
             services.AddStartupTask<GenerateSufficientTypesStartupTask>();
-            services.AddStartupTask<GeneratePresentationDataStartupTask>();
         }
     }
 }

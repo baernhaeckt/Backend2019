@@ -7,7 +7,7 @@ namespace Backend.Core.Security.Extensions
 {
     public static class PrincipalExtensions
     {
-        public static string Id(this IPrincipal principal) => principal.GetValueFromClaim(LeafClaimTypes.UserId);
+        public static Guid Id(this IPrincipal principal) => Guid.Parse(principal.GetValueFromClaim(LeafClaimTypes.UserId));
 
         public static string Email(this IPrincipal principal) => principal.GetValueFromClaim(ClaimTypes.NameIdentifier);
 

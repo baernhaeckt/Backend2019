@@ -1,9 +1,9 @@
-﻿using AspNetCore.MongoDB;
+﻿
 using System.Collections.Generic;
 
 namespace Backend.Database
 {
-    public class PointReward : IMongoEntity
+    public class PointReward : Entity
     {
         public int Value { get; set; }
 

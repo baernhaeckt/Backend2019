@@ -16,7 +16,7 @@ namespace Backend.Core.Newsfeed
         {
             foreach (var user in @event.Audience)
             {
-                await _hubContext.Clients.Group(user).SendAsync("newEvent", @event);
+                await _hubContext.Clients.Group(user.ToString()).SendAsync("newEvent", @event);
             }
         }
     }

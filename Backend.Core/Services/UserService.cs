@@ -1,11 +1,10 @@
-﻿using AspNetCore.MongoDB;
-using Backend.Core.Newsfeed;
+﻿using Backend.Core.Newsfeed;
 using Backend.Core.Security.Abstraction;
 using Backend.Database;
+using Backend.Database.Abstraction;
 using Backend.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -13,17 +12,15 @@ namespace Backend.Core.Services
 {
     public class UserService : PersonalizedService
     {
-        private readonly IMongoOperation<User> _userRepository;
         private readonly IEventStream _eventStream;
         private readonly ISecurityTokenFactory _securityTokenFactory;
         private readonly IPasswordGenerator _passwordGenerator;
         private readonly IPasswordStorage _passwordStorage;
         private readonly AwardService _awardService;
 
-        public UserService(IMongoOperation<User> userRepository, ClaimsPrincipal principal, IEventStream eventStream, ISecurityTokenFactory securityTokenFactory, IPasswordGenerator passwordGenerator, IPasswordStorage passwordStorage, AwardService awardService)
-            : base(userRepository, principal)
+        public UserService(IUnitOfWork unitOfWork, ClaimsPrincipal principal, IEventStream eventStream, ISecurityTokenFactory securityTokenFactory, IPasswordGenerator passwordGenerator, IPasswordStorage passwordStorage, AwardService awardService)
+            : base(unitOfWork, principal)
         {
-            _userRepository = userRepository;
             _eventStream = eventStream;
             _securityTokenFactory = securityTokenFactory;
             _passwordGenerator = passwordGenerator;
@@ -35,7 +32,7 @@ namespace Backend.Core.Services
         {
             var user = CurrentUser;
             user.DisplayName = updateUserRequest.DisplayName;
-            await UserRepository.UpdateAsync(user.Id, user);
+            await UnitOfWork.UpdateAsync(user);
         }
 
         public async Task AddPoints(Token token)
@@ -56,21 +53,11 @@ namespace Backend.Core.Services
             await Process(token.Points, token.Co2Saving, user);
         }
 
-        public User GetByEmail(string email)
-        {
-            return _userRepository.GetQuerableAsync().Single(u => u.Email == email);
-        }
+        public async Task<User> GetByEmailAsync(string email) => await UnitOfWork.GetByEmailAsync(email);
 
-        public IEnumerable<User> GetByPlz(string zip)
-        {
-            return UserRepository.GetQuerableAsync()
-               .Where(u => u.Location.Zip == zip);
-        }
+        public async Task<IEnumerable<User>> GetByPlzAsync(string zip) => await UnitOfWork.GetByZipAsync(zip);
 
-        public bool IsRegistered(string email)
-        {
-            return _userRepository.GetQuerableAsync().Any(u => u.Email == email);
-        }
+        public async Task<bool> IsRegisteredAsync(string email) => (await UnitOfWork.GetByEmailAsync(email) != null);
 
         public async Task<string> RegisterAsync(string email)
         {
@@ -88,16 +75,13 @@ namespace Backend.Core.Services
                     Longitude = 7.443788
                 }
             };
-            newUser = await _userRepository.SaveAsync(newUser);
+            newUser = await UnitOfWork.InsertAsync(newUser);
 
             string token = _securityTokenFactory.Create(newUser);
             return token;
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync()
-        {
-            return await UserRepository.GetAllAsync();
-        }
+        public async Task<IEnumerable<User>> GetAllAsync() => await UnitOfWork.GetAllAsync<User>();
 
         public async Task AddPoints(PointAwarding pointAwarding)
         {
@@ -122,7 +106,7 @@ namespace Backend.Core.Services
             user.Points += points;
             user.Co2Saving += co2saving;
 
-            await UserRepository.UpdateAsync(user.Id, user);
+            await UnitOfWork.UpdateAsync(user);
 
             // Fire and forget.
             await _eventStream.PublishAsync(new PointsReceivedEvent(user, points));
@@ -131,9 +115,9 @@ namespace Backend.Core.Services
             await _awardService.CheckForNewAwardsAsync(user);
         }
 
-        public async Task<IEnumerable<PointAction>> PointHistory(string userId)
+        public async Task<IEnumerable<PointAction>> PointHistory(Guid id)
         {
-            var user = await UserRepository.GetByIdAsync(userId);
+            var user = await UnitOfWork.GetAsync<User>(id);
             return user.PointActions;
         }
     }

@@ -1,8 +1,8 @@
-﻿using AspNetCore.MongoDB;
+﻿
 
 namespace Backend.Database
 {
-    public class MetaData : IMongoEntity
+    public class MetaData : Entity
     {
         public string Key { get; set; }
 

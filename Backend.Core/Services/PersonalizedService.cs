@@ -1,22 +1,22 @@
-﻿using AspNetCore.MongoDB;
-using Backend.Core.Security.Extensions;
+﻿using Backend.Core.Security.Extensions;
 using Backend.Database;
-using System.Linq;
+using Backend.Database.Abstraction;
 using System.Security.Claims;
 
 namespace Backend.Core.Services
 {
     public abstract class PersonalizedService
     {
+        protected IUnitOfWork UnitOfWork { get; }
+
         protected ClaimsPrincipal Principal { get; }
 
-        protected IMongoOperation<User> UserRepository { get; }
+        // TODO: Refactor to method.
+        public User CurrentUser => UnitOfWork.SingleOrDefaultAsync<User>(u => u.Email == Principal.Email()).Result;
 
-        public User CurrentUser => UserRepository.GetQuerableAsync().Single(u => u.Email == Principal.Email());
-
-        protected PersonalizedService(IMongoOperation<User> userRepository, ClaimsPrincipal principal)
+        protected PersonalizedService(IUnitOfWork unitOfWork, ClaimsPrincipal principal)
         {
-            UserRepository = userRepository;
+            UnitOfWork = unitOfWork;
             Principal = principal;
         }
     }

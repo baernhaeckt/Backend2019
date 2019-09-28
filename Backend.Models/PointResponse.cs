@@ -5,9 +5,9 @@ namespace Backend.Models
 {
     public class PointResponse
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
-        public String Text { get; set; }
+        public string Text { get; set; }
 
         public int Value { get; set; }
 

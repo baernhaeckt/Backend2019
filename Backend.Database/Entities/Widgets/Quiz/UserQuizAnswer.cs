@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Backend.Database.Widgets.Quiz
 {
     public class UserQuizAnswer
     {
-        public string QuizQuestionId { get; set; }
+        public Guid QuizQuestionId { get; set; }
 
         public IList<string> SelectedAnswer { get; set; }
 

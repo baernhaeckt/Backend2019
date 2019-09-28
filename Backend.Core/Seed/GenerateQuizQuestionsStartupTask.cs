@@ -1,7 +1,6 @@
-﻿using AspNetCore.MongoDB;
-using Backend.Core.Startup;
+﻿using Backend.Core.Startup;
+using Backend.Database.Abstraction;
 using Backend.Database.Widgets.Quiz;
-using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,16 +9,16 @@ namespace Backend.Core.Seed
 {
     public class GenerateQuizQuestionsStartupTask : IStartupTask
     {
-        private readonly IMongoOperation<QuizQuestion> _quizQuestionRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GenerateQuizQuestionsStartupTask(IMongoOperation<QuizQuestion> quizQuestionRepository)
+        public GenerateQuizQuestionsStartupTask(IUnitOfWork unitOfWork)
         {
-            _quizQuestionRepository = quizQuestionRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            if (_quizQuestionRepository.Count(FilterDefinition<QuizQuestion>.Empty) != 0)
+            if (await _unitOfWork.CountAsync<QuizQuestion>() != 0)
             {
                 return;
             }
@@ -113,7 +112,7 @@ namespace Backend.Core.Seed
                 Points = 2
             });
 
-            await _quizQuestionRepository.InsertManyAsync(questions);
+            await _unitOfWork.InsertManyAsync(questions);
         }
     }
 }

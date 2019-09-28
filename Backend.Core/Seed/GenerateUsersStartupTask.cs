@@ -1,10 +1,9 @@
-﻿using AspNetCore.MongoDB;
-using Backend.Core.Security.Abstraction;
+﻿using Backend.Core.Security.Abstraction;
 using Backend.Core.Startup;
 using Backend.Database;
+using Backend.Database.Abstraction;
 using Bogus;
 using Bogus.Locations;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -17,21 +16,20 @@ namespace Backend.Core.Seed
     public class GenerateUsersStartupTask : IStartupTask
     {
         private const int SeedCount = 20;
-
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IPasswordStorage _passwordStorage;
-        private readonly IMongoOperation<User> _userRepository;
         private readonly IPasswordGenerator _paswordGenerator;
 
-        public GenerateUsersStartupTask(IPasswordStorage passwordStorage, IMongoOperation<User> userRepository, IPasswordGenerator paswordGenerator)
+        public GenerateUsersStartupTask(IUnitOfWork unitOfWork, IPasswordStorage passwordStorage, IPasswordGenerator paswordGenerator)
         {
+            _unitOfWork = unitOfWork;
             _passwordStorage = passwordStorage;
-            _userRepository = userRepository;
             _paswordGenerator = paswordGenerator;
         }
 
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            if (_userRepository.Count(FilterDefinition<User>.Empty) >= SeedCount)
+            if (await _unitOfWork.CountAsync<User>() >= SeedCount)
             {
                 return;
             }
@@ -47,7 +45,7 @@ namespace Backend.Core.Seed
             var locations = locationFaker.Generate(100).ToList();
 
             Faker<User> faker = new Faker<User>()
-                .RuleFor(u => u.Id, f => ObjectId.GenerateNewId().ToString())
+                .RuleFor(u => u.Id, f => Guid.NewGuid())
                 .RuleFor(u => u.Email, f => f.Internet.Email())
                 .RuleFor(u => u.Password, _passwordStorage.Create(_paswordGenerator.Generate()))
                 .RuleFor(u => u.DisplayName, f => f.Name.FirstName())
@@ -66,7 +64,7 @@ namespace Backend.Core.Seed
                 }
             }
 
-            await _userRepository.InsertManyAsync(users);
+            await _unitOfWork.InsertManyAsync(users);
         }
     }
 }

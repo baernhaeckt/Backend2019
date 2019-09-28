@@ -1,8 +1,9 @@
-﻿using AspNetCore.MongoDB;
+﻿
+using MongoDbGenericRepository.Models;
 
 namespace Backend.Database
 {
-    public class Location : IMongoEntity
+    public class Location : Entity
     {
         public double Longitude { get; set; }
 

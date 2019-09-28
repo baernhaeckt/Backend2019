@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Backend.Core.Newsfeed
 {
@@ -11,6 +12,6 @@ namespace Backend.Core.Newsfeed
         // success oder info
         public string variant { get; protected set; }
 
-        public IList<string> Audience { get; } = new List<string>();
+        public IList<Guid> Audience { get; } = new List<Guid>();
     }
 }

@@ -1,10 +1,11 @@
-﻿using AspNetCore.MongoDB;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Backend.Database
 {
-    public class User : IMongoEntity
+    public class User : Entity
     {
         public string Email { get; set; }
 
@@ -14,7 +15,7 @@ namespace Backend.Database
 
         public string Password { get; set; }
 
-        public IList<string> Friends { get; set; } = Enumerable.Empty<string>().ToList();
+        public IList<Guid> Friends { get; set; } = Enumerable.Empty<Guid>().ToList();
 
         public int Points { get; set; }
 

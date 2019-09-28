@@ -1,28 +1,23 @@
-﻿using AspNetCore.MongoDB;
-using Backend.Database;
+﻿using Backend.Database;
+using Backend.Database.Abstraction;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Backend.Core.Services
 {
     public class PointService : PersonalizedService
     {
-        public PointService(IMongoOperation<User> userRepository, ClaimsPrincipal principal)
-            : base(userRepository, principal)
+        public PointService(IUnitOfWork unitOfWork, ClaimsPrincipal principal)
+            : base(unitOfWork, principal)
         { }
 
-        public int Points
-        {
-            get => CurrentUser.PointActions.Sum(a => a.Point);
-        }
+        public int Points => CurrentUser.PointActions.Sum(a => a.Point);
 
-        public IEnumerable<PointAction> History
-        {
-            get => CurrentUser.PointActions;
-        }
+        public IEnumerable<PointAction> History => CurrentUser.PointActions;
 
-        public void RewardPoints(PointReward pointReward)
+        public async Task RewardPointsAsync(PointReward pointReward)
         {
             User user = CurrentUser;
             var pointActions = user.PointActions.ToList();
@@ -33,7 +28,7 @@ namespace Backend.Core.Services
                 MetaData = pointReward.MetaData.Select(m => new MetaData { Key = m.Key, Value = m.Value })
             });
             user.PointActions = pointActions;
-            UserRepository.SaveAsync(user);
+            await UnitOfWork.UpdateAsync(user);
         }
     }
 }

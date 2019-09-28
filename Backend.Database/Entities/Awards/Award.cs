@@ -1,8 +1,8 @@
-﻿using AspNetCore.MongoDB;
+﻿
 
 namespace Backend.Database
 {
-    public class Award : IMongoEntity
+    public class Award : Entity
     {
         public string Name { get; set; }
 
