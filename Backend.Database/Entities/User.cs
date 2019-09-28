@@ -24,5 +24,7 @@ namespace Backend.Database
         public IList<PointAction> PointActions { get; set; } = Enumerable.Empty<PointAction>().ToList();
 
         public IList<Award> Awards { get; set; } = Enumerable.Empty<Award>().ToList();
+
+        public List<string> Roles { get; set; } = Enumerable.Empty<string>().ToList();
     }
 }

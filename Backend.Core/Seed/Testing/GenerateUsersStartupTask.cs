@@ -1,4 +1,5 @@
-﻿using Backend.Core.Security.Abstraction;
+﻿using Backend.Core.Security;
+using Backend.Core.Security.Abstraction;
 using Backend.Core.Startup;
 using Backend.Database;
 using Backend.Database.Abstraction;
@@ -11,7 +12,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Backend.Core.Seed
+namespace Backend.Core.Seed.Testing
 {
     public class GenerateUsersStartupTask : IStartupTask
     {
@@ -49,6 +50,7 @@ namespace Backend.Core.Seed
                 .RuleFor(u => u.Email, f => f.Internet.Email())
                 .RuleFor(u => u.Password, _passwordStorage.Create(_paswordGenerator.Generate()))
                 .RuleFor(u => u.DisplayName, f => f.Name.FirstName())
+                .RuleFor(u => u.Roles, new List<string> { Roles.User })
                 .RuleFor(u => u.Location, f => f.PickRandom(locations));
 
             List<User> users = faker.Generate(SeedCount);
@@ -63,6 +65,20 @@ namespace Backend.Core.Seed
                     user.Friends.Add(users[index].Id);
                 }
             }
+
+            // This users are for the automated tests.
+            users.Add(new User
+            {
+                Email = "user@leaf.ch",
+                Roles = new List<string> { Roles.User },
+                Password = _passwordStorage.Create("user")
+            });
+            users.Add(new User
+            {
+                Email = "partner@leaf.ch",
+                Roles = new List<string> { Roles.Partner },
+                Password = _passwordStorage.Create("partner")
+            });
 
             await _unitOfWork.InsertManyAsync(users);
         }

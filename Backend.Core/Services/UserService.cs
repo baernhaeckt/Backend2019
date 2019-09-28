@@ -1,4 +1,5 @@
 ﻿using Backend.Core.Newsfeed;
+using Backend.Core.Security;
 using Backend.Core.Security.Abstraction;
 using Backend.Database;
 using Backend.Database.Abstraction;
@@ -67,6 +68,7 @@ namespace Backend.Core.Services
                 Email = email,
                 Password = _passwordStorage.Create(newPassword),
                 DisplayName = "ÖkoRookie",
+                Roles = new List<string> { Roles.User },
                 Location = new Location
                 {
                     City = "Bern",

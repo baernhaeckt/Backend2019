@@ -12,9 +12,12 @@ namespace Backend.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IHostEnvironment _hostEnvironment;
+
+        public Startup(IConfiguration configuration, IHostEnvironment hostEnvironment)
         {
             Configuration = configuration;
+            _hostEnvironment = hostEnvironment;
         }
 
         public IConfiguration Configuration { get; }
@@ -26,7 +29,7 @@ namespace Backend.Web
             //services.AddApiDocumentation(); Wait for Swagger v5
             services.AddJwtAuthentication();
             services.AddNewsfeed();
-            services.AddServices();
+            services.AddServices(_hostEnvironment);
             services.AddMongoDb(Configuration);
 
             services.AddHostedService<StartupTaskRunner>();

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 
 namespace Backend.Core.Security
@@ -24,10 +25,13 @@ namespace Backend.Core.Security
             var claims = new List<Claim>
             {
                 new Claim(LeafClaimTypes.UserId, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, now.ToUniversalTime().ToString(CultureInfo.CurrentCulture), ClaimValueTypes.Integer64),
             };
+
+            claims.AddRange(user.Roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
             SymmetricSecurityKey signingKey = _securityKeyProvider.GetSecurityKey();
             var securityToken = new JwtSecurityToken(
