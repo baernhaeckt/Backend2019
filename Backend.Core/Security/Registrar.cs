@@ -8,7 +8,7 @@ namespace Backend.Core.Security
     {
         public static IServiceCollection AddFeatureLogin(this IServiceCollection services, IHostEnvironment hostEnvironment)
         {
-            services.AddSingleton<IPasswordStorage, HmacSha256PasswordStorage>();
+            services.AddSingleton<IPasswordStorage, HmacSha512PasswordStorage>();
             services.AddSingleton<ISecurityTokenFactory, JwtSecurityTokenFactory>();
 
             services.AddSingleton<ISecurityKeyProvider, SymmetricSecurityKeyProvider>();

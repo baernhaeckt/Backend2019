@@ -4,6 +4,6 @@
     {
         string Create(string password);
 
-        bool Match(string inputPassword, string originalPassword);
+        bool Match(string password, string goodHash);
     }
 }
