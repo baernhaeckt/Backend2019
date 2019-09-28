@@ -14,7 +14,7 @@ namespace Backend.Web.Setup
     {
         public static void AddServices(this IServiceCollection services, IHostEnvironment hostEnvironment)
         {
-            services.AddFeatureLogin();
+            services.AddFeatureLogin(hostEnvironment);
 
             services.AddScoped<FriendsService>();
             services.AddScoped<PointService>();

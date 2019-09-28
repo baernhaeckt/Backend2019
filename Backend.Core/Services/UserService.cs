@@ -67,7 +67,7 @@ namespace Backend.Core.Services
             {
                 Email = email,
                 Password = _passwordStorage.Create(newPassword),
-                DisplayName = "ÖkoRookie",
+                DisplayName = "Newby",
                 Roles = new List<string> { Roles.User },
                 Location = new Location
                 {

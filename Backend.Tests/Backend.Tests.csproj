@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="Unit\" />
   </ItemGroup>
 
 </Project>
