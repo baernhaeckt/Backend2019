@@ -20,9 +20,9 @@ namespace Backend.Core.Seed
 
         private readonly IPasswordStorage _passwordStorage;
         private readonly IMongoOperation<User> _userRepository;
-        private readonly IPaswordGenerator _paswordGenerator;
+        private readonly IPasswordGenerator _paswordGenerator;
 
-        public GenerateUsersStartupTask(IPasswordStorage passwordStorage, IMongoOperation<User> userRepository, IPaswordGenerator paswordGenerator)
+        public GenerateUsersStartupTask(IPasswordStorage passwordStorage, IMongoOperation<User> userRepository, IPasswordGenerator paswordGenerator)
         {
             _passwordStorage = passwordStorage;
             _userRepository = userRepository;

@@ -23,7 +23,6 @@ namespace Backend.Web.Setup
                 c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> { { "Bearer", Enumerable.Empty<string>() },
                 });
             });
-
         }
     }
 }

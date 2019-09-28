@@ -13,7 +13,7 @@ namespace Backend.Core.Seed
     {
         public GeneratePresentationDataStartupTask(
             IMongoOperation<User> userRepository,
-            IPaswordGenerator paswordGenerator,
+            IPasswordGenerator paswordGenerator,
             IMongoOperation<Token> tokenRepository)
         {
             UserRepository = userRepository;
@@ -23,7 +23,7 @@ namespace Backend.Core.Seed
 
         public IMongoOperation<Token> TokenRepository { get; }
         public IMongoOperation<User> UserRepository { get; }
-        public IPaswordGenerator PaswordGenerator { get; }
+        public IPasswordGenerator PaswordGenerator { get; }
 
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {

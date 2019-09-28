@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Backend.Core.Security
 {
-    public class StaticPasswordGenerator : IPaswordGenerator
+    public class StaticPasswordGenerator : IPasswordGenerator
     {
         private readonly IConfiguration _configuration;
 

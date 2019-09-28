@@ -1,6 +1,6 @@
 ﻿namespace Backend.Core.Security.Abstraction
 {
-    public interface IPaswordGenerator
+    public interface IPasswordGenerator
     {
         string Generate();
     }
