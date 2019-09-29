@@ -16,10 +16,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{E4B3454E-FA34-4697-87FC-44627B5284EF}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		azure-pipelines.yml = azure-pipelines.yml
+		Backend.sln.DotSettings = Backend.sln.DotSettings
 		Directory.Build.props = Directory.Build.props
+		Global.ruleset = Global.ruleset
+		GlobalTest.ruleset = GlobalTest.ruleset
+		stylecop.json = stylecop.json
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Models", "Backend.Models\Backend.Models.csproj", "{D17FFD16-344C-4095-B8CE-880AE4BAA05D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +46,6 @@ Global
 		{0EC011B1-0EE3-4F44-8902-8B0217A31455}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EC011B1-0EE3-4F44-8902-8B0217A31455}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EC011B1-0EE3-4F44-8902-8B0217A31455}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D17FFD16-344C-4095-B8CE-880AE4BAA05D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D17FFD16-344C-4095-B8CE-880AE4BAA05D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D17FFD16-344C-4095-B8CE-880AE4BAA05D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D17FFD16-344C-4095-B8CE-880AE4BAA05D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
