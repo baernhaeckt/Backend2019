@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
 namespace Backend.Web
@@ -13,7 +14,12 @@ namespace Backend.Web
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webHost => { webHost.UseStartup<Startup>(); });
+                .ConfigureWebHostDefaults(webHost =>
+                {
+                    webHost
+                        .UseSetting(WebHostDefaults.SuppressStatusMessagesKey, true.ToString(CultureInfo.InvariantCulture))
+                        .UseStartup<Startup>();
+                });
         }
     }
 }
