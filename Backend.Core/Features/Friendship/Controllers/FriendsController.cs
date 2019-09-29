@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Features.UserManagement.Models;
-using Backend.Database;
+using Backend.Database.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +25,7 @@ namespace Backend.Core.Features.Friendship.Controllers
         public async Task<IEnumerable<PrivateUserResponse>> GetAsync()
         {
             IEnumerable<User> result = await _friendService.GetFriends();
-            return result.Select(u => new PrivateUserResponse()
+            return result.Select(u => new PrivateUserResponse
             {
                 Id = u.Id,
                 Email = u.Email,
@@ -40,9 +40,15 @@ namespace Backend.Core.Features.Friendship.Controllers
         }
 
         [HttpPost]
-        public async Task Create(string friendEmail) => await _friendService.AddFriend(friendEmail);
+        public async Task Create(string friendEmail)
+        {
+            await _friendService.AddFriend(friendEmail);
+        }
 
         [HttpDelete]
-        public async Task Delete(Guid friendUserId) => await _friendService.RemoveFriend(friendUserId);
+        public async Task Delete(Guid friendUserId)
+        {
+            await _friendService.RemoveFriend(friendUserId);
+        }
     }
 }

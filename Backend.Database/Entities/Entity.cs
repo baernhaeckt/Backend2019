@@ -1,16 +1,16 @@
-﻿using MongoDbGenericRepository.Models;
-using System;
+﻿using System;
+using MongoDbGenericRepository.Models;
 
-namespace Backend.Database
+namespace Backend.Database.Entities
 {
     public abstract class Entity : IDocument
     {
-        public Guid Id { get; set; }
-
-        public int Version { get; set; }
-
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
+
+        public Guid Id { get; set; }
+
+        public int Version { get; set; }
     }
 }

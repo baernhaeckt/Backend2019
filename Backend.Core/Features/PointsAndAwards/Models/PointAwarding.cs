@@ -6,7 +6,7 @@
 
         public int Points { get; set; }
 
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
 
         public double Co2Saving { get; set; }
     }

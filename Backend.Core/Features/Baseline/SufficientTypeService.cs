@@ -3,15 +3,16 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Backend.Core.Extensions;
-using Backend.Database;
 using Backend.Database.Abstraction;
+using Backend.Database.Entities;
 
 namespace Backend.Core.Features.Baseline
 {
     public class SufficientTypeService
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly ClaimsPrincipal _principal;
+
+        private readonly IUnitOfWork _unitOfWork;
 
         public SufficientTypeService(IUnitOfWork unitOfWork, ClaimsPrincipal principal)
         {
@@ -19,7 +20,10 @@ namespace Backend.Core.Features.Baseline
             _principal = principal;
         }
 
-        public async Task<IEnumerable<SufficientType>> GetSufficientTypes() => await _unitOfWork.GetAllAsync<SufficientType>();
+        public async Task<IEnumerable<SufficientType>> GetSufficientTypes()
+        {
+            return await _unitOfWork.GetAllAsync<SufficientType>();
+        }
 
         public async Task<IEnumerable<UserSufficientType>> GetSufficientTypesFromUser()
         {

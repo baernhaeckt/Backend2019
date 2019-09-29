@@ -6,6 +6,6 @@
 
         public int AwardedPoints { get; set; }
 
-        public string DetailedAnswer { get; set; }
+        public string? DetailedAnswer { get; set; }
     }
 }

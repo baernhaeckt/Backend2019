@@ -1,5 +1,5 @@
-﻿using Backend.Core.Features.UserManagement.Data;
-using Backend.Core.Startup;
+﻿using Backend.Core.Abstraction;
+using Backend.Core.Features.UserManagement.Data;
 using Backend.Database.Framework;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

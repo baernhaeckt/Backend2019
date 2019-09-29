@@ -1,4 +1,4 @@
-﻿using Backend.Core.Startup;
+﻿using Backend.Core.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backend.Core.Extensions
@@ -7,6 +7,8 @@ namespace Backend.Core.Extensions
     {
         public static IServiceCollection AddStartupTask<T>(this IServiceCollection services)
             where T : class, IStartupTask
-            => services.AddTransient<IStartupTask, T>();
+        {
+            return services.AddTransient<IStartupTask, T>();
+        }
     }
 }

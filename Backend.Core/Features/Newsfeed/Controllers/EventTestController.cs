@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
+using Backend.Core.Features.Newsfeed.Abstraction;
 using Backend.Core.Features.Newsfeed.Events;
 using Backend.Core.Features.UserManagement;
 using Backend.Core.Features.UserManagement.Security;
-using Backend.Database;
+using Backend.Database.Entities.Awards;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,37 +14,38 @@ namespace Backend.Core.Features.Newsfeed.Controllers
     [Authorize(Roles = Roles.Administrator)]
     public class EventTestController : ControllerBase
     {
-        private readonly IEventStream _eventStream;
+        private readonly IEventFeed _eventFeed;
+
         private readonly UserService _userService;
 
-        public EventTestController(IEventStream eventStream, UserService userService)
+        public EventTestController(IEventFeed eventFeed, UserService userService)
         {
-            _eventStream = eventStream;
+            _eventFeed = eventFeed;
             _userService = userService;
         }
 
-        [HttpGet(nameof(PointsReceivedAsync))]
-        public async Task PointsReceivedAsync()
+        [HttpGet(nameof(PointsReceived))]
+        public async Task PointsReceived()
         {
-            await _eventStream.PublishAsync(new PointsReceivedEvent(await _userService.GetCurrentUser(), 5));
+            await _eventFeed.PublishAsync(new PointsReceivedNewsfeedEvent(await _userService.GetCurrentUser(), 5));
         }
 
-        [HttpGet(nameof(BadgeReceivedAsync))]
-        public async Task BadgeReceivedAsync()
+        [HttpGet(nameof(BadgeReceived))]
+        public async Task BadgeReceived()
         {
-            await _eventStream.PublishAsync(new BadgeReceivedEvent(await _userService.GetCurrentUser(), new TrashHeroAward()));
+            await _eventFeed.PublishAsync(new BadgeReceivedNewsfeedEvent(await _userService.GetCurrentUser(), new TrashHeroAward()));
         }
 
-        [HttpGet(nameof(FriendBadgeReceivedAsync))]
-        public async Task FriendBadgeReceivedAsync()
+        [HttpGet(nameof(FriendBadgeReceived))]
+        public async Task FriendBadgeReceived()
         {
-            await _eventStream.PublishAsync(new FriendBadgeReceivedEvent(await _userService.GetCurrentUser(), new TrashHeroAward()));
+            await _eventFeed.PublishAsync(new FriendNewsfeedBadgeReceivedEvent(await _userService.GetCurrentUser(), new TrashHeroAward()));
         }
 
-        [HttpGet(nameof(FriendPointsReceivedAsync))]
-        public async Task FriendPointsReceivedAsync()
+        [HttpGet(nameof(FriendPointsReceived))]
+        public async Task FriendPointsReceived()
         {
-            await _eventStream.PublishAsync(new FriendPointsReceivedEvent(await _userService.GetCurrentUser(), 5));
+            await _eventFeed.PublishAsync(new FriendNewsfeedPointsReceivedEvent(await _userService.GetCurrentUser(), 5));
         }
     }
 }

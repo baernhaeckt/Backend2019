@@ -1,20 +1,23 @@
-﻿using Backend.Tests.Integration.Utilities;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Backend.Tests.Integration.Utilities;
 using Bogus;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Backend.Tests.Integration
 {
-    public class SmokeTests : IClassFixture<CustomWebApplicationFactory>
+    [Trait("Category", "Integration")]
+    public class SmokeTestsFixture : IClassFixture<CustomWebApplicationFactory>
     {
         private readonly CustomWebApplicationFactory _factory;
+
         private readonly ITestOutputHelper _output;
 
-        public SmokeTests(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
+        public SmokeTestsFixture(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
         {
             _factory = factory;
             _output = testOutputHelper;
@@ -23,14 +26,14 @@ namespace Backend.Tests.Integration
         [Fact]
         public async Task Execute()
         {
-            var client = _factory.CreateClient();
+            HttpClient client = _factory.CreateClient();
 
             string email = RandomEmail();
             _output.WriteLine("New user will be " + email);
 
             _output.WriteLine("Register a user");
-            string url = "/api/users/Register?email=" + email;
-            var response = await client.PostAsync(url, null);
+            var url = new Uri("api/users/Register?email=" + email, UriKind.Relative);
+            HttpResponseMessage response = await client.PostAsync(url, null);
             response.EnsureSuccessStatusCode();
 
             _output.WriteLine("Sign in with the user");
@@ -43,37 +46,37 @@ namespace Backend.Tests.Integration
             partnerIds.Add("ccc14b11-5922-4e3e-bb54-03e71facaeb3");
 
             IList<string> tokenValues = new List<string>();
-            foreach (var partnerId in partnerIds)
+            foreach (string partnerId in partnerIds)
             {
                 _output.WriteLine("Generate Tokens");
-                url = "api/tokens?partnerId=" + partnerId;
+                url = new Uri("api/tokens?partnerId=" + partnerId, UriKind.Relative);
                 response = await client.GetAsync(url);
                 response.EnsureSuccessStatusCode();
                 tokenValues.Add(await response.Content.ReadAsStringAsync());
             }
-            
-            foreach (var tokenValue in tokenValues)
+
+            foreach (string tokenValue in tokenValues)
             {
                 _output.WriteLine("Use Tokens");
-                url = "api/tokens?tokenGuid=" + tokenValue;
+                url = new Uri("api/tokens?tokenGuid=" + tokenValue, UriKind.Relative);
                 response = await client.PostAsync(url, null);
                 response.EnsureSuccessStatusCode();
             }
 
             _output.WriteLine("Ranking");
-            url = "api/rankings/global";
+            url = new Uri("api/rankings/global", UriKind.Relative);
             response = await client.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
-            _output.WriteLine("Has the 'Onboarding' and 'TrashHero'-award");
-            url = "api/awards";
+            _output.WriteLine("Has the 'On-boarding' and 'TrashHero'-award");
+            url = new Uri("api/awards", UriKind.Relative);
             response = await client.GetAsync(url);
             string content = await response.Content.ReadAsStringAsync();
             dynamic awardsResponse = JsonConvert.DeserializeObject(content);
             Assert.Equal(2, awardsResponse.Count);
 
             _output.WriteLine("SufficientTypes Baseline");
-            url = "api/sufficienttype/baseline";
+            url = new Uri("api/sufficienttype/baseline", UriKind.Relative);
             response = await client.GetAsync(url);
             response.EnsureSuccessStatusCode();
         }
@@ -81,7 +84,7 @@ namespace Backend.Tests.Integration
         private string RandomEmail()
         {
             Randomizer.Seed = new Random();
-            var faker = new Faker("en");
+            var faker = new Faker();
             return faker.Internet.Email();
         }
     }

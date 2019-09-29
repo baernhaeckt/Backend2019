@@ -1,9 +1,9 @@
-﻿using Backend.Core.Features.UserManagement.Models;
-using Backend.Database;
+﻿using System.Threading.Tasks;
+using Backend.Core.Features.UserManagement.Models;
+using Backend.Core.Features.UserManagement.Security.Abstraction;
+using Backend.Database.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Backend.Core.Features.UserManagement.Security.Abstraction;
 
 namespace Backend.Core.Features.UserManagement.Controllers
 {
@@ -12,7 +12,9 @@ namespace Backend.Core.Features.UserManagement.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IPasswordStorage _passwordStorage;
+
         private readonly ISecurityTokenFactory _securityTokenFactory;
+
         private readonly UserService _userService;
 
         public UsersController(
@@ -34,10 +36,8 @@ namespace Backend.Core.Features.UserManagement.Controllers
                 string token = await _userService.RegisterAsync(email);
                 return new LoginResponse { Token = token };
             }
-            else
-            {
-                return new LoginResponse();
-            }
+
+            return new LoginResponse();
         }
 
         [HttpPost(nameof(Login))]

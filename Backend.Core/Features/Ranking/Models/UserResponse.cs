@@ -6,7 +6,7 @@ namespace Backend.Core.Features.Ranking.Models
     {
         public Guid Id { get; set; }
 
-        public string DisplayName { get; set; }
+        public string DisplayName { get; set; } = string.Empty;
 
         public int Points { get; set; }
     }

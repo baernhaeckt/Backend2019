@@ -1,19 +1,19 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Backend.Database.Entities.Awards;
 
-namespace Backend.Database
+namespace Backend.Database.Entities
 {
     public class User : Entity
     {
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
-        public string DisplayName { get; set; }
+        public string DisplayName { get; set; } = string.Empty;
 
-        public Location Location { get; set; }
+        public Location Location { get; set; } = new Location();
 
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         public IList<Guid> Friends { get; set; } = Enumerable.Empty<Guid>().ToList();
 

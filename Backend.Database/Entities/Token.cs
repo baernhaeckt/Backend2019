@@ -1,13 +1,12 @@
-﻿
-using System;
+﻿using System;
 
-namespace Backend.Database
+namespace Backend.Database.Entities
 {
     public class Token : Entity
     {
-        public string Partner { get; set; }
+        public string Partner { get; set; } = string.Empty;
 
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
 
         public int Points { get; set; }
 
@@ -19,6 +18,6 @@ namespace Backend.Database
 
         public Guid Value { get; set; }
 
-        public SufficientType SufficientType { get; set; }
+        public SufficientType SufficientType { get; set; } = new SufficientType();
     }
 }

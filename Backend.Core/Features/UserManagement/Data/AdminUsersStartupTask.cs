@@ -1,21 +1,21 @@
-﻿using Backend.Core.Startup;
-using Backend.Database;
-using Backend.Database.Abstraction;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Backend.Core.Abstraction;
 using Backend.Core.Features.UserManagement.Security;
-using Backend.Core.Features.UserManagement.Security.Abstraction;
+using Backend.Database.Abstraction;
+using Backend.Database.Entities;
+using Microsoft.Extensions.Configuration;
 
 namespace Backend.Core.Features.UserManagement.Data
 {
     public class AdminUsersStartupTask : IStartupTask
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
 
-        public AdminUsersStartupTask(IUnitOfWork unitOfWork, IPasswordStorage passwordStorage, IPasswordGenerator paswordGenerator, IConfiguration configuration)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public AdminUsersStartupTask(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;

@@ -1,12 +1,10 @@
-﻿
-
-namespace Backend.Database
+﻿namespace Backend.Database.Entities
 {
     public class SufficientType : Entity
     {
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         public int BaselinePoint { get; set; }
 

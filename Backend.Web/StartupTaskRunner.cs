@@ -1,9 +1,10 @@
-﻿using Backend.Core.Startup;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Backend.Core.Abstraction;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Backend.Web
 {
@@ -19,18 +20,21 @@ namespace Backend.Web
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             // Load all tasks from DI
-            using (var scope = _serviceProvider.CreateScope())
+            using (IServiceScope scope = _serviceProvider.CreateScope())
             {
-                var startupTasks = scope.ServiceProvider.GetServices<IStartupTask>();
+                IEnumerable<IStartupTask> startupTasks = scope.ServiceProvider.GetServices<IStartupTask>();
 
                 // Execute all the tasks
-                foreach (var startupTask in startupTasks)
+                foreach (IStartupTask startupTask in startupTasks)
                 {
                     await startupTask.ExecuteAsync(cancellationToken);
                 }
             }
         }
 
-        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

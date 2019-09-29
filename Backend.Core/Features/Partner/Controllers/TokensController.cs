@@ -18,9 +18,15 @@ namespace Backend.Core.Features.Partner.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<string>> Get(Guid partnerId) => await _tokenGenerationService.GenerateForPartnerAsync(partnerId);
+        public async Task<ActionResult<string>> Get(Guid partnerId)
+        {
+            return await _tokenGenerationService.GenerateForPartnerAsync(partnerId);
+        }
 
         [HttpPost]
-        public async Task PostAsync(Guid tokenGuid) => await _tokenGenerationService.AssignTokenToUserAsync(tokenGuid);
+        public async Task PostAsync(Guid tokenGuid)
+        {
+            await _tokenGenerationService.AssignTokenToUserAsync(tokenGuid);
+        }
     }
 }

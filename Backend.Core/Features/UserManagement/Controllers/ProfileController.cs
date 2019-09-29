@@ -1,7 +1,7 @@
-﻿using Backend.Core.Features.UserManagement.Models;
-using Backend.Database;
+﻿using System.Threading.Tasks;
+using Backend.Core.Features.UserManagement.Models;
+using Backend.Database.Entities;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace Backend.Core.Features.UserManagement.Controllers
 {
@@ -15,7 +15,6 @@ namespace Backend.Core.Features.UserManagement.Controllers
         {
             _userService = userService;
         }
-
 
         [HttpGet]
         public async Task<PrivateUserResponse> GetAsync()
@@ -31,11 +30,14 @@ namespace Backend.Core.Features.UserManagement.Controllers
                     Latitude = user.Location?.Latitude ?? 0.0,
                     Longitude = user.Location?.Longitude ?? 0.0
                 },
-                Points = user.Points,
+                Points = user.Points
             };
         }
 
         [HttpPatch]
-        public async Task Update([FromBody] UserUpdateRequest userUpdateRequest) => await _userService.Update(userUpdateRequest);
+        public async Task Update([FromBody] UserUpdateRequest userUpdateRequest)
+        {
+            await _userService.Update(userUpdateRequest);
+        }
     }
 }

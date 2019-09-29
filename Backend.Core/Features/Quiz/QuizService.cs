@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Backend.Core.Extensions;
@@ -8,16 +10,19 @@ using Backend.Core.Features.PointsAndAwards;
 using Backend.Core.Features.PointsAndAwards.Models;
 using Backend.Core.Features.Quiz.Models;
 using Backend.Database.Abstraction;
-using Backend.Database.Widgets.Quiz;
+using Backend.Database.Entities.Widgets.Quiz;
 
 namespace Backend.Core.Features.Quiz
 {
     public class QuizService
     {
         private const string DateKeyFormat = "yyyyMMdd";
-        private readonly IUnitOfWork _unitOfWork;
+
         private readonly PointService _pointService;
+
         private readonly ClaimsPrincipal _principal;
+
+        private readonly IUnitOfWork _unitOfWork;
 
         public QuizService(IUnitOfWork unitOfWork, PointService pointService, ClaimsPrincipal principal)
         {
@@ -28,28 +33,28 @@ namespace Backend.Core.Features.Quiz
 
         public async Task<QuestionResponse> Get()
         {
-            var questions = await _unitOfWork.GetAllAsync<QuizQuestion>();
-            var answeredQuestions = await GetUserQuizAnswerForDayAsync(DateTime.Today);
-            var unansweredQuestions = questions.Where(q => answeredQuestions.All(aQ => aQ.QuizQuestionId != q.Id)).ToList();
+            IEnumerable<QuizQuestion> questions = await _unitOfWork.GetAllAsync<QuizQuestion>();
+            IEnumerable<UserQuizAnswer> answeredQuestions = await GetUserQuizAnswerForDayAsync(DateTime.Today);
+            List<QuizQuestion> unansweredQuestions = questions.Where(q => answeredQuestions.All(aQ => aQ.QuizQuestionId != q.Id)).ToList();
             unansweredQuestions.Shuffle();
 
-            return unansweredQuestions.Select(q => Cast(q)).FirstOrDefault();
+            return unansweredQuestions.Select(Cast).FirstOrDefault();
         }
 
         public async Task<QuestionAnswerResponse> Answer(QuestionAnswer answer)
         {
-            var question = await _unitOfWork.GetAsync<QuizQuestion>(answer.QuestionId);
+            QuizQuestion question = await _unitOfWork.GetAsync<QuizQuestion>(answer.QuestionId);
             if (question == null)
             {
-                throw new WebException($"Question with id: {answer.QuestionId} not found.", System.Net.HttpStatusCode.NotFound);
+                throw new WebException($"Question with id: {answer.QuestionId} not found.", HttpStatusCode.NotFound);
             }
 
             if ((await GetUserQuizAnswerForDayAsync(DateTime.Today)).Any(q => q.QuizQuestionId == answer.QuestionId))
             {
-                throw new WebException("Question has already been answered today", System.Net.HttpStatusCode.BadRequest);
+                throw new WebException("Question has already been answered today", HttpStatusCode.BadRequest);
             }
 
-            var isCorrectAnswer = IsAnswerCorrect(question.CorrectAnswers, answer.Answers);
+            bool isCorrectAnswer = IsAnswerCorrect(question.CorrectAnswers, answer.Answers);
             var questionAnswerResponse = new QuestionAnswerResponse
             {
                 IsCorrect = isCorrectAnswer,
@@ -74,19 +79,19 @@ namespace Backend.Core.Features.Quiz
 
         private async Task StoreAnswer(QuestionAnswer answer, QuestionAnswerResponse answerResponse)
         {
-            var userQuiz = await _unitOfWork.FirstOrDefaultAsync<UserQuiz>(uq => uq.UserId == _principal.Id());
+            UserQuiz userQuiz = await _unitOfWork.FirstOrDefaultAsync<UserQuiz>(uq => uq.UserId == _principal.Id());
             if (userQuiz == null)
             {
                 userQuiz = new UserQuiz { UserId = _principal.Id() };
                 userQuiz = await _unitOfWork.InsertAsync(userQuiz);
             }
 
-            if (!userQuiz.AnswersByDay.ContainsKey(DateTime.Today.ToString(DateKeyFormat)))
+            if (!userQuiz.AnswersByDay.ContainsKey(DateTime.Today.ToString(DateKeyFormat, CultureInfo.InvariantCulture)))
             {
-                userQuiz.AnswersByDay.Add(DateTime.Today.ToString(DateKeyFormat), new List<UserQuizAnswer>());
+                userQuiz.AnswersByDay.Add(DateTime.Today.ToString(DateKeyFormat, CultureInfo.InvariantCulture), new List<UserQuizAnswer>());
             }
 
-            userQuiz.AnswersByDay[DateTime.Today.ToString(DateKeyFormat)].Add(new UserQuizAnswer
+            userQuiz.AnswersByDay[DateTime.Today.ToString(DateKeyFormat, CultureInfo.InvariantCulture)].Add(new UserQuizAnswer
             {
                 IsCorrect = answerResponse.IsCorrect,
                 QuizQuestionId = answer.QuestionId,
@@ -97,54 +102,28 @@ namespace Backend.Core.Features.Quiz
             await _unitOfWork.UpdateAsync(userQuiz);
         }
 
-        private bool IsAnswerCorrect(IEnumerable<string> correctAnswers, IEnumerable<string> userAnswers)
+        private static bool IsAnswerCorrect(IEnumerable<string> correctAnswers, IEnumerable<string> userAnswers)
         {
-            if (userAnswers.Count() != correctAnswers.Count())
-            {
-                return false;
-            }
-
-            return correctAnswers.ToList().All(a => userAnswers.Any(uA => uA == a));
+            return userAnswers.Count() == correctAnswers.Count() && correctAnswers.ToList().All(a => userAnswers.Any(uA => uA == a));
         }
 
         private async Task<IEnumerable<UserQuizAnswer>> GetUserQuizAnswerForDayAsync(DateTime day)
         {
             var dayWithoutTime = new DateTime(day.Year, day.Month, day.Day);
-            IList<UserQuizAnswer> submittedQuestionAnswer = null;
             UserQuiz currentUserQuiz = await _unitOfWork.SingleOrDefaultAsync<UserQuiz>(uq => uq.UserId == _principal.Id());
-            if (currentUserQuiz?.AnswersByDay.TryGetValue(dayWithoutTime.ToString(DateKeyFormat), out submittedQuestionAnswer) ?? false)
+            if (currentUserQuiz != null)
             {
-                return submittedQuestionAnswer;
+                string dayWithoutTimeString = dayWithoutTime.ToString(DateKeyFormat, CultureInfo.InvariantCulture);
+                currentUserQuiz.AnswersByDay.TryGetValue(dayWithoutTimeString, out IList<UserQuizAnswer>? submittedQuestionAnswer);
+                return submittedQuestionAnswer ?? Enumerable.Empty<UserQuizAnswer>();
             }
 
             return Enumerable.Empty<UserQuizAnswer>();
         }
 
-        public async Task<IEnumerable<SubmittedQuestionAnswer>> GetSubmittedAnswersForDayAsync(DateTime day)
+        private static QuestionResponse Cast(QuizQuestion quizQuestion)
         {
-            IList<SubmittedQuestionAnswer> submittedQuestionAnswers = new List<SubmittedQuestionAnswer>();
-
-            IEnumerable<UserQuizAnswer> userQuizAnswers = await GetUserQuizAnswerForDayAsync(day);
-            foreach (var userQuizAnswer in userQuizAnswers)
-            {
-                var question = await _unitOfWork.GetAsync<QuizQuestion>(userQuizAnswer.QuizQuestionId);
-
-                submittedQuestionAnswers.Add(new SubmittedQuestionAnswer
-                {
-                    IsCorrect = userQuizAnswer.IsCorrect,
-                    Points = userQuizAnswer.Points,
-                    Question = Cast(question),
-                    SelectedAnswers = userQuizAnswer.SelectedAnswer,
-                    DetailedAnswer = question.DetailedAnswer
-                });
-            }
-
-            return submittedQuestionAnswers;
-        }
-
-        private QuestionResponse Cast(QuizQuestion quizQuestion)
-        {
-            var allAnswers = quizQuestion.IncorrectAnswers.ToList();
+            List<string> allAnswers = quizQuestion.IncorrectAnswers.ToList();
             allAnswers.AddRange(quizQuestion.CorrectAnswers);
             allAnswers.Shuffle();
 

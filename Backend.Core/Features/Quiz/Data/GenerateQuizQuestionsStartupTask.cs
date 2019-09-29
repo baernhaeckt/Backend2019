@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Backend.Core.Startup;
+using Backend.Core.Abstraction;
 using Backend.Database.Abstraction;
-using Backend.Database.Widgets.Quiz;
+using Backend.Database.Entities.Widgets.Quiz;
 
 namespace Backend.Core.Features.Quiz.Data
 {

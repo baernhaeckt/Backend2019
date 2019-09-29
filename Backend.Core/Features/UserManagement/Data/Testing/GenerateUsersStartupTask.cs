@@ -1,25 +1,27 @@
-﻿using Backend.Core.Startup;
-using Backend.Database;
-using Backend.Database.Abstraction;
-using Bogus;
-using Bogus.Locations;
-using MongoDB.Driver;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Backend.Core.Abstraction;
 using Backend.Core.Features.UserManagement.Security;
 using Backend.Core.Features.UserManagement.Security.Abstraction;
+using Backend.Database.Abstraction;
+using Backend.Database.Entities;
+using Bogus;
+using Bogus.Locations;
 
 namespace Backend.Core.Features.UserManagement.Data.Testing
 {
     public class GenerateUsersStartupTask : IStartupTask
     {
         private const int SeedCount = 20;
-        private readonly IUnitOfWork _unitOfWork;
+
         private readonly IPasswordStorage _passwordStorage;
+
         private readonly IPasswordGenerator _paswordGenerator;
+
+        private readonly IUnitOfWork _unitOfWork;
 
         public GenerateUsersStartupTask(IUnitOfWork unitOfWork, IPasswordStorage passwordStorage, IPasswordGenerator paswordGenerator)
         {
@@ -43,7 +45,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                 .RuleFor(u => u.Latitude, f => f.Location().AreaCircle(46.944699, 7.443788, 10000).Latitude)
                 .RuleFor(u => u.Longitude, f => f.Location().AreaCircle(46.944699, 7.443788, 10000).Longitude);
 
-            var locations = locationFaker.Generate(100).ToList();
+            List<Location> locations = locationFaker.Generate(100).ToList();
 
             Faker<User> faker = new Faker<User>()
                 .RuleFor(u => u.Id, f => Guid.NewGuid())
@@ -57,9 +59,9 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
 
             // Random generate friendships
             var random = new Random();
-            foreach (var user in users)
+            foreach (User user in users)
             {
-                for (int i = 0; i < 12; i++)
+                for (var i = 0; i < 12; i++)
                 {
                     int index = random.Next(users.Count);
                     user.Friends.Add(users[index].Id);

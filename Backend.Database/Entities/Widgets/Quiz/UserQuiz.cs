@@ -1,8 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace Backend.Database.Widgets.Quiz
+namespace Backend.Database.Entities.Widgets.Quiz
 {
     public class UserQuiz : Entity
     {

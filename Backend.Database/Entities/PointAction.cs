@@ -1,8 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace Backend.Database
+namespace Backend.Database.Entities
 {
     public class PointAction : Entity
     {
@@ -10,14 +9,12 @@ namespace Backend.Database
 
         public double Co2Saving { get; set; }
 
-        public string Action { get; set; }
+        public string Action { get; set; } = string.Empty;
 
-        public IEnumerable<MetaData> MetaData { get; set; }
-
-        public String SponsorRef { get; set; }
+        public string SponsorRef { get; set; } = string.Empty;
 
         public DateTime Date { get; set; } = DateTime.Now;
 
-        public UserSufficientType SufficientType { get; set; }
+        public UserSufficientType SufficientType { get; set; } = new UserSufficientType();
     }
 }

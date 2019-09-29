@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Features.PointsAndAwards.Models;
+using Backend.Database.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Core.Features.PointsAndAwards.Controllers
@@ -21,7 +22,7 @@ namespace Backend.Core.Features.PointsAndAwards.Controllers
         [HttpGet]
         public async Task<IEnumerable<PointResponse>> GetAsync(Guid userId)
         {
-            var pointList = await _pointService.PointHistory(userId);
+            IEnumerable<PointAction> pointList = await _pointService.PointHistory(userId);
             return pointList.OrderByDescending(p => p.Date).Take(25).Select(p => new PointResponse
             {
                 Date = p.Date,

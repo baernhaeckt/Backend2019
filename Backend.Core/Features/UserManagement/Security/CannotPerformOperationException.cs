@@ -4,10 +4,18 @@ namespace Backend.Core.Features.UserManagement.Security
 {
     public class CannotPerformOperationException : Exception
     {
-        public CannotPerformOperationException() { }
+        public CannotPerformOperationException()
+        {
+        }
+
         public CannotPerformOperationException(string message)
-            : base(message) { }
+            : base(message)
+        {
+        }
+
         public CannotPerformOperationException(string message, Exception inner)
-            : base(message, inner) { }
+            : base(message, inner)
+        {
+        }
     }
 }

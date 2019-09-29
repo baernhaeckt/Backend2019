@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using MongoDB.Driver;
-using System.Collections.Generic;
 using Backend.Database.Abstraction;
+using Backend.Database.Entities;
+using MongoDB.Driver;
 
 namespace Backend.Database.Framework
 {
@@ -27,10 +28,11 @@ namespace Backend.Database.Framework
             where TEntity : Entity, new()
         {
             DbContext dbContext = DbContextFactory.Create();
-            foreach (var record in records)
+            foreach (TEntity record in records)
             {
                 record.CreatedAt = DateTime.UtcNow;
             }
+
             await dbContext.GetCollection<TEntity>().InsertManyAsync(records);
         }
 

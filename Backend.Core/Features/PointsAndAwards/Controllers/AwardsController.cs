@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Extensions;
 using Backend.Core.Features.PointsAndAwards.Models;
-using Backend.Database;
 using Backend.Database.Abstraction;
+using Backend.Database.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Core.Features.PointsAndAwards.Controllers
@@ -23,8 +23,8 @@ namespace Backend.Core.Features.PointsAndAwards.Controllers
         [HttpGet]
         public async Task<IEnumerable<AwardsResponse>> GetAsync()
         {
-            var currentUser = await _unitOfWork.GetAsync<User>(HttpContext.User.Id());
-            
+            User currentUser = await _unitOfWork.GetAsync<User>(HttpContext.User.Id());
+
             return currentUser.Awards.Select(a => new AwardsResponse
             {
                 Title = a.Title,

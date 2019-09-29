@@ -4,7 +4,7 @@ using Backend.Core.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Backend.Core.Features.Newsfeed
+namespace Backend.Core.Features.Newsfeed.Hubs
 {
     [Authorize]
     public class NewsfeedHub : Hub

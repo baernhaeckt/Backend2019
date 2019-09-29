@@ -5,6 +5,20 @@ namespace Backend.Core
 {
     public class WebException : Exception
     {
+        public WebException()
+        {
+        }
+
+        public WebException(string message)
+            : base(message)
+        {
+        }
+
+        public WebException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
+
         public WebException(string message, HttpStatusCode httpStatusCode)
             : base(message)
         {

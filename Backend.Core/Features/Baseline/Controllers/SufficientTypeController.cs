@@ -1,9 +1,9 @@
-﻿using Backend.Database;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Features.Baseline.Models;
+using Backend.Database.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Core.Features.Baseline.Controllers
 {
@@ -21,7 +21,7 @@ namespace Backend.Core.Features.Baseline.Controllers
         [HttpGet("baseline")]
         public async Task<IEnumerable<BaselineResponse>> GetBaseLinePoints()
         {
-            var sufficientTypes = await _sufficientTypeService.GetSufficientTypes();
+            IEnumerable<SufficientType> sufficientTypes = await _sufficientTypeService.GetSufficientTypes();
             return sufficientTypes.Select(s => new BaselineResponse
             {
                 Title = s.Title,

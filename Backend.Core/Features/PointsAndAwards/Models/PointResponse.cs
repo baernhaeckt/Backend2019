@@ -1,5 +1,5 @@
 ﻿using System;
-using Backend.Database;
+using Backend.Database.Entities;
 
 namespace Backend.Core.Features.PointsAndAwards.Models
 {
@@ -7,7 +7,7 @@ namespace Backend.Core.Features.PointsAndAwards.Models
     {
         public Guid Id { get; set; }
 
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
 
         public int Value { get; set; }
 
@@ -15,6 +15,6 @@ namespace Backend.Core.Features.PointsAndAwards.Models
 
         public double Co2Saving { get; set; }
 
-        public UserSufficientType SufficientType { get; set; }
+        public UserSufficientType? SufficientType { get; set; }
     }
 }

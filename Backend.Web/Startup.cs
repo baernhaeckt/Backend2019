@@ -1,10 +1,16 @@
-﻿using Backend.Core.Features.Friendship;
+﻿using System.Diagnostics.CodeAnalysis;
+using Backend.Core.Features.Baseline;
+using Backend.Core.Features.Friendship;
 using Backend.Core.Features.Newsfeed;
+using Backend.Core.Features.Newsfeed.Hubs;
+using Backend.Core.Features.Partner;
+using Backend.Core.Features.PointsAndAwards;
+using Backend.Core.Features.Quiz;
+using Backend.Core.Features.Ranking;
 using Backend.Core.Features.UserManagement;
 using Backend.Web.Middleware;
 using Backend.Web.Setup;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,18 +32,25 @@ namespace Backend.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // services.AddApiDocumentation(); Wait for Swagger v5
             services.AddBus(options => options.UseModel());
             services.AddMvcWithCors();
-            //services.AddApiDocumentation(); Wait for Swagger v5
             services.AddJwtAuthentication();
-            services.AddNewsfeed();
             services.AddFeatureUserManagement(_hostEnvironment);
+            services.AddFeatureBaseline();
+            services.AddFeatureFriendship(_hostEnvironment);
+            services.AddFeatureNewsfeed();
+            services.AddFeaturePartner();
+            services.AddFeaturePointsAndAwards();
+            services.AddFeatureQuiz();
+            services.AddFeatureRanking();
+            services.AddFeatureRanking();
             services.AddMongoDb(Configuration);
 
             services.AddHostedService<StartupTaskRunner>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Framework demand.")]
         public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -48,23 +61,23 @@ namespace Backend.Web
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             // Wait for Swagger v5
-            //app.UseSwagger();
-            //app.UseSwaggerUI(c =>
-            //{
+            // app.UseSwagger();
+            // app.UseSwaggerUI(c =>
+            // {
             //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Leaf API V1");
-            //});
-
+            // });
             app.UseCors(x =>
-                    x.AllowAnyMethod()
+                x.AllowAnyMethod()
                     .WithOrigins("http://localhost:8080", "https://baernhaeckt.z16.web.core.windows.net")
                     .AllowAnyHeader()
                     .AllowCredentials());
 
+            app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseRouting();
-            app.UseEndpoints(endpoints => 
+            app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers().RequireAuthorization();
                 endpoints.MapHub<NewsfeedHub>("/newsfeed");

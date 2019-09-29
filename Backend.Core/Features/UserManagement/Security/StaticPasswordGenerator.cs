@@ -12,6 +12,9 @@ namespace Backend.Core.Features.UserManagement.Security
             _configuration = configuration;
         }
 
-        public string Generate() => _configuration["DefaultPassword"];
+        public string Generate()
+        {
+            return _configuration["DefaultPassword"];
+        }
     }
 }

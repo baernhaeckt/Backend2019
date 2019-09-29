@@ -1,9 +1,10 @@
-﻿using Backend.Database.Abstraction;
-using MongoDB.Driver;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Backend.Database.Abstraction;
+using Backend.Database.Entities;
+using MongoDB.Driver;
 
 namespace Backend.Database.Framework
 {
@@ -29,7 +30,7 @@ namespace Backend.Database.Framework
             where TEntity : Entity, new()
         {
             DbContext dbContext = DbContextFactory.Create();
-            return (await dbContext.GetCollection<TEntity>().FindAsync(FilterDefinition<TEntity>.Empty, null)).ToEnumerable();
+            return (await dbContext.GetCollection<TEntity>().FindAsync(FilterDefinition<TEntity>.Empty)).ToEnumerable();
         }
 
         public async Task<long> CountAsync<TEntity>()

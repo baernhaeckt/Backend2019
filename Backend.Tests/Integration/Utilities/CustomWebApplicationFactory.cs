@@ -1,9 +1,8 @@
 ﻿using Backend.Web;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Hosting;
 
-namespace Backend.Tests.Integration
+namespace Backend.Tests.Integration.Utilities
 {
     public class CustomWebApplicationFactory : WebApplicationFactory<Startup>
     {

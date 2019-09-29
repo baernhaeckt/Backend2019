@@ -1,30 +1,35 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Features.Newsfeed;
+using Backend.Core.Features.Newsfeed.Abstraction;
 using Backend.Core.Features.Newsfeed.Events;
-using Backend.Database;
 using Backend.Database.Abstraction;
+using Backend.Database.Entities;
+using Backend.Database.Entities.Awards;
 
 namespace Backend.Core.Features.PointsAndAwards
 {
     public class AwardService
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IEventStream _eventStream;
+        private readonly IEventFeed _eventFeed;
 
-        public AwardService(IUnitOfWork unitOfWork, IEventStream eventStream)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public AwardService(IUnitOfWork unitOfWork, IEventFeed eventFeed)
         {
             _unitOfWork = unitOfWork;
-            _eventStream = eventStream;
+            _eventFeed = eventFeed;
         }
 
         public async Task CheckForNewAwardsAsync(User user)
         {
             // Yes. We are aware that this method contains horrible code.
-            var allTokensFromUser = (await _unitOfWork.GetTokensFromUser(user.Id)).ToList();
+            List<Token> allTokensFromUser = (await _unitOfWork.GetTokensFromUser(user.Id)).ToList();
 
-            Award newAward = null;
-            if (allTokensFromUser.Count() > 1 && user.Awards.All(a => a.Kind != AwardKind.Onboarding))
+            Award? newAward = null;
+            if (allTokensFromUser.Count > 1 && user.Awards.All(a => a.Kind != AwardKind.Onboarding))
             {
                 // This is the first token the user gets, so this is worth an award.
                 newAward = new OnBoardingAward();
@@ -40,8 +45,8 @@ namespace Backend.Core.Features.PointsAndAwards
                 user.Awards.Add(newAward);
                 await _unitOfWork.UpdateAsync(user);
 
-                await _eventStream.PublishAsync(new BadgeReceivedEvent(user, newAward));
-                await _eventStream.PublishAsync(new FriendBadgeReceivedEvent(user, newAward));
+                await _eventFeed.PublishAsync(new BadgeReceivedNewsfeedEvent(user, newAward));
+                await _eventFeed.PublishAsync(new FriendNewsfeedBadgeReceivedEvent(user, newAward));
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace Backend.Database
+﻿namespace Backend.Database.Entities.Awards
 {
     public class TrashHeroAward : Award
     {

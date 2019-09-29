@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Backend.Core.Startup;
-using Backend.Database;
+using Backend.Core.Abstraction;
 using Backend.Database.Abstraction;
+using Backend.Database.Entities;
 
 namespace Backend.Core.Features.Baseline.Data
 {
@@ -23,7 +23,7 @@ namespace Backend.Core.Features.Baseline.Data
                 return;
             }
 
-            IList<SufficientType> sufficientTypes = new List<SufficientType>()
+            IList<SufficientType> sufficientTypes = new List<SufficientType>
             {
                 new SufficientType
                 {

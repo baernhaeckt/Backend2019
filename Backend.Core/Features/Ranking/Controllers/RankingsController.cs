@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Backend.Core.Extensions;
 using Backend.Core.Features.Friendship;
 using Backend.Core.Features.Ranking.Models;
-using Backend.Database;
 using Backend.Database.Abstraction;
+using Backend.Database.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Core.Features.Ranking.Controllers
@@ -15,9 +15,11 @@ namespace Backend.Core.Features.Ranking.Controllers
     [ApiController]
     public class RankingsController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ClaimsPrincipal _principal;
         private readonly FriendsService _friendsService;
+
+        private readonly ClaimsPrincipal _principal;
+
+        private readonly IUnitOfWork _unitOfWork;
 
         public RankingsController(IUnitOfWork unitOfWork, ClaimsPrincipal principal, FriendsService friendsService)
         {
@@ -29,8 +31,8 @@ namespace Backend.Core.Features.Ranking.Controllers
         [HttpGet("global")]
         public async Task<IEnumerable<UserResponse>> GetGlobalAsync()
         {
-            var users = await _unitOfWork.GetAllAsync<User>();
-            var results = CreateResult(users);
+            IEnumerable<User> users = await _unitOfWork.GetAllAsync<User>();
+            IEnumerable<UserResponse> results = CreateResult(users);
 
             return results.OrderByDescending(r => r.Points);
         }
@@ -40,7 +42,7 @@ namespace Backend.Core.Features.Ranking.Controllers
         {
             IEnumerable<User> users = await _unitOfWork.WhereAsync<User>(u => u.Location.Zip == zip);
 
-            var results = CreateResult(users);
+            IEnumerable<UserResponse> results = CreateResult(users);
 
             return results.OrderByDescending(r => r.Points);
         }
@@ -48,7 +50,7 @@ namespace Backend.Core.Features.Ranking.Controllers
         [HttpGet("friends")]
         public async Task<IEnumerable<UserResponse>> GetFriendsAsync()
         {
-            var results = CreateResult((await _friendsService.GetFriends()));
+            IEnumerable<UserResponse> results = CreateResult(await _friendsService.GetFriends());
 
             return results.OrderByDescending(u => u.Points);
         }
@@ -56,13 +58,13 @@ namespace Backend.Core.Features.Ranking.Controllers
         [HttpGet("summary")]
         public async Task<RankingSummary> GetSummary()
         {
-            var user = await _unitOfWork.GetAsync<User>(_principal.Id());
-            var zipCode = user.Location?.Zip ?? "3000";
+            User user = await _unitOfWork.GetAsync<User>(_principal.Id());
+            string zipCode = user.Location?.Zip ?? "3000";
 
-            var allUsers = await _unitOfWork.GetAllAsync<User>();
-            var global = CreateResult(allUsers).OrderByDescending(u => u.Points);
-            var local = CreateResult(allUsers.Where(u => u.Location != null && u.Location.Zip == zipCode)).OrderByDescending(u => u.Points);
-            var friends = CreateResult(await _friendsService.GetFriends()).OrderByDescending(u => u.Points);
+            IEnumerable<User> allUsers = await _unitOfWork.GetAllAsync<User>();
+            IOrderedEnumerable<UserResponse> global = CreateResult(allUsers).OrderByDescending(u => u.Points);
+            IOrderedEnumerable<UserResponse> local = CreateResult(allUsers.Where(u => u.Location != null && u.Location.Zip == zipCode)).OrderByDescending(u => u.Points);
+            IOrderedEnumerable<UserResponse> friends = CreateResult(await _friendsService.GetFriends()).OrderByDescending(u => u.Points);
 
             return new RankingSummary
             {
@@ -75,24 +77,25 @@ namespace Backend.Core.Features.Ranking.Controllers
         private static int GetRank(IEnumerable<UserResponse> list, User user)
         {
             var rank = 1;
-            foreach (var u in list)
+            foreach (UserResponse u in list)
             {
                 if (u.Id == user.Id)
                 {
                     break;
                 }
+
                 rank++;
             }
 
             return rank;
         }
 
-        private IEnumerable<UserResponse> CreateResult(IEnumerable<User> users)
+        private static IEnumerable<UserResponse> CreateResult(IEnumerable<User> users)
         {
             users = users.ToList();
             IList<UserResponse> results = new List<UserResponse>(users.Count());
 
-            foreach (var user in users)
+            foreach (User user in users)
             {
                 int pointsForUser = user.PointActions.Sum(p => p.Point);
 

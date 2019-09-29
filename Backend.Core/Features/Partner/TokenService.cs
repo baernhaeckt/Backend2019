@@ -1,18 +1,21 @@
 ﻿using System;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Backend.Core.Extensions;
 using Backend.Core.Features.PointsAndAwards;
-using Backend.Database;
 using Backend.Database.Abstraction;
+using Backend.Database.Entities;
 
 namespace Backend.Core.Features.Partner
 {
     public class TokenService
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly ClaimsPrincipal _claimsPrincipal;
+
         private readonly PointService _pointService;
+
+        private readonly IUnitOfWork _unitOfWork;
 
         public TokenService(IUnitOfWork unitOfWork, ClaimsPrincipal claimsPrincipal, PointService pointService)
         {
@@ -23,7 +26,7 @@ namespace Backend.Core.Features.Partner
 
         public async Task<string> GenerateForPartnerAsync(Guid partnerId)
         {
-            Token token = null;
+            Token? token = null;
             if (partnerId == Guid.Parse("ccc14b11-5922-4e3e-bb54-03e71facaeb3"))
             {
                 token = new Token();
@@ -73,7 +76,7 @@ namespace Backend.Core.Features.Partner
                 return token.Value.ToString();
             }
 
-            throw new WebException("Partner doesn't exist.", System.Net.HttpStatusCode.BadRequest);
+            throw new WebException("Partner doesn't exist.", HttpStatusCode.BadRequest);
         }
 
         public async Task AssignTokenToUserAsync(Guid tokenGuid)
@@ -81,12 +84,12 @@ namespace Backend.Core.Features.Partner
             Token token = await _unitOfWork.SingleOrDefaultAsync<Token>(t => t.Value == tokenGuid);
             if (token == null)
             {
-                throw new WebException("Token not found.", System.Net.HttpStatusCode.NotFound);
+                throw new WebException("Token not found.", HttpStatusCode.NotFound);
             }
 
             if (!token.Valid)
             {
-                throw new WebException("Token already used.", System.Net.HttpStatusCode.BadRequest);
+                throw new WebException("Token already used.", HttpStatusCode.BadRequest);
             }
 
             token.UserId = _claimsPrincipal.Id();

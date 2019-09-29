@@ -27,8 +27,8 @@ namespace Backend.Core.Features.Friendship
             {
                 services.AddStartupTask<GenerateUsersStartupTask>();
             }
-            services.AddStartupTask<AdminUsersStartupTask>();
 
+            services.AddStartupTask<AdminUsersStartupTask>();
 
             // Security Utilities
             services.AddSingleton<IPasswordStorage, HmacSha512PasswordStorage>();

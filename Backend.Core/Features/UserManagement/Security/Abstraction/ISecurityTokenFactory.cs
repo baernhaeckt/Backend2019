@@ -1,4 +1,4 @@
-﻿using Backend.Database;
+﻿using Backend.Database.Entities;
 
 namespace Backend.Core.Features.UserManagement.Security.Abstraction
 {

@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
+﻿using System;
 using System.Threading.Tasks;
 using Backend.Core.Features.UserManagement.Security.Abstraction;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Backend.Web.Setup
 {
@@ -18,7 +21,7 @@ namespace Backend.Web.Setup
             {
                 options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
-                using (var scope = services.BuildServiceProvider().CreateScope())
+                using (IServiceScope scope = services.BuildServiceProvider().CreateScope())
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -30,21 +33,22 @@ namespace Backend.Web.Setup
                 }
 
                 // We have to hook the OnMessageReceived event in order to
-                // allow the JWT authentication handler to read the access token from the query string 
+                // allow the JWT authentication handler to read the access token from the query string
                 // when a WebSocket or Server-Sent Events request comes in.
                 options.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>
                     {
-                        var accessToken = context.Request.Query["access_token"];
+                        StringValues accessToken = context.Request.Query["access_token"];
 
                         // If the request is for our hub...
-                        var path = context.HttpContext.Request.Path;
-                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/newsfeed"))
+                        PathString path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/newsfeed", StringComparison.OrdinalIgnoreCase))
                         {
                             // Read the token out of the query string
                             context.Token = accessToken;
                         }
+
                         return Task.CompletedTask;
                     }
                 };
