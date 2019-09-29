@@ -28,7 +28,7 @@ namespace Backend.Tests.Integration
         {
             HttpClient client = _factory.CreateClient();
 
-            string email = RandomEmail();
+            string email = DataGenerator.RandomEmail();
             _output.WriteLine("New user will be " + email);
 
             _output.WriteLine("Register a user");
@@ -39,11 +39,13 @@ namespace Backend.Tests.Integration
             _output.WriteLine("Sign in with the user");
             await client.SignIn(email, "1234");
 
-            IList<string> partnerIds = new List<string>();
-            partnerIds.Add("ccc14b11-5922-4e3e-bb54-03e71facaeb3");
-            partnerIds.Add("acc14b11-5922-4e3e-bb54-03e71facaeb3");
-            partnerIds.Add("bcc14b11-5922-4e3e-bb54-03e71facaeb3");
-            partnerIds.Add("ccc14b11-5922-4e3e-bb54-03e71facaeb3");
+            IList<string> partnerIds = new List<string>
+            {
+                "ccc14b11-5922-4e3e-bb54-03e71facaeb3",
+                "acc14b11-5922-4e3e-bb54-03e71facaeb3",
+                "bcc14b11-5922-4e3e-bb54-03e71facaeb3",
+                "ccc14b11-5922-4e3e-bb54-03e71facaeb3"
+            };
 
             IList<string> tokenValues = new List<string>();
             foreach (string partnerId in partnerIds)
@@ -79,13 +81,6 @@ namespace Backend.Tests.Integration
             url = new Uri("api/sufficienttype/baseline", UriKind.Relative);
             response = await client.GetAsync(url);
             response.EnsureSuccessStatusCode();
-        }
-
-        private string RandomEmail()
-        {
-            Randomizer.Seed = new Random();
-            var faker = new Faker();
-            return faker.Internet.Email();
         }
     }
 }

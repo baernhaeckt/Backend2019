@@ -8,6 +8,8 @@ using Backend.Core.Features.PointsAndAwards;
 using Backend.Core.Features.Quiz;
 using Backend.Core.Features.Ranking;
 using Backend.Core.Features.UserManagement;
+using Backend.Infrastructure.Email;
+using Backend.Infrastructure.Persistence;
 using Backend.Web.Middleware;
 using Backend.Web.Setup;
 using Microsoft.AspNetCore.Builder;
@@ -19,15 +21,15 @@ namespace Backend.Web
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
         private readonly IHostEnvironment _hostEnvironment;
 
         public Startup(IConfiguration configuration, IHostEnvironment hostEnvironment)
         {
-            Configuration = configuration;
+            _configuration = configuration;
             _hostEnvironment = hostEnvironment;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -36,6 +38,12 @@ namespace Backend.Web
             services.AddBus(options => options.UseModel());
             services.AddMvcWithCors();
             services.AddJwtAuthentication();
+
+            // Infrastructure
+            services.AddMongoDbPersistence(_configuration);
+            services.AddInfrastructureEmail(_configuration);
+
+            // Features
             services.AddFeatureUserManagement(_hostEnvironment);
             services.AddFeatureBaseline();
             services.AddFeatureFriendship(_hostEnvironment);
@@ -45,7 +53,6 @@ namespace Backend.Web
             services.AddFeatureQuiz();
             services.AddFeatureRanking();
             services.AddFeatureRanking();
-            services.AddMongoDb(Configuration);
 
             services.AddHostedService<StartupTaskRunner>();
         }

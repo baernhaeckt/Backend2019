@@ -4,8 +4,8 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using Backend.Core.Entities;
 using Backend.Core.Features.UserManagement.Security.Abstraction;
-using Backend.Database.Entities;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Backend.Core.Features.UserManagement.Security

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Backend.Core.Entities;
 using Backend.Core.Features.UserManagement.Models;
-using Backend.Database.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Core.Features.UserManagement.Controllers

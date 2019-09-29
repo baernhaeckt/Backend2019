@@ -1,4 +1,4 @@
-﻿using Backend.Database.Entities;
+﻿using Backend.Core.Entities;
 
 namespace Backend.Core.Features.Newsfeed.Events
 {

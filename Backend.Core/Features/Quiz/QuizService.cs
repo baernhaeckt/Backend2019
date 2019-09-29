@@ -5,12 +5,12 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Backend.Core.Entities.Quiz;
 using Backend.Core.Extensions;
 using Backend.Core.Features.PointsAndAwards;
 using Backend.Core.Features.PointsAndAwards.Models;
 using Backend.Core.Features.Quiz.Models;
-using Backend.Database.Abstraction;
-using Backend.Database.Entities.Widgets.Quiz;
+using Backend.Infrastructure.Persistence.Abstraction;
 
 namespace Backend.Core.Features.Quiz
 {

@@ -1,5 +1,5 @@
-﻿using Backend.Database.Entities;
-using Backend.Database.Entities.Awards;
+﻿using Backend.Core.Entities;
+using Backend.Core.Entities.Awards;
 
 namespace Backend.Core.Features.Newsfeed.Events
 {

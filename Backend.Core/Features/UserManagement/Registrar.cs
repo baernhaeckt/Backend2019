@@ -1,12 +1,15 @@
 ﻿using Backend.Core.Extensions;
 using Backend.Core.Features.Friendship;
+using Backend.Core.Features.UserManagement.Commands;
 using Backend.Core.Features.UserManagement.Controllers;
 using Backend.Core.Features.UserManagement.Data;
 using Backend.Core.Features.UserManagement.Data.Testing;
+using Backend.Core.Features.UserManagement.EventSubscriber;
 using Backend.Core.Features.UserManagement.Security;
 using Backend.Core.Features.UserManagement.Security.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Features.UserManagement
 {
@@ -22,7 +25,14 @@ namespace Backend.Core.Features.UserManagement
             services.AddScoped<UserService>();
             services.AddScoped<FriendsService>();
 
+            // Subscribers
+            services.AddTransient<ISubscriber, UserRegisteredEventSubscriber>();
+
+            // CommandHandlers
+            services.AddTransient<ISubscriber, RegisterUserCommandHandler>();
+
             // Data setup
+            services.AddStartupTask<SetIndexOnEmailStartupTask>();
             if (hostEnvironment.IsDevelopment())
             {
                 services.AddStartupTask<GenerateUsersStartupTask>();

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Backend.Core.Abstraction;
+using Backend.Core.Entities;
 using Backend.Core.Features.UserManagement.Security;
-using Backend.Database.Abstraction;
-using Backend.Database.Entities;
+using Backend.Infrastructure.Hosting.Abstraction;
+using Backend.Infrastructure.Persistence.Abstraction;
 using Microsoft.Extensions.Configuration;
 
 namespace Backend.Core.Features.UserManagement.Data
@@ -28,11 +28,13 @@ namespace Backend.Core.Features.UserManagement.Data
                 return;
             }
 
-            var user = new User();
-            user.Email = _configuration["AdminEmail"];
-            user.Password = _configuration["AdminPassword"];
-            user.DisplayName = "Admin";
-            user.Roles = new List<string> { Roles.Administrator };
+            var user = new User
+            {
+                Email = _configuration["AdminEmail"],
+                Password = _configuration["AdminPassword"],
+                DisplayName = "Admin",
+                Roles = new List<string> { Roles.Administrator }
+            };
             await _unitOfWork.InsertAsync(user);
         }
     }

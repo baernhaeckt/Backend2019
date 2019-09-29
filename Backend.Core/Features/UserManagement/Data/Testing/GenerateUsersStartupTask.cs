@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Backend.Core.Abstraction;
+using Backend.Core.Entities;
 using Backend.Core.Features.UserManagement.Security;
 using Backend.Core.Features.UserManagement.Security.Abstraction;
-using Backend.Database.Abstraction;
-using Backend.Database.Entities;
+using Backend.Infrastructure.Hosting.Abstraction;
+using Backend.Infrastructure.Persistence.Abstraction;
 using Bogus;
 using Bogus.Locations;
 
@@ -19,15 +19,15 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
 
         private readonly IPasswordStorage _passwordStorage;
 
-        private readonly IPasswordGenerator _paswordGenerator;
+        private readonly IPasswordGenerator _passwordGenerator;
 
         private readonly IUnitOfWork _unitOfWork;
 
-        public GenerateUsersStartupTask(IUnitOfWork unitOfWork, IPasswordStorage passwordStorage, IPasswordGenerator paswordGenerator)
+        public GenerateUsersStartupTask(IUnitOfWork unitOfWork, IPasswordStorage passwordStorage, IPasswordGenerator passwordGenerator)
         {
             _unitOfWork = unitOfWork;
             _passwordStorage = passwordStorage;
-            _paswordGenerator = paswordGenerator;
+            _passwordGenerator = passwordGenerator;
         }
 
         public async Task ExecuteAsync(CancellationToken cancellationToken)
@@ -50,7 +50,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
             Faker<User> faker = new Faker<User>()
                 .RuleFor(u => u.Id, f => Guid.NewGuid())
                 .RuleFor(u => u.Email, f => f.Internet.Email())
-                .RuleFor(u => u.Password, _passwordStorage.Create(_paswordGenerator.Generate()))
+                .RuleFor(u => u.Password, _passwordStorage.Create(_passwordGenerator.Generate()))
                 .RuleFor(u => u.DisplayName, f => f.Name.FirstName())
                 .RuleFor(u => u.Roles, new List<string> { Roles.User })
                 .RuleFor(u => u.Location, f => f.PickRandom(locations));

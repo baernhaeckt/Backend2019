@@ -1,9 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Backend.Core.Entities;
+using Backend.Core.Features.UserManagement.Commands;
 using Backend.Core.Features.UserManagement.Models;
 using Backend.Core.Features.UserManagement.Security.Abstraction;
-using Backend.Database.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Silverback.Messaging.Publishing;
 
 namespace Backend.Core.Features.UserManagement.Controllers
 {
@@ -11,17 +13,17 @@ namespace Backend.Core.Features.UserManagement.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly ICommandPublisher _commandPublisher;
+
         private readonly IPasswordStorage _passwordStorage;
 
         private readonly ISecurityTokenFactory _securityTokenFactory;
 
         private readonly UserService _userService;
 
-        public UsersController(
-            IPasswordStorage passwordStorage,
-            ISecurityTokenFactory securityTokenFactory,
-            UserService userService)
+        public UsersController(ICommandPublisher commandPublisher, IPasswordStorage passwordStorage, ISecurityTokenFactory securityTokenFactory, UserService userService)
         {
+            _commandPublisher = commandPublisher;
             _passwordStorage = passwordStorage;
             _securityTokenFactory = securityTokenFactory;
             _userService = userService;
@@ -33,7 +35,9 @@ namespace Backend.Core.Features.UserManagement.Controllers
         {
             if (!await _userService.IsRegisteredAsync(email))
             {
-                string token = await _userService.RegisterAsync(email);
+                await _commandPublisher.ExecuteAsync(new RegisterUserCommand(email));
+                User user = await _userService.GetByEmailAsync(email);
+                string token = _securityTokenFactory.Create(user);
                 return new LoginResponse { Token = token };
             }
 

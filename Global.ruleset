@@ -121,7 +121,6 @@
     <Rule Id="CA1809" Action="Warning" />
     <Rule Id="CA1810" Action="Warning" />
     <Rule Id="CA1811" Action="Warning" />
-    <Rule Id="CA1812" Action="Warning" />
     <Rule Id="CA1813" Action="Warning" />
     <Rule Id="CA1814" Action="Warning" />
     <Rule Id="CA1815" Action="Warning" />
@@ -676,6 +675,7 @@
     <Rule Id="CA1711" Action="Warning" />
     <Rule Id="CA1724" Action="None" />
     <Rule Id="CA1725" Action="Warning" />
+    <Rule Id="CA1812" Action="None" />
     <Rule Id="CA2007" Action="None" />
     <Rule Id="CA2217" Action="Warning" />
     <Rule Id="CA2227" Action="None" />

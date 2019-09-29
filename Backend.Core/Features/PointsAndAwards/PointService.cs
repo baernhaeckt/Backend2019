@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Backend.Core.Entities;
 using Backend.Core.Extensions;
 using Backend.Core.Features.Newsfeed;
 using Backend.Core.Features.Newsfeed.Abstraction;
 using Backend.Core.Features.Newsfeed.Events;
 using Backend.Core.Features.PointsAndAwards.Models;
-using Backend.Database.Abstraction;
-using Backend.Database.Entities;
+using Backend.Infrastructure.Persistence.Abstraction;
 
 namespace Backend.Core.Features.PointsAndAwards
 {

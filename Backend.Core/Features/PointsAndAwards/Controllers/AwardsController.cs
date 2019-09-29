@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.Core.Entities;
 using Backend.Core.Extensions;
 using Backend.Core.Features.PointsAndAwards.Models;
-using Backend.Database.Abstraction;
-using Backend.Database.Entities;
+using Backend.Infrastructure.Persistence.Abstraction;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Core.Features.PointsAndAwards.Controllers

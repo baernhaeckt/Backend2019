@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Backend.Core.Abstraction;
-using Backend.Database.Abstraction;
-using Backend.Database.Entities;
+using Backend.Core.Entities;
+using Backend.Infrastructure.Hosting.Abstraction;
+using Backend.Infrastructure.Persistence.Abstraction;
 
 namespace Backend.Core.Features.Baseline.Data
 {

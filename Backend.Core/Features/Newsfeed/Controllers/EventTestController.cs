@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
+using Backend.Core.Entities.Awards;
 using Backend.Core.Features.Newsfeed.Abstraction;
 using Backend.Core.Features.Newsfeed.Events;
 using Backend.Core.Features.UserManagement;
 using Backend.Core.Features.UserManagement.Security;
-using Backend.Database.Entities.Awards;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

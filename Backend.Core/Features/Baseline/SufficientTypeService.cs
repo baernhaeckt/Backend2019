@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Backend.Core.Entities;
 using Backend.Core.Extensions;
-using Backend.Database.Abstraction;
-using Backend.Database.Entities;
+using Backend.Infrastructure.Persistence.Abstraction;
 
 namespace Backend.Core.Features.Baseline
 {
