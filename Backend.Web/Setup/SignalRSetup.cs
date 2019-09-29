@@ -1,4 +1,4 @@
-﻿using Backend.Core.Newsfeed;
+﻿using Backend.Core.Features.Newsfeed;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backend.Web.Setup

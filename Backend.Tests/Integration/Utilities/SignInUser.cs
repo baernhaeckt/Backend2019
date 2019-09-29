@@ -1,4 +1,4 @@
-﻿using Backend.Models;
+﻿using Backend.Core.Features.UserManagement.Models;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;

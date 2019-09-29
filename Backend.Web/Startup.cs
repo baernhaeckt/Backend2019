@@ -1,7 +1,8 @@
-﻿using Backend.Core.Newsfeed;
+﻿using Backend.Core.Features.Friendship;
+using Backend.Core.Features.Newsfeed;
+using Backend.Core.Features.UserManagement;
 using Backend.Web.Middleware;
 using Backend.Web.Setup;
-using Backend.Web.StartupTask;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,11 +26,12 @@ namespace Backend.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddBus(options => options.UseModel());
             services.AddMvcWithCors();
             //services.AddApiDocumentation(); Wait for Swagger v5
             services.AddJwtAuthentication();
             services.AddNewsfeed();
-            services.AddServices(_hostEnvironment);
+            services.AddFeatureUserManagement(_hostEnvironment);
             services.AddMongoDb(Configuration);
 
             services.AddHostedService<StartupTaskRunner>();
@@ -64,7 +66,7 @@ namespace Backend.Web
             app.UseRouting();
             app.UseEndpoints(endpoints => 
             {
-                endpoints.MapControllers();
+                endpoints.MapControllers().RequireAuthorization();
                 endpoints.MapHub<NewsfeedHub>("/newsfeed");
             });
         }

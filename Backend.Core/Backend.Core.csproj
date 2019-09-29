@@ -8,13 +8,14 @@
     <PackageReference Include="Bogus" Version="28.3.1" />
     <PackageReference Include="Bogus.Locations" Version="28.3.1" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.5.0" />
+    <PackageReference Include="Silverback.Core" Version="0.10.0" />
+    <PackageReference Include="Silverback.Core.Model" Version="0.10.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Backend.Database\Backend.Database.csproj" />
-    <ProjectReference Include="..\Backend.Models\Backend.Models.csproj" />
   </ItemGroup>
 
 </Project>

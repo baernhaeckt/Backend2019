@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backend.Web.Setup
@@ -10,11 +8,9 @@ namespace Backend.Web.Setup
     {
         public static void AddMvcWithCors(this IServiceCollection services)
         {
-            services.AddControllers(config =>
-            {
-                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-                config.Filters.Add(new AuthorizeFilter(policy));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddControllers()
+                .AddControllersAsServices()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddCors();
 

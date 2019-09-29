@@ -1,8 +1,8 @@
-﻿using Backend.Core.Security.Abstraction;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
+using Backend.Core.Features.UserManagement.Security.Abstraction;
 
 namespace Backend.Web.Setup
 {

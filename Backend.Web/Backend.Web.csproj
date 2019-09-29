@@ -12,7 +12,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Backend.Core\Backend.Core.csproj" />
     <ProjectReference Include="..\Backend.Database\Backend.Database.csproj" />
-    <ProjectReference Include="..\Backend.Models\Backend.Models.csproj" />
   </ItemGroup>
 
 </Project>

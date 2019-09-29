@@ -1,4 +1,4 @@
-﻿using Backend.Core.Seed;
+﻿using Backend.Core.Features.UserManagement.Data;
 using Backend.Core.Startup;
 using Backend.Database.Framework;
 using Microsoft.Extensions.Configuration;
