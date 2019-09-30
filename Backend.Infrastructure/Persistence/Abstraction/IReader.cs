@@ -10,6 +10,9 @@ namespace Backend.Infrastructure.Persistence.Abstraction
         Task<long> CountAsync<TEntity>()
             where TEntity : Entity, new();
 
+        Task<long> CountAsync<TEntity>(Expression<Func<TEntity, bool>> predicate)
+            where TEntity : Entity, new();
+
         Task<IEnumerable<TEntity>> GetAllAsync<TEntity>()
             where TEntity : Entity, new();
 

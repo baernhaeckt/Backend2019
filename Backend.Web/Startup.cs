@@ -48,7 +48,7 @@ namespace Backend.Web
             // Features
             services.AddFeatureUserManagement(_hostEnvironment);
             services.AddFeatureBaseline();
-            services.AddFeatureFriendship(_hostEnvironment);
+            services.AddFeatureFriendship();
             services.AddFeatureNewsfeed();
             services.AddFeaturePartner();
             services.AddFeaturePointsAndAwards();

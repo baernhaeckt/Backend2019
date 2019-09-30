@@ -1,5 +1,4 @@
 ﻿using Backend.Core.Extensions;
-using Backend.Core.Features.Friendship;
 using Backend.Core.Features.UserManagement.Commands;
 using Backend.Core.Features.UserManagement.Controllers;
 using Backend.Core.Features.UserManagement.Data;
@@ -23,7 +22,6 @@ namespace Backend.Core.Features.UserManagement
 
             // Services
             services.AddScoped<UserService>();
-            services.AddScoped<FriendsService>();
 
             // Subscribers
             services.AddTransient<ISubscriber, UserRegisteredEventSubscriber>();

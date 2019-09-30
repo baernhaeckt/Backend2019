@@ -25,6 +25,14 @@ namespace Backend.Infrastructure.Persistence
             return entity;
         }
 
+        public async Task<long> CountAsync<TEntity>(Expression<Func<TEntity, bool>> predicate)
+            where TEntity : Entity, new()
+        {
+            DbContext dbContext = DbContextFactory.Create();
+            FilterDefinition<TEntity> filter = new ExpressionFilterDefinition<TEntity>(predicate);
+            return await dbContext.GetCollection<TEntity>().CountDocumentsAsync(filter);
+        }
+
         public async Task<IEnumerable<TEntity>> GetAllAsync<TEntity>()
             where TEntity : Entity, new()
         {
@@ -36,7 +44,7 @@ namespace Backend.Infrastructure.Persistence
             where TEntity : Entity, new()
         {
             DbContext dbContext = DbContextFactory.Create();
-            return await dbContext.GetCollection<TEntity>().EstimatedDocumentCountAsync();
+            return await dbContext.GetCollection<TEntity>().CountDocumentsAsync(FilterDefinition<TEntity>.Empty);
         }
 
         public async Task<IEnumerable<TEntity>> WhereAsync<TEntity>(Expression<Func<TEntity, bool>> predicate)
