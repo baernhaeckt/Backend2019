@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Entities.Awards;
 using Backend.Core.Extensions;
-using Backend.Core.Features.Newsfeed;
 using Backend.Core.Features.Newsfeed.Abstraction;
 using Backend.Core.Features.Newsfeed.Events;
 using Backend.Infrastructure.Persistence.Abstraction;

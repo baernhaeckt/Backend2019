@@ -79,6 +79,8 @@ namespace Backend.Core.Features.PointsAndAwards
             await _unitOfWork.UpdateAsync(user);
 
             // TODO: Encouple this, using Silverback!
+            // Guess this will lead into a decoupling from awards and points.
+            // E.g. create a new feature awards, as there can be points without awards.
             // Fire and forget.
             await _eventFeed.PublishAsync(new PointsReceivedNewsfeedEvent(user, points));
             await _eventFeed.PublishAsync(new FriendNewsfeedPointsReceivedEvent(user, points));

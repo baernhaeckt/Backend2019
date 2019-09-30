@@ -12,6 +12,7 @@ namespace Backend.Core.Features.PointsAndAwards
             // Controllers
             services.AddScoped<AwardsController>();
             services.AddScoped<PointsController>();
+            services.AddScoped<RankingsController>();
 
             // Services
             services.AddScoped<AwardService>();

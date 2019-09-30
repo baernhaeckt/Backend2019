@@ -1,4 +1,4 @@
-﻿namespace Backend.Core.Features.Ranking.Models
+﻿namespace Backend.Core.Features.PointsAndAwards.Models
 {
     public class RankingSummary
     {

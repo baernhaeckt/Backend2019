@@ -6,7 +6,6 @@ using Backend.Core.Features.Newsfeed.Hubs;
 using Backend.Core.Features.Partner;
 using Backend.Core.Features.PointsAndAwards;
 using Backend.Core.Features.Quiz;
-using Backend.Core.Features.Ranking;
 using Backend.Core.Features.UserManagement;
 using Backend.Infrastructure.Email;
 using Backend.Infrastructure.Persistence;
@@ -53,8 +52,6 @@ namespace Backend.Web
             services.AddFeaturePartner();
             services.AddFeaturePointsAndAwards();
             services.AddFeatureQuiz();
-            services.AddFeatureRanking();
-            services.AddFeatureRanking();
 
             services.AddHostedService<StartupTaskRunner>();
         }
