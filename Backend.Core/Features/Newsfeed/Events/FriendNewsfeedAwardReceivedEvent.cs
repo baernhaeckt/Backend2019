@@ -3,9 +3,9 @@ using Backend.Core.Entities.Awards;
 
 namespace Backend.Core.Features.Newsfeed.Events
 {
-    public class FriendNewsfeedBadgeReceivedEvent : FriendNewsfeedEvent
+    public class FriendNewsfeedAwardReceivedEvent : FriendNewsfeedEvent
     {
-        public FriendNewsfeedBadgeReceivedEvent(User user, Award award)
+        public FriendNewsfeedAwardReceivedEvent(User user, Award award)
             : base(user)
         {
             Title = "Neuer Award";

@@ -35,7 +35,7 @@ namespace Backend.Tests.Integration
 
             // Initial the user hasn't any friends
             HttpResponseMessage response = await client.GetAsync(new Uri("api/friends", UriKind.Relative));
-            var friendResponse = await response.OnSuccessDeserialize<List<FriendResponse>>();
+            List<FriendResponse> friendResponse = await response.OnSuccessDeserialize<List<FriendResponse>>();
             Assert.Empty(friendResponse);
 
             // Add two friends. After adding, the user has two friends

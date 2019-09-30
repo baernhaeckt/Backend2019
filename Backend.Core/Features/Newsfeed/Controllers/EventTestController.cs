@@ -33,13 +33,13 @@ namespace Backend.Core.Features.Newsfeed.Controllers
         [HttpGet(nameof(BadgeReceived))]
         public async Task BadgeReceived()
         {
-            await _eventFeed.PublishAsync(new BadgeReceivedNewsfeedEvent(await _userService.GetCurrentUser(), new TrashHeroAward()));
+            await _eventFeed.PublishAsync(new AwardReceivedNewsfeedEvent(await _userService.GetCurrentUser(), new TrashHeroAward()));
         }
 
         [HttpGet(nameof(FriendBadgeReceived))]
         public async Task FriendBadgeReceived()
         {
-            await _eventFeed.PublishAsync(new FriendNewsfeedBadgeReceivedEvent(await _userService.GetCurrentUser(), new TrashHeroAward()));
+            await _eventFeed.PublishAsync(new FriendNewsfeedAwardReceivedEvent(await _userService.GetCurrentUser(), new TrashHeroAward()));
         }
 
         [HttpGet(nameof(FriendPointsReceived))]

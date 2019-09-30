@@ -12,13 +12,13 @@ namespace Backend.Core.Features.UserManagement.Commands
 {
     internal class RegisterUserCommandHandler : ISubscriber
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IEventPublisher _eventPublisher;
 
         private readonly IPasswordGenerator _passwordGenerator;
 
         private readonly IPasswordStorage _passwordStorage;
 
-        private readonly IEventPublisher _eventPublisher;
+        private readonly IUnitOfWork _unitOfWork;
 
         public RegisterUserCommandHandler(IUnitOfWork unitOfWork, IPasswordGenerator passwordGenerator, IPasswordStorage passwordStorage, IEventPublisher eventPublisher)
         {

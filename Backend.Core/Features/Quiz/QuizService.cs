@@ -6,11 +6,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Backend.Core.Entities.Quiz;
+using Backend.Core.Events;
 using Backend.Core.Extensions;
-using Backend.Core.Features.Points;
-using Backend.Core.Features.Points.Models;
 using Backend.Core.Features.Quiz.Models;
 using Backend.Infrastructure.Persistence.Abstraction;
+using Silverback.Messaging.Publishing;
 
 namespace Backend.Core.Features.Quiz
 {
@@ -18,18 +18,17 @@ namespace Backend.Core.Features.Quiz
     {
         private const string DateKeyFormat = "yyyyMMdd";
 
-        // TODO: Decouple
-        private readonly PointService _pointService;
-
         private readonly ClaimsPrincipal _principal;
+
+        private readonly IEventPublisher _eventPublisher;
 
         private readonly IUnitOfWork _unitOfWork;
 
-        public QuizService(IUnitOfWork unitOfWork, PointService pointService, ClaimsPrincipal principal)
+        public QuizService(IUnitOfWork unitOfWork, ClaimsPrincipal principal, IEventPublisher _eventPublisher)
         {
             _unitOfWork = unitOfWork;
-            _pointService = pointService;
             _principal = principal;
+            this._eventPublisher = _eventPublisher;
         }
 
         public async Task<QuestionResponse> Get()
@@ -62,13 +61,7 @@ namespace Backend.Core.Features.Quiz
             await StoreAnswer(answer, questionAnswerResponse);
             if (isCorrectAnswer)
             {
-                await _pointService.AddPoints(new PointAwarding
-                {
-                    Points = question.Points,
-                    Co2Saving = 0.0,
-                    Source = PointAwardingKind.Widget,
-                    Text = "[Widget] Quiz eine korrekte Antwort gegeben."
-                });
+                await _eventPublisher.PublishAsync(new QuizQuestionCorrectAnsweredEvent(question.Points));
             }
 
             return questionAnswerResponse;

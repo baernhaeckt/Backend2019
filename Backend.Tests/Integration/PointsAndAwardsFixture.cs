@@ -24,7 +24,7 @@ namespace Backend.Tests.Integration
         }
 
         [Fact]
-        public async Task GetProfileControllerProfile_NormalUser_Ok()
+        public async Task Execute()
         {
             HttpClient client = _factory.CreateClient();
 

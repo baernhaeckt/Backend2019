@@ -1,5 +1,5 @@
-﻿using Backend.Core.Features.Points.Commands;
-using Backend.Core.Features.Points.Controllers;
+﻿using Backend.Core.Features.Points.Controllers;
+using Backend.Core.Features.Points.EventHandler;
 using Microsoft.Extensions.DependencyInjection;
 using Silverback.Messaging.Subscribers;
 
@@ -16,8 +16,9 @@ namespace Backend.Core.Features.Points
             // Services
             services.AddScoped<PointService>();
 
-            // Commands
-            services.AddScoped<ISubscriber, PointsForTokenRewardCommandHandler>();
+            // EventHandlers
+            services.AddScoped<ISubscriber, PartnerTokenRegisteredEventHandler>();
+            services.AddScoped<ISubscriber, QuizQuestionCorrectAnsweredEventHandler>();
 
             return services;
         }

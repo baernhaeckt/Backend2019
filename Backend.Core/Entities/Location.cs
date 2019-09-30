@@ -1,6 +1,4 @@
-﻿using Backend.Infrastructure.Persistence.Abstraction;
-
-namespace Backend.Core.Entities
+﻿namespace Backend.Core.Entities
 {
     public class Location
     {

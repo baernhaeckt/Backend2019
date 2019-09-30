@@ -6,6 +6,7 @@ using Backend.Core.Entities;
 using Backend.Core.Features.Friendship.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Location = Backend.Core.Features.Friendship.Models.Location;
 
 namespace Backend.Core.Features.Friendship.Controllers
 {
@@ -30,7 +31,7 @@ namespace Backend.Core.Features.Friendship.Controllers
                 Id = u.Id,
                 Email = u.Email,
                 DisplayName = u.DisplayName,
-                Location = new Models.Location
+                Location = new Location
                 {
                     Longitude = u.Location?.Longitude ?? 0.0,
                     Latitude = u.Location?.Latitude ?? 0.0

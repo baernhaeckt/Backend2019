@@ -6,20 +6,20 @@ using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Features.Newsfeed.EventHandler
 {
-    internal class UserNewPointsEventHandler : ISubscriber
+    internal class UserNewAwardEventHandler : ISubscriber
     {
         private readonly IEventFeed _eventFeed;
 
-        public UserNewPointsEventHandler(IEventFeed eventFeed)
+        public UserNewAwardEventHandler(IEventFeed eventFeed)
         {
             _eventFeed = eventFeed;
         }
 
-        public async Task ExecuteAsync(UserNewPointsEvent @event)
+        public async Task ExecuteAsync(UserNewAwardEvent @event)
         {
             // TODO: This should be non-blocking..
-            await _eventFeed.PublishAsync(new PointsReceivedNewsfeedEvent(@event.User, @event.Points));
-            await _eventFeed.PublishAsync(new FriendNewsfeedPointsReceivedEvent(@event.User, @event.Points));
+            await _eventFeed.PublishAsync(new AwardReceivedNewsfeedEvent(@event.User, @event.Award));
+            await _eventFeed.PublishAsync(new FriendNewsfeedAwardReceivedEvent(@event.User, @event.Award));
         }
     }
 }
