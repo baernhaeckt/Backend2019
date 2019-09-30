@@ -19,7 +19,7 @@ namespace Backend.Infrastructure.Email
         {
             var client = new SendGridClient(_config.ApiKey);
             var from = new EmailAddress(_config.SenderEmail, _config.SenderDisplayName);
-            List<EmailAddress> receivers = new List<EmailAddress> { new EmailAddress(receiver) };
+            var receivers = new List<EmailAddress> { new EmailAddress(receiver) };
             SendGridMessage mail = MailHelper.CreateSingleEmailToMultipleRecipients(from, receivers, subject, text, text, false);
             Response response = await client.SendEmailAsync(mail);
             if (response.StatusCode != HttpStatusCode.Accepted)

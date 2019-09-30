@@ -1,6 +1,5 @@
 ﻿using Backend.Core.Features.Friendship.Controllers;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace Backend.Core.Features.Friendship
 {
