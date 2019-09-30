@@ -2,8 +2,6 @@
 
 ## 1. High test coverage
 
-Consider to use xUnit ordering first and clean up the existing tests.
-
 ### int tests
 
 - Backend.Core.Features.Ranking.Controllers.RankingsController

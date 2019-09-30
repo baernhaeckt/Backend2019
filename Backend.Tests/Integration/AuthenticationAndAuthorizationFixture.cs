@@ -3,29 +3,29 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Backend.Core.Features.UserManagement.Data.Testing;
-using Backend.Tests.Integration.Utilities;
+using Backend.Tests.Integration.Utilities.Extensions;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Backend.Tests.Integration
 {
     [Trait("Category", "Integration")]
-    public class AuthenticationAndAuthorizationFixture : IClassFixture<CustomWebApplicationFactory>
+    public class AuthenticationAndAuthorizationFixture : IClassFixture<TestContext>
     {
-        private readonly CustomWebApplicationFactory _factory;
+        private readonly TestContext _context;
 
         private readonly ITestOutputHelper _output;
 
-        public AuthenticationAndAuthorizationFixture(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
+        public AuthenticationAndAuthorizationFixture(TestContext context, ITestOutputHelper testOutputHelper)
         {
-            _factory = factory;
+            _context = context;
             _output = testOutputHelper;
         }
 
         [Fact]
         public async Task GetProfileControllerProfile_NormalUser_Ok()
         {
-            HttpClient client = _factory.CreateClient();
+            HttpClient client = _context.CreateClient();
 
             _output.WriteLine("Sign in with the user");
             await client.SignIn(TestCredentials.User1, TestCredentials.User1Password);
@@ -37,7 +37,7 @@ namespace Backend.Tests.Integration
         [Fact]
         public async Task GetEventControllerPointsReceived_NormalUser_NOk()
         {
-            HttpClient client = _factory.CreateClient();
+            HttpClient client = _context.CreateClient();
 
             await client.SignIn(TestCredentials.User1, TestCredentials.User1Password);
 
@@ -48,7 +48,7 @@ namespace Backend.Tests.Integration
         [Fact]
         public async Task GetEventControllerPointsReceived_Admin_Ok()
         {
-            HttpClient client = _factory.CreateClient();
+            HttpClient client = _context.CreateClient();
 
             await client.SignIn("admin@leaf.ch", "1234");
 

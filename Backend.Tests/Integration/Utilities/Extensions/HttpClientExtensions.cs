@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Backend.Core.Features.UserManagement.Models;
 using Newtonsoft.Json;
 
-namespace Backend.Tests.Integration.Utilities
+namespace Backend.Tests.Integration.Utilities.Extensions
 {
     public static class HttpClientExtensions
     {

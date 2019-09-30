@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Backend.Infrastructure.Email.Abstraction;
 
-namespace Backend.Tests.Integration.Fakes
+namespace Backend.Tests.Integration.Utilities.Fakes
 {
     public class InMemoryEmailService : IEmailService
     {

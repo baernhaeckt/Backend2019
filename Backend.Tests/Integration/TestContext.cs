@@ -1,13 +1,13 @@
 ﻿using Backend.Infrastructure.Email.Abstraction;
-using Backend.Tests.Integration.Fakes;
+using Backend.Tests.Integration.Utilities.Fakes;
 using Backend.Web;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Backend.Tests.Integration.Utilities
+namespace Backend.Tests.Integration
 {
-    public class CustomWebApplicationFactory : WebApplicationFactory<Startup>
+    public class TestContext : WebApplicationFactory<Startup>
     {
         public InMemoryEmailService EmailService { get; } = new InMemoryEmailService();
 

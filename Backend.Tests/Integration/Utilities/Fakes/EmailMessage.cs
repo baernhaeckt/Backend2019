@@ -1,4 +1,4 @@
-﻿namespace Backend.Tests.Integration.Fakes
+﻿namespace Backend.Tests.Integration.Utilities.Fakes
 {
     public class EmailMessage
     {
