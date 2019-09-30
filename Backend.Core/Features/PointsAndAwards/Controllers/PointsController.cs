@@ -8,21 +8,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Core.Features.PointsAndAwards.Controllers
 {
-    [Route("api/users/{userId}/points")]
+    [Route("api/users/{userId}/points")] // TODO: Remove this route
+    [Route("api/points")]
     [ApiController]
     public class PointsController : ControllerBase
     {
         private readonly PointService _pointService;
 
-        public PointsController(PointService pointService)
-        {
-            _pointService = pointService;
-        }
+        public PointsController(PointService pointService) => _pointService = pointService;
 
         [HttpGet]
-        public async Task<IEnumerable<PointResponse>> GetAsync(Guid userId)
+        public async Task<IEnumerable<PointResponse>> Get(Guid userId)
         {
-            IEnumerable<PointAction> pointList = await _pointService.PointHistory(userId);
+            IEnumerable<PointAction> pointList = await _pointService.GetPointHistory(userId);
             return pointList.OrderByDescending(p => p.Date).Take(25).Select(p => new PointResponse
             {
                 Date = p.Date,

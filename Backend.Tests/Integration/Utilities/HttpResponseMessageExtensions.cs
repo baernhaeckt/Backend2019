@@ -11,5 +11,13 @@ namespace Backend.Tests.Integration.Utilities
             response.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<TObject>(await response.Content.ReadAsStringAsync());
         }
+
+        public static void EnsureNotSuccessStatusCode(this HttpResponseMessage response)
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException("Status code successful. " + response.StatusCode);
+            }
+        }
     }
 }

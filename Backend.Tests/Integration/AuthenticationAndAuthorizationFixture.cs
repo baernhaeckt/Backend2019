@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Backend.Core.Features.UserManagement.Data.Testing;
 using Backend.Tests.Integration.Utilities;
 using Xunit;
 using Xunit.Abstractions;
@@ -27,7 +28,7 @@ namespace Backend.Tests.Integration
             HttpClient client = _factory.CreateClient();
 
             _output.WriteLine("Sign in with the user");
-            await client.SignIn("user@leaf.ch", "user");
+            await client.SignIn(TestCredentials.User1, TestCredentials.User1Password);
 
             HttpResponseMessage response = await client.GetAsync(new Uri("api/profile", UriKind.Relative));
             response.EnsureSuccessStatusCode();
@@ -38,7 +39,7 @@ namespace Backend.Tests.Integration
         {
             HttpClient client = _factory.CreateClient();
 
-            await client.SignIn("user@leaf.ch", "user");
+            await client.SignIn(TestCredentials.User1, TestCredentials.User1Password);
 
             HttpResponseMessage response = await client.GetAsync(new Uri("api/events/PointsReceived", UriKind.Relative));
             Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);

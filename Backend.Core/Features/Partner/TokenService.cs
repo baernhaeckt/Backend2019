@@ -1,27 +1,18 @@
 ﻿using System;
-using System.Net;
-using System.Security.Claims;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
-using Backend.Core.Extensions;
-using Backend.Core.Features.PointsAndAwards;
 using Backend.Infrastructure.Persistence.Abstraction;
 
 namespace Backend.Core.Features.Partner
 {
     public class TokenService
     {
-        private readonly ClaimsPrincipal _claimsPrincipal;
-
-        private readonly PointService _pointService;
-
         private readonly IUnitOfWork _unitOfWork;
 
-        public TokenService(IUnitOfWork unitOfWork, ClaimsPrincipal claimsPrincipal, PointService pointService)
+        public TokenService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _claimsPrincipal = claimsPrincipal;
-            _pointService = pointService;
         }
 
         public async Task<string> GenerateForPartnerAsync(Guid partnerId)
@@ -76,25 +67,7 @@ namespace Backend.Core.Features.Partner
                 return token.Value.ToString();
             }
 
-            throw new WebException("Partner doesn't exist.", HttpStatusCode.BadRequest);
-        }
-
-        public async Task AssignTokenToUserAsync(Guid tokenGuid)
-        {
-            Token token = await _unitOfWork.SingleOrDefaultAsync<Token>(t => t.Value == tokenGuid);
-            if (token == null)
-            {
-                throw new WebException("Token not found.", HttpStatusCode.NotFound);
-            }
-
-            if (!token.Valid)
-            {
-                throw new WebException("Token already used.", HttpStatusCode.BadRequest);
-            }
-
-            token.UserId = _claimsPrincipal.Id();
-            await _unitOfWork.UpdateAsync(token);
-            await _pointService.AddPoints(token);
+            throw new ValidationException("Partner not found."); // Shall be 404 once get from database.
         }
     }
 }

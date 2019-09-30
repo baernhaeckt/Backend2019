@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Backend.Core.Features.UserManagement.Data.Testing;
 using Backend.Tests.Integration.Utilities;
-using Bogus;
 using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
@@ -29,16 +29,16 @@ namespace Backend.Tests.Integration
             HttpClient client = _factory.CreateClient();
 
             string email = DataGenerator.RandomEmail();
-            _output.WriteLine("New user will be " + email);
+            _output.WriteLine("Register new user: " + email);
 
-            _output.WriteLine("Register a user");
             var url = new Uri("api/users/Register?email=" + email, UriKind.Relative);
             HttpResponseMessage response = await client.PostAsync(url, null);
             response.EnsureSuccessStatusCode();
 
-            _output.WriteLine("Sign in with the user");
-            await client.SignIn(email, "1234");
+            _output.WriteLine("Sign in with the user: " + TestCredentials.Partner);
+            await client.SignIn(TestCredentials.Partner, "partner");
 
+            _output.WriteLine("Generate partner tokens");
             IList<string> partnerIds = new List<string>
             {
                 "ccc14b11-5922-4e3e-bb54-03e71facaeb3",
@@ -50,22 +50,25 @@ namespace Backend.Tests.Integration
             IList<string> tokenValues = new List<string>();
             foreach (string partnerId in partnerIds)
             {
-                _output.WriteLine("Generate Tokens");
+                _output.WriteLine("Generate token for partner: " + partnerId);
                 url = new Uri("api/tokens?partnerId=" + partnerId, UriKind.Relative);
                 response = await client.GetAsync(url);
                 response.EnsureSuccessStatusCode();
                 tokenValues.Add(await response.Content.ReadAsStringAsync());
             }
 
+            _output.WriteLine("Sign in with the user: " + email);
+            await client.SignIn(email, "1234");
+
             foreach (string tokenValue in tokenValues)
             {
-                _output.WriteLine("Use Tokens");
+                _output.WriteLine("Use token: " + tokenValue);
                 url = new Uri("api/tokens?tokenGuid=" + tokenValue, UriKind.Relative);
                 response = await client.PostAsync(url, null);
                 response.EnsureSuccessStatusCode();
             }
 
-            _output.WriteLine("Ranking");
+            _output.WriteLine("Get global ranking");
             url = new Uri("api/rankings/global", UriKind.Relative);
             response = await client.GetAsync(url);
             response.EnsureSuccessStatusCode();

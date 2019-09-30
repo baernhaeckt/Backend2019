@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Backend.Core.Features.UserManagement.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace Backend.Core.Features.Partner.Controllers
 {
     [Route("api/tokens")]
     [ApiController]
+    [Authorize(Roles = Roles.Partner)]
     public class TokensController : ControllerBase
     {
         private readonly TokenService _tokenGenerationService;
@@ -17,16 +19,9 @@ namespace Backend.Core.Features.Partner.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<ActionResult<string>> Get(Guid partnerId)
         {
             return await _tokenGenerationService.GenerateForPartnerAsync(partnerId);
-        }
-
-        [HttpPost]
-        public async Task PostAsync(Guid tokenGuid)
-        {
-            await _tokenGenerationService.AssignTokenToUserAsync(tokenGuid);
         }
     }
 }

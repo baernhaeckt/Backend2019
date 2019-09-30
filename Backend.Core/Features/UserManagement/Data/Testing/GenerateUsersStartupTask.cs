@@ -35,43 +35,43 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
             var users = new List<User>();
 
             // This users are for the automated tests.
-            if (await _unitOfWork.CountAsync<User>(u => u.Email == "user@leaf.ch") < 1)
+            if (await _unitOfWork.CountAsync<User>(u => u.Email == TestCredentials.User1) < 1)
             {
                 users.Add(new User
                 {
-                    Email = "user@leaf.ch",
+                    Email = TestCredentials.User1,
                     Roles = new List<string> { Roles.User },
-                    Password = _passwordStorage.Create("user")
+                    Password = _passwordStorage.Create(TestCredentials.User1Password)
                 });
             }
 
-            if (await _unitOfWork.CountAsync<User>(u => u.Email == "user2@leaf.ch") < 1)
+            if (await _unitOfWork.CountAsync<User>(u => u.Email == TestCredentials.User2) < 1)
             {
                 users.Add(new User
                 {
-                    Email = "user2@leaf.ch",
+                    Email = TestCredentials.User2,
                     Roles = new List<string> { Roles.User },
-                    Password = _passwordStorage.Create("user")
+                    Password = _passwordStorage.Create(TestCredentials.User2Password)
                 });
             }
 
-            if (await _unitOfWork.CountAsync<User>(u => u.Email == "user3@leaf.ch") < 1)
+            if (await _unitOfWork.CountAsync<User>(u => u.Email == TestCredentials.User3) < 1)
             {
                 users.Add(new User
                 {
-                    Email = "user3@leaf.ch",
+                    Email = TestCredentials.User3,
                     Roles = new List<string> { Roles.User },
-                    Password = _passwordStorage.Create("user")
+                    Password = _passwordStorage.Create(TestCredentials.User3Password)
                 });
             }
 
-            if (await _unitOfWork.CountAsync<User>(u => u.Email == "partner@leaf.ch") < 1)
+            if (await _unitOfWork.CountAsync<User>(u => u.Email == TestCredentials.Partner) < 1)
             {
                 users.Add(new User
                 {
-                    Email = "partner@leaf.ch",
+                    Email = TestCredentials.Partner,
                     Roles = new List<string> { Roles.Partner },
-                    Password = _passwordStorage.Create("partner")
+                    Password = _passwordStorage.Create(TestCredentials.PartnerPassword)
                 });
             }
 

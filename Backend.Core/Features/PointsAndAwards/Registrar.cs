@@ -1,5 +1,7 @@
-﻿using Backend.Core.Features.PointsAndAwards.Controllers;
+﻿using Backend.Core.Features.PointsAndAwards.Commands;
+using Backend.Core.Features.PointsAndAwards.Controllers;
 using Microsoft.Extensions.DependencyInjection;
+using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Features.PointsAndAwards
 {
@@ -14,6 +16,9 @@ namespace Backend.Core.Features.PointsAndAwards
             // Services
             services.AddScoped<AwardService>();
             services.AddScoped<PointService>();
+
+            // Commands
+            services.AddScoped<ISubscriber, TokenRewardCommandHandler>();
 
             return services;
         }

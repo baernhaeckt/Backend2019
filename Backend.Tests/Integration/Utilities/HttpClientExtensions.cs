@@ -18,5 +18,15 @@ namespace Backend.Tests.Integration.Utilities
             var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(jwt);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginResponse.Token);
         }
+
+        public static async Task<string> CreateUserAndSignIn(this HttpClient client)
+        {
+            string email = DataGenerator.RandomEmail();
+            var url = new Uri("api/users/Register?email=" + email, UriKind.Relative);
+            HttpResponseMessage response = await client.PostAsync(url, null);
+            LoginResponse loginResponse = await response.OnSuccessDeserialize<LoginResponse>();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginResponse.Token);
+            return email;
+        }
     }
 }
