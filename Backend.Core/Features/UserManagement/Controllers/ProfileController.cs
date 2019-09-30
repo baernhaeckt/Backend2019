@@ -17,7 +17,7 @@ namespace Backend.Core.Features.UserManagement.Controllers
         }
 
         [HttpGet]
-        public async Task<PrivateUserResponse> GetAsync()
+        public async Task<PrivateUserResponse> Get()
         {
             User user = await _userService.GetCurrentUser();
             return new PrivateUserResponse

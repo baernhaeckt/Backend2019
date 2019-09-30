@@ -24,11 +24,11 @@ namespace Backend.Core.Features.Quiz
 
         private readonly IUnitOfWork _unitOfWork;
 
-        public QuizService(IUnitOfWork unitOfWork, ClaimsPrincipal principal, IEventPublisher _eventPublisher)
+        public QuizService(IUnitOfWork unitOfWork, ClaimsPrincipal principal, IEventPublisher eventPublisher)
         {
             _unitOfWork = unitOfWork;
             _principal = principal;
-            this._eventPublisher = _eventPublisher;
+            _eventPublisher = eventPublisher;
         }
 
         public async Task<QuestionResponse> Get()
