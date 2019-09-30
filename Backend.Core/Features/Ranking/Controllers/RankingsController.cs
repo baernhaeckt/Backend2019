@@ -58,7 +58,7 @@ namespace Backend.Core.Features.Ranking.Controllers
         [HttpGet("summary")]
         public async Task<RankingSummary> GetSummary()
         {
-            User user = await _unitOfWork.GetAsync<User>(_principal.Id());
+            User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(_principal.Id());
             string zipCode = user.Location?.Zip ?? "3000";
 
             IEnumerable<User> allUsers = await _unitOfWork.GetAllAsync<User>();

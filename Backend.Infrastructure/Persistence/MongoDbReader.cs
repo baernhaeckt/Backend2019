@@ -16,13 +16,20 @@ namespace Backend.Infrastructure.Persistence
 
         protected DbContextFactory DbContextFactory { get; }
 
-        public virtual async Task<TEntity> GetAsync<TEntity>(Guid id)
+        public virtual async Task<TEntity> GetByIdOrDefaultAsync<TEntity>(Guid id)
             where TEntity : Entity, new()
         {
             DbContext dbContext = DbContextFactory.Create();
             FilterDefinition<TEntity> filter = new ExpressionFilterDefinition<TEntity>(u => u.Id == id);
             TEntity entity = await dbContext.GetCollection<TEntity>().Find(filter).SingleOrDefaultAsync();
             return entity;
+        }
+
+        public async Task<TEntity> GetByIdOrThrowAsync<TEntity>(Guid id)
+            where TEntity : Entity, new()
+        {
+            TEntity result = await GetByIdOrDefaultAsync<TEntity>(id);
+            return result ?? throw new EntityNotFoundException(typeof(TEntity));
         }
 
         public async Task<long> CountAsync<TEntity>(Expression<Func<TEntity, bool>> predicate)
@@ -69,6 +76,13 @@ namespace Backend.Infrastructure.Persistence
             DbContext dbContext = DbContextFactory.Create();
             FilterDefinition<TEntity> filter = new ExpressionFilterDefinition<TEntity>(predicate);
             return await (await dbContext.GetCollection<TEntity>().FindAsync(filter)).FirstOrDefaultAsync();
+        }
+
+        public async Task<TEntity> SingleAsync<TEntity>(Expression<Func<TEntity, bool>> predicate)
+            where TEntity : Entity, new()
+        {
+            TEntity result = await SingleOrDefaultAsync(predicate);
+            return result ?? throw new EntityNotFoundException(typeof(TEntity));
         }
     }
 }

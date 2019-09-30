@@ -20,11 +20,11 @@ namespace Backend.Core.Features.UserManagement
             _principal = principal;
         }
 
-        public Task<User> GetCurrentUser() => _unitOfWork.GetAsync<User>(_principal.Id());
+        public Task<User> GetCurrentUser() => _unitOfWork.GetByIdOrDefaultAsync<User>(_principal.Id());
 
         public async Task Update(UserUpdateRequest updateUserRequest)
         {
-            User user = await _unitOfWork.GetAsync<User>(_principal.Id());
+            User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(_principal.Id());
             user.DisplayName = updateUserRequest.DisplayName;
             await _unitOfWork.UpdateAsync(user);
         }

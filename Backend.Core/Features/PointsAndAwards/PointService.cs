@@ -4,7 +4,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Extensions;
-using Backend.Core.Features.Newsfeed;
 using Backend.Core.Features.Newsfeed.Abstraction;
 using Backend.Core.Features.Newsfeed.Events;
 using Backend.Core.Features.PointsAndAwards.Models;
@@ -32,7 +31,7 @@ namespace Backend.Core.Features.PointsAndAwards
 
         public async Task AddPoints(Token token)
         {
-            User user = await _unitOfWork.GetAsync<User>(_principal.Id());
+            User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(_principal.Id());
             user.PointActions.Add(new PointAction
             {
                 Point = token.Points,
@@ -50,7 +49,7 @@ namespace Backend.Core.Features.PointsAndAwards
 
         public async Task AddPoints(PointAwarding pointAwarding)
         {
-            User user = await _unitOfWork.GetAsync<User>(_principal.Id());
+            User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(_principal.Id());
             user.PointActions.Add(new PointAction
             {
                 Point = pointAwarding.Points,
@@ -66,9 +65,9 @@ namespace Backend.Core.Features.PointsAndAwards
             await Process(pointAwarding.Points, pointAwarding.Co2Saving, user);
         }
 
-        public async Task<IEnumerable<PointAction>> PointHistory(Guid id)
+        public async Task<IEnumerable<PointAction>> GetPointHistory(Guid id)
         {
-            User user = await _unitOfWork.GetAsync<User>(id);
+            User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(id);
             return user.PointActions;
         }
 

@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
+using System.Threading.Tasks;
+using Backend.Infrastructure.Persistence.Abstraction;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using WebException = Backend.Core.WebException;
 
 namespace Backend.Web.Middleware
 {
@@ -20,11 +22,18 @@ namespace Backend.Web.Middleware
             {
                 await _next(context);
             }
-            catch (WebException ex)
+            catch (EntityNotFoundException ex)
             {
                 string result = JsonConvert.SerializeObject(new { error = ex.Message });
                 context.Response.ContentType = "application/json";
-                context.Response.StatusCode = (int)ex.HttpStatusCode;
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                await context.Response.WriteAsync(result);
+            }
+            catch (ValidationException ex)
+            {
+                string result = JsonConvert.SerializeObject(new { error = ex.Message });
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 await context.Response.WriteAsync(result);
             }
         }

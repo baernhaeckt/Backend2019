@@ -16,7 +16,10 @@ namespace Backend.Infrastructure.Persistence.Abstraction
         Task<IEnumerable<TEntity>> GetAllAsync<TEntity>()
             where TEntity : Entity, new();
 
-        Task<TEntity> GetAsync<TEntity>(Guid id)
+        Task<TEntity> GetByIdOrDefaultAsync<TEntity>(Guid id)
+            where TEntity : Entity, new();
+
+        Task<TEntity> GetByIdOrThrowAsync<TEntity>(Guid id)
             where TEntity : Entity, new();
 
         Task<IEnumerable<TEntity>> WhereAsync<TEntity>(Expression<Func<TEntity, bool>> predicate)
@@ -26,6 +29,9 @@ namespace Backend.Infrastructure.Persistence.Abstraction
             where TEntity : Entity, new();
 
         Task<TEntity> SingleOrDefaultAsync<TEntity>(Expression<Func<TEntity, bool>> predicate)
+            where TEntity : Entity, new();
+
+        Task<TEntity> SingleAsync<TEntity>(Expression<Func<TEntity, bool>> predicate)
             where TEntity : Entity, new();
     }
 }

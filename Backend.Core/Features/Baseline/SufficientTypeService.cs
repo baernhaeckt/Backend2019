@@ -27,7 +27,7 @@ namespace Backend.Core.Features.Baseline
 
         public async Task<IEnumerable<UserSufficientType>> GetSufficientTypesFromUser()
         {
-            User user = await _unitOfWork.GetAsync<User>(_principal.Id());
+            User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(_principal.Id());
             return user.PointActions.GroupBy(p => p.SufficientType.Title).Select(p => new UserSufficientType
             {
                 Title = p.Key,

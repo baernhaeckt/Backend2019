@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -43,15 +44,11 @@ namespace Backend.Core.Features.Quiz
 
         public async Task<QuestionAnswerResponse> Answer(QuestionAnswer answer)
         {
-            QuizQuestion question = await _unitOfWork.GetAsync<QuizQuestion>(answer.QuestionId);
-            if (question == null)
-            {
-                throw new WebException($"Question with id: {answer.QuestionId} not found.", HttpStatusCode.NotFound);
-            }
+            QuizQuestion question = await _unitOfWork.GetByIdOrThrowAsync<QuizQuestion>(answer.QuestionId);
 
             if ((await GetUserQuizAnswerForDayAsync(DateTime.Today)).Any(q => q.QuizQuestionId == answer.QuestionId))
             {
-                throw new WebException("Question has already been answered today", HttpStatusCode.BadRequest);
+                throw new ValidationException("Question has already been answered today");
             }
 
             bool isCorrectAnswer = IsAnswerCorrect(question.CorrectAnswers, answer.Answers);

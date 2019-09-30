@@ -23,7 +23,7 @@ namespace Backend.Core.Features.PointsAndAwards.Controllers
         [HttpGet]
         public async Task<IEnumerable<AwardsResponse>> GetAsync()
         {
-            User currentUser = await _unitOfWork.GetAsync<User>(HttpContext.User.Id());
+            User currentUser = await _unitOfWork.GetByIdOrDefaultAsync<User>(HttpContext.User.Id());
 
             return currentUser.Awards.Select(a => new AwardsResponse
             {

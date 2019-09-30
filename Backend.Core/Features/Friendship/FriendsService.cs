@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
@@ -29,27 +29,21 @@ namespace Backend.Core.Features.Friendship
 
         public async Task ConnectFriends(Guid userId, string friendEmail)
         {
-            if (string.IsNullOrEmpty(friendEmail))
-            {
-                throw new WebException("Email must not be empty", HttpStatusCode.BadRequest);
-            }
-
             User friendUser = await _unitOfWork.GetByEmailAsync(friendEmail);
             if (friendUser == null)
             {
-                // TODO: Invite to Platform
-                throw new WebException($"No user with email: {friendEmail} found.", HttpStatusCode.BadRequest);
+                throw new ValidationException($"No user with email: {friendEmail} found.");
             }
 
             if (userId == friendUser.Id)
             {
-                throw new WebException("Can't be your own friend.", HttpStatusCode.BadRequest);
+                throw new ValidationException("Can't be your own friend.");
             }
 
-            User user = await _unitOfWork.GetAsync<User>(userId);
+            User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(userId);
             if (user.Friends.Contains(friendUser.Id))
             {
-                throw new WebException("User is already your friend", HttpStatusCode.BadRequest);
+                throw new ValidationException("User is already your friend");
             }
 
             user.Friends.Add(friendUser.Id);
@@ -66,19 +60,19 @@ namespace Backend.Core.Features.Friendship
 
         public async Task RemoveFriend(Guid friendUserId)
         {
-            User user = await _unitOfWork.GetAsync<User>(_principal.Id());
+            User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(_principal.Id());
 
             List<Guid> friends = user.Friends.ToList();
             if (!friends.Contains(friendUserId))
             {
-                throw new WebException("User is not your friend", HttpStatusCode.BadRequest);
+                throw new ValidationException("User is not your friend");
             }
 
             friends.Remove(friendUserId);
             user.Friends = friends;
             await _unitOfWork.UpdateAsync(user);
 
-            User exFriend = await _unitOfWork.GetAsync<User>(friendUserId);
+            User exFriend = await _unitOfWork.GetByIdOrDefaultAsync<User>(friendUserId);
 
             if (exFriend.Friends.Contains(user.Id))
             {
@@ -89,7 +83,7 @@ namespace Backend.Core.Features.Friendship
 
         public async Task<IEnumerable<User>> GetFriends()
         {
-            User user = await _unitOfWork.GetAsync<User>(_principal.Id());
+            User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(_principal.Id());
             if (user.Friends == null)
             {
                 return Enumerable.Empty<User>();
@@ -98,7 +92,7 @@ namespace Backend.Core.Features.Friendship
             IList<User> friends = new List<User>(user.Friends.Count);
             foreach (Guid friend in user.Friends)
             {
-                friends.Add(await _unitOfWork.GetAsync<User>(friend));
+                friends.Add(await _unitOfWork.GetByIdOrDefaultAsync<User>(friend));
             }
 
             return friends;
