@@ -2,7 +2,7 @@
 
 namespace Backend.Core.Entities
 {
-    public class Location : Entity
+    public class Location
     {
         public double Longitude { get; set; }
 

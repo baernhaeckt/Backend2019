@@ -51,7 +51,14 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                 {
                     Email = TestCredentials.User2,
                     Roles = new List<string> { Roles.User },
-                    Password = _passwordStorage.Create(TestCredentials.User2Password)
+                    Password = _passwordStorage.Create(TestCredentials.User2Password),
+                    Location = new Location
+                    {
+                        City = "Bern",
+                        Zip = "3011",
+                        Latitude = 46.944699,
+                        Longitude = 7.443788
+                    }
                 });
             }
 
@@ -61,7 +68,14 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                 {
                     Email = TestCredentials.User3,
                     Roles = new List<string> { Roles.User },
-                    Password = _passwordStorage.Create(TestCredentials.User3Password)
+                    Password = _passwordStorage.Create(TestCredentials.User3Password),
+                    Location = new Location
+                    {
+                        City = "Bern",
+                        Zip = "3011",
+                        Latitude = 46.944699,
+                        Longitude = 7.443788
+                    }
                 });
             }
 
@@ -71,13 +85,20 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                 {
                     Email = TestCredentials.Partner,
                     Roles = new List<string> { Roles.Partner },
-                    Password = _passwordStorage.Create(TestCredentials.PartnerPassword)
+                    Password = _passwordStorage.Create(TestCredentials.PartnerPassword),
+                    Location = new Location
+                    {
+                        City = "Bern",
+                        Zip = "3011",
+                        Latitude = 46.944699,
+                        Longitude = 7.443788
+                    }
                 });
             }
 
             if (await _unitOfWork.CountAsync<User>() <= SeedCount)
             {
-                IList<string> zips = new[] { "3001", "3006", "3010", "3013", "3018", "3027", "3004", "3007", "3011", "3014" };
+                IList<string> zips = new[] { "3001", "3006", "3010", "3013", "3018", "3027", "3004", "3007", "3014" };
 
                 Faker<Location> locationFaker = new Faker<Location>()
                     .RuleFor(u => u.Zip, f => f.PickRandom(zips))
