@@ -45,6 +45,26 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                 });
             }
 
+            if (await _unitOfWork.CountAsync<User>(u => u.Email == "user2@leaf.ch") < 1)
+            {
+                users.Add(new User
+                {
+                    Email = "user2@leaf.ch",
+                    Roles = new List<string> { Roles.User },
+                    Password = _passwordStorage.Create("user")
+                });
+            }
+
+            if (await _unitOfWork.CountAsync<User>(u => u.Email == "user3@leaf.ch") < 1)
+            {
+                users.Add(new User
+                {
+                    Email = "user3@leaf.ch",
+                    Roles = new List<string> { Roles.User },
+                    Password = _passwordStorage.Create("user")
+                });
+            }
+
             if (await _unitOfWork.CountAsync<User>(u => u.Email == "partner@leaf.ch") < 1)
             {
                 users.Add(new User
@@ -75,18 +95,20 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                         .RuleFor(u => u.Roles, new List<string> { Roles.User })
                         .RuleFor(u => u.Location, f => f.PickRandom(locations));
 
-                users.AddRange(faker.Generate(SeedCount));
+                List<User> fakeUsers = faker.Generate(SeedCount);
 
                 // Random generate friendships
                 var random = new Random();
-                foreach (User user in users)
+                foreach (User fakeUser in fakeUsers)
                 {
                     for (var i = 0; i < 12; i++)
                     {
                         int index = random.Next(users.Count);
-                        user.Friends.Add(users[index].Id);
+                        fakeUser.Friends.Add(users[index].Id);
                     }
                 }
+
+                users.AddRange(fakeUsers);
             }
 
             if (users.Any())
