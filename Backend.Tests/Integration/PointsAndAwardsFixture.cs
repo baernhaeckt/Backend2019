@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Backend.Core.Features.PointsAndAwards.Models;
+using Backend.Core.Features.Awards.Models;
 using Backend.Core.Features.UserManagement.Data.Testing;
 using Backend.Tests.Integration.Utilities;
 using Xunit;

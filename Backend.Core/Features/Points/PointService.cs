@@ -3,30 +3,27 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
+using Backend.Core.Events;
 using Backend.Core.Extensions;
-using Backend.Core.Features.Newsfeed.Abstraction;
-using Backend.Core.Features.Newsfeed.Events;
-using Backend.Core.Features.PointsAndAwards.Models;
+using Backend.Core.Features.Points.Models;
 using Backend.Infrastructure.Persistence.Abstraction;
+using Silverback.Messaging.Publishing;
 
-namespace Backend.Core.Features.PointsAndAwards
+namespace Backend.Core.Features.Points
 {
     public class PointService
     {
-        private readonly AwardService _awardService;
-
-        private readonly IEventFeed _eventFeed;
-
         private readonly ClaimsPrincipal _principal;
+
+        private readonly IEventPublisher _eventPublisher;
 
         private readonly IUnitOfWork _unitOfWork;
 
-        public PointService(IUnitOfWork unitOfWork, ClaimsPrincipal principal, IEventFeed eventFeed, AwardService awardService)
+        public PointService(IUnitOfWork unitOfWork, ClaimsPrincipal principal, IEventPublisher eventPublisher)
         {
             _unitOfWork = unitOfWork;
             _principal = principal;
-            _eventFeed = eventFeed;
-            _awardService = awardService;
+            _eventPublisher = eventPublisher;
         }
 
         public async Task AddPoints(Token token)
@@ -71,21 +68,14 @@ namespace Backend.Core.Features.PointsAndAwards
             return user.PointActions;
         }
 
-        private async Task Process(int points, double co2saving, User user)
+        private async Task Process(int points, double co2Saving, User user)
         {
             user.Points += points;
-            user.Co2Saving += co2saving;
+            user.Co2Saving += co2Saving;
 
             await _unitOfWork.UpdateAsync(user);
 
-            // TODO: Encouple this, using Silverback!
-            // Guess this will lead into a decoupling from awards and points.
-            // E.g. create a new feature awards, as there can be points without awards.
-            // Fire and forget.
-            await _eventFeed.PublishAsync(new PointsReceivedNewsfeedEvent(user, points));
-            await _eventFeed.PublishAsync(new FriendNewsfeedPointsReceivedEvent(user, points));
-
-            await _awardService.CheckForNewAwardsAsync(user);
+            await _eventPublisher.PublishAsync(new UserNewPointsEvent(user, points, co2Saving));
         }
     }
 }

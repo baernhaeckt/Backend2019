@@ -3,11 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Extensions;
-using Backend.Core.Features.PointsAndAwards.Models;
+using Backend.Core.Features.Awards.Models;
 using Backend.Infrastructure.Persistence.Abstraction;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Backend.Core.Features.PointsAndAwards.Controllers
+namespace Backend.Core.Features.Awards.Controllers
 {
     [Route("api/awards")]
     [ApiController]

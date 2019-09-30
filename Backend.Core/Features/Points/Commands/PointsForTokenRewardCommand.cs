@@ -1,11 +1,11 @@
 ﻿using System;
 using Silverback.Messaging.Messages;
 
-namespace Backend.Core.Features.PointsAndAwards.Commands
+namespace Backend.Core.Features.Points.Commands
 {
-    public class TokenRewardCommand : ICommand
+    public class PointsForTokenRewardCommand : ICommand
     {
-        public TokenRewardCommand(Guid token)
+        public PointsForTokenRewardCommand(Guid token)
         {
             Token = token;
         }

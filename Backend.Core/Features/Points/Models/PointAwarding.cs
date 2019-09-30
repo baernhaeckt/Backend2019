@@ -1,4 +1,4 @@
-﻿namespace Backend.Core.Features.PointsAndAwards.Models
+﻿namespace Backend.Core.Features.Points.Models
 {
     public class PointAwarding
     {

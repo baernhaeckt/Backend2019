@@ -6,9 +6,9 @@ using Backend.Infrastructure.Persistence.Abstraction;
 using Bogus;
 using Silverback.Messaging.Subscribers;
 
-namespace Backend.Core.Features.PointsAndAwards.Commands
+namespace Backend.Core.Features.Points.Commands
 {
-    internal class TokenRewardCommandHandler : ISubscriber
+    internal class PointsForTokenRewardCommandHandler : ISubscriber
     {
         private readonly ClaimsPrincipal _claimsPrincipal;
 
@@ -16,14 +16,14 @@ namespace Backend.Core.Features.PointsAndAwards.Commands
 
         private readonly IUnitOfWork _unitOfWork;
 
-        public TokenRewardCommandHandler(IUnitOfWork unitOfWork, ClaimsPrincipal claimsPrincipal, PointService pointService)
+        public PointsForTokenRewardCommandHandler(IUnitOfWork unitOfWork, ClaimsPrincipal claimsPrincipal, PointService pointService)
         {
             _unitOfWork = unitOfWork;
             _claimsPrincipal = claimsPrincipal;
             _pointService = pointService;
         }
 
-        public async Task AssignTokenToUserAsync(TokenRewardCommand command)
+        public async Task ExecuteAsync(PointsForTokenRewardCommand command)
         {
             Token token = await _unitOfWork.SingleAsync<Token>(t => t.Value == command.Token);
 

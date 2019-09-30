@@ -4,7 +4,7 @@ using Backend.Core.Features.Friendship;
 using Backend.Core.Features.Newsfeed;
 using Backend.Core.Features.Newsfeed.Hubs;
 using Backend.Core.Features.Partner;
-using Backend.Core.Features.PointsAndAwards;
+using Backend.Core.Features.Points;
 using Backend.Core.Features.Quiz;
 using Backend.Core.Features.UserManagement;
 using Backend.Infrastructure.Email;
@@ -50,7 +50,7 @@ namespace Backend.Web
             services.AddFeatureFriendship();
             services.AddFeatureNewsfeed();
             services.AddFeaturePartner();
-            services.AddFeaturePointsAndAwards();
+            services.AddFeaturePoints();
             services.AddFeatureQuiz();
 
             services.AddHostedService<StartupTaskRunner>();

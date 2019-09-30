@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Backend.Core.Features.PointsAndAwards.Commands;
+using Backend.Core.Features.Points.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Silverback.Messaging.Publishing;
 
-namespace Backend.Core.Features.PointsAndAwards.Controllers
+namespace Backend.Core.Features.Points.Controllers
 {
     [Route("api/tokens")]
     [ApiController]
@@ -20,7 +20,7 @@ namespace Backend.Core.Features.PointsAndAwards.Controllers
         [HttpPost]
         public async Task PostAsync(Guid tokenGuid)
         {
-            await _commandPublisher.ExecuteAsync(new TokenRewardCommand(tokenGuid));
+            await _commandPublisher.ExecuteAsync(new PointsForTokenRewardCommand(tokenGuid));
         }
     }
 }

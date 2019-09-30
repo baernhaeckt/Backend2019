@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
-using Backend.Core.Features.PointsAndAwards.Models;
+using Backend.Core.Features.Points.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Backend.Core.Features.PointsAndAwards.Controllers
+namespace Backend.Core.Features.Points.Controllers
 {
     [Route("api/users/{userId}/points")] // TODO: Remove this route
     [Route("api/points")]
