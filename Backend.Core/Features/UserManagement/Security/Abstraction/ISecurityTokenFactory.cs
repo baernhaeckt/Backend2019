@@ -1,9 +1,10 @@
-﻿using Backend.Core.Entities;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Backend.Core.Features.UserManagement.Security.Abstraction
 {
     public interface ISecurityTokenFactory
     {
-        string Create(User user);
+        string Create(Guid id, string email, IEnumerable<string> roles);
     }
 }

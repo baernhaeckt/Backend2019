@@ -14,7 +14,7 @@ namespace Backend.Core.Entities
 
         public Location Location { get; set; } = new Location();
 
-        public string Password { get; set; } = string.Empty;
+        public string PasswordHash { get; set; } = string.Empty;
 
         public IList<Guid> Friends { get; set; } = Enumerable.Empty<Guid>().ToList();
 

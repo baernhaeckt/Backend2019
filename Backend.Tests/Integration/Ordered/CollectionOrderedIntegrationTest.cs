@@ -1,5 +1,4 @@
-﻿using Backend.Tests.Integration.Utilities;
-using Xunit;
+﻿using Xunit;
 
 namespace Backend.Tests.Integration
 {

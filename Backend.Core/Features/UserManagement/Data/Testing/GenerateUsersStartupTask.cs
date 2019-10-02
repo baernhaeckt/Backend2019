@@ -41,7 +41,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                 {
                     Email = TestCredentials.User1,
                     Roles = new List<string> { Roles.User },
-                    Password = _passwordStorage.Create(TestCredentials.User1Password)
+                    PasswordHash = _passwordStorage.Create(TestCredentials.User1Password)
                 });
             }
 
@@ -51,7 +51,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                 {
                     Email = TestCredentials.User2,
                     Roles = new List<string> { Roles.User },
-                    Password = _passwordStorage.Create(TestCredentials.User2Password),
+                    PasswordHash = _passwordStorage.Create(TestCredentials.User2Password),
                     Location = new Location
                     {
                         City = "Bern",
@@ -68,7 +68,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                 {
                     Email = TestCredentials.User3,
                     Roles = new List<string> { Roles.User },
-                    Password = _passwordStorage.Create(TestCredentials.User3Password),
+                    PasswordHash = _passwordStorage.Create(TestCredentials.User3Password),
                     Location = new Location
                     {
                         City = "Bern",
@@ -85,7 +85,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                 {
                     Email = TestCredentials.Partner,
                     Roles = new List<string> { Roles.Partner },
-                    Password = _passwordStorage.Create(TestCredentials.PartnerPassword),
+                    PasswordHash = _passwordStorage.Create(TestCredentials.PartnerPassword),
                     Location = new Location
                     {
                         City = "Bern",
@@ -109,12 +109,12 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                 List<Location> locations = locationFaker.Generate(100).ToList();
 
                 Faker<User> faker = new Faker<User>()
-                        .RuleFor(u => u.Id, f => Guid.NewGuid())
-                        .RuleFor(u => u.Email, f => f.Internet.Email())
-                        .RuleFor(u => u.Password, _passwordStorage.Create(_passwordGenerator.Generate()))
-                        .RuleFor(u => u.DisplayName, f => f.Name.FirstName())
-                        .RuleFor(u => u.Roles, new List<string> { Roles.User })
-                        .RuleFor(u => u.Location, f => f.PickRandom(locations));
+                    .RuleFor(u => u.Id, f => Guid.NewGuid())
+                    .RuleFor(u => u.Email, f => f.Internet.Email())
+                    .RuleFor(u => u.PasswordHash, _passwordStorage.Create(_passwordGenerator.Generate()))
+                    .RuleFor(u => u.DisplayName, f => f.Name.FirstName())
+                    .RuleFor(u => u.Roles, new List<string> { Roles.User })
+                    .RuleFor(u => u.Location, f => f.PickRandom(locations));
 
                 List<User> fakeUsers = faker.Generate(SeedCount);
 

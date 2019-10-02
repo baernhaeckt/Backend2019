@@ -18,14 +18,7 @@ namespace Backend.Core.Features.UserManagement.Queries
         {
             return await _reader.SingleAsync<User, UserProfileQueryResult>(
                 u => u.Id == query.Id,
-                u => new UserProfileQueryResult
-                {
-                    DisplayName = u.DisplayName,
-                    Email = u.Email,
-                    Longitude = u.Location.Longitude,
-                    Latitude = u.Location.Latitude,
-                    Points = u.Points
-                });
+                u => new UserProfileQueryResult(u.DisplayName, u.Points, u.Email, u.Location.Latitude, u.Location.Longitude));
         }
     }
 }

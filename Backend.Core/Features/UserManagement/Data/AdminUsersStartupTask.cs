@@ -31,7 +31,7 @@ namespace Backend.Core.Features.UserManagement.Data
             var user = new User
             {
                 Email = _configuration["AdminEmail"],
-                Password = _configuration["AdminPassword"],
+                PasswordHash = _configuration["AdminPassword"],
                 DisplayName = "Admin",
                 Roles = new List<string> { Roles.Administrator }
             };

@@ -21,13 +21,13 @@ namespace Backend.Core.Features.UserManagement.Commands
 
         public async Task ExecuteAsync(ChangePasswordCommand command)
         {
-            string passwordHash = await _unitOfWork.GetByIdOrThrowAsync<User, string>(command.UserId, u => u.Password);
+            string passwordHash = await _unitOfWork.GetByIdOrThrowAsync<User, string>(command.UserId, u => u.PasswordHash);
             if (!_passwordStorage.Match(command.OldPassword, passwordHash))
             {
                 throw new ValidationException("Incorrect password.");
             }
 
-            object definition = new { Password = _passwordStorage.Create(command.NewPassword) };
+            object definition = new { PasswordHash = _passwordStorage.Create(command.NewPassword) };
             await _unitOfWork.UpdateAsync<User>(command.UserId, definition);
         }
     }

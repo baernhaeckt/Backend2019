@@ -33,8 +33,8 @@ namespace Backend.Core.Features.UserManagement.Commands
             string newPassword = _passwordGenerator.Generate();
             var newUser = new User
             {
-                Email = command.Email, // TODO: Validate E-Mail Address
-                Password = _passwordStorage.Create(newPassword),
+                Email = command.Email.ToLowerInvariant(), // TODO: Validate E-Mail Address
+                PasswordHash = _passwordStorage.Create(newPassword),
                 DisplayName = "Newby",
                 Roles = new List<string> { Roles.User },
                 Location = new Location

@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using Backend.Core.Entities;
 using Backend.Core.Features.UserManagement.Security.Abstraction;
 using Microsoft.IdentityModel.Tokens;
 
@@ -19,19 +18,19 @@ namespace Backend.Core.Features.UserManagement.Security
             _securityKeyProvider = securityKeyProvider;
         }
 
-        public string Create(User user)
+        public string Create(Guid id, string email, IEnumerable<string> roles)
         {
             DateTime now = DateTime.Now;
             var claims = new List<Claim>
             {
-                new Claim(LeafClaimTypes.UserId, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(LeafClaimTypes.UserId, id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, email),
+                new Claim(JwtRegisteredClaimNames.Sub, email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, now.ToUniversalTime().ToString(CultureInfo.CurrentCulture), ClaimValueTypes.Integer64)
             };
 
-            claims.AddRange(user.Roles.Select(r => new Claim(ClaimTypes.Role, r)));
+            claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
             SymmetricSecurityKey signingKey = _securityKeyProvider.GetSecurityKey();
             var securityToken = new JwtSecurityToken(

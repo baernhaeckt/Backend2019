@@ -1,8 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Backend.Core.Entities;
 using Backend.Core.Features.UserManagement.Commands;
 using Backend.Core.Features.UserManagement.Models;
-using Backend.Core.Features.UserManagement.Security.Abstraction;
+using Backend.Core.Features.UserManagement.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Silverback.Messaging.Publishing;
@@ -13,32 +12,26 @@ namespace Backend.Core.Features.UserManagement.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly IQueryPublisher _queryPublisher;
+
         private readonly ICommandPublisher _commandPublisher;
 
-        private readonly IPasswordStorage _passwordStorage;
-
-        private readonly ISecurityTokenFactory _securityTokenFactory;
-
-        private readonly UserService _userService;
-
-        public UsersController(ICommandPublisher commandPublisher, IPasswordStorage passwordStorage, ISecurityTokenFactory securityTokenFactory, UserService userService)
+        public UsersController(IQueryPublisher queryPublisher, ICommandPublisher commandPublisher)
         {
+            _queryPublisher = queryPublisher;
             _commandPublisher = commandPublisher;
-            _passwordStorage = passwordStorage;
-            _securityTokenFactory = securityTokenFactory;
-            _userService = userService;
         }
 
         [HttpPost(nameof(Register))]
         [AllowAnonymous]
         public async Task<ActionResult<LoginResponse>> Register(string email)
         {
-            if (!await _userService.IsRegisteredAsync(email))
+            EmailRegisteredQueryResult result = await _queryPublisher.ExecuteAsync(new EmailRegisteredQuery(email));
+            if (!result.IsRegistered)
             {
                 await _commandPublisher.ExecuteAsync(new RegisterUserCommand(email));
-                User user = await _userService.GetByEmailAsync(email);
-                string token = _securityTokenFactory.Create(user);
-                return new LoginResponse { Token = token };
+                var tokenResult = await _queryPublisher.ExecuteAsync(new SecurityTokenForUserQuery(email));
+                return new LoginResponse { Token = tokenResult.Token };
             }
 
             return new LoginResponse();
@@ -48,19 +41,18 @@ namespace Backend.Core.Features.UserManagement.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<LoginResponse>> Login(string email, string password)
         {
-            if (await _userService.IsRegisteredAsync(email))
+            SignInQueryResult result = await _queryPublisher.ExecuteAsync(new SignInQuery(email, password));
+            if (result.UserNotFound)
             {
-                User user = await _userService.GetByEmailAsync(email);
-                if (!_passwordStorage.Match(password, user.Password))
-                {
-                    return Forbid();
-                }
-
-                string securityToken = _securityTokenFactory.Create(user);
-                return new ActionResult<LoginResponse>(new LoginResponse { Token = securityToken });
+                return NotFound();
             }
 
-            return NotFound();
+            if (result.PasswordNotCorrect)
+            {
+                return Forbid();
+            }
+
+            return new ActionResult<LoginResponse>(new LoginResponse { Token = result.Token });
         }
     }
 }

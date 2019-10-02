@@ -40,7 +40,7 @@ namespace Backend.Tests.Integration
             response.EnsureSuccessStatusCode();
 
             Assert.Single(_context.EmailService.Messages);
-            Assert.Equal(newUserEmail, _context.EmailService.Messages.Single().Receiver);
+            Assert.Equal(newUserEmail.ToLowerInvariant(), _context.EmailService.Messages.Single().Receiver);
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace Backend.Tests.Integration
             var url = new Uri("api/profile", UriKind.Relative);
             HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
             var userResponse = await response.OnSuccessDeserialize<PrivateUserResponse>();
-            Assert.Equal(_context.NewTestUser, userResponse.Email);
+            Assert.Equal(_context.NewTestUser.ToLowerInvariant(), userResponse.Email);
         }
 
         [Fact]

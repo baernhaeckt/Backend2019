@@ -21,9 +21,6 @@ namespace Backend.Core.Features.UserManagement
             services.AddScoped<ProfileController>();
             services.AddScoped<UsersController>();
 
-            // Services
-            services.AddScoped<UserService>();
-
             // Subscribers
             services.AddTransient<ISubscriber, UserRegisteredEventSubscriber>();
 
@@ -34,6 +31,9 @@ namespace Backend.Core.Features.UserManagement
 
             // QueryHandlers
             services.AddTransient<ISubscriber, UserProfileQueryHandler>();
+            services.AddTransient<ISubscriber, EmailRegisteredQueryHandler>();
+            services.AddTransient<ISubscriber, SecurityTokenForUserQueryHandler>();
+            services.AddTransient<ISubscriber, SignInQueryHandler>();
 
             // Data setup
             services.AddStartupTask<SetIndexOnEmailStartupTask>();

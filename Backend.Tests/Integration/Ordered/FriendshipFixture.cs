@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Backend.Core.Features.Friendship.Models;
 using Backend.Core.Features.UserManagement.Data.Testing;
-using Backend.Tests.Integration.Utilities;
 using Backend.Tests.Integration.Utilities.Extensions;
 using Xunit;
 using Xunit.Extensions.Ordering;

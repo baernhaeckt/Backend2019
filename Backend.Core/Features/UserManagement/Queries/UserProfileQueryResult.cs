@@ -2,14 +2,23 @@
 {
     public class UserProfileQueryResult
     {
-        public string DisplayName { get; set; }
+        public UserProfileQueryResult(string displayName, int points, string email, double latitude, double longitude)
+        {
+            DisplayName = displayName;
+            Points = points;
+            Email = email;
+            Latitude = latitude;
+            Longitude = longitude;
+        }
 
-        public int Points { get; set; }
+        public string DisplayName { get; }
 
-        public string Email { get; set; }
+        public int Points { get; }
 
-        public double Latitude { get; set; }
+        public string Email { get; }
 
-        public double Longitude { get; set; }
+        public double Latitude { get; }
+
+        public double Longitude { get; }
     }
 }
