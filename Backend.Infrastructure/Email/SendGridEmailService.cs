@@ -21,6 +21,8 @@ namespace Backend.Infrastructure.Email
             var from = new EmailAddress(_config.SenderEmail, _config.SenderDisplayName);
             var receivers = new List<EmailAddress> { new EmailAddress(receiver) };
             SendGridMessage mail = MailHelper.CreateSingleEmailToMultipleRecipients(from, receivers, subject, text, text, false);
+
+            // TODO: This shall be saved to the database and processed async.
             Response response = await client.SendEmailAsync(mail);
             if (response.StatusCode != HttpStatusCode.Accepted)
             {

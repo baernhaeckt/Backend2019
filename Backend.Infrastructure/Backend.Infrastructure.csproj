@@ -9,6 +9,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0" />
     <PackageReference Include="Sendgrid" Version="9.12.0" />
     <PackageReference Include="MongoDbGenericRepository" Version="1.4.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.9.1" />

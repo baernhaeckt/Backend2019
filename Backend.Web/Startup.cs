@@ -43,7 +43,7 @@ namespace Backend.Web
 
             // Infrastructure
             services.AddMongoDbPersistence(_configuration);
-            services.AddInfrastructureEmail(_configuration);
+            services.AddInfrastructureEmail(_configuration, _hostEnvironment);
             services.AddGeolocation(_configuration);
 
             // Features
