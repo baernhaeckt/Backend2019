@@ -40,7 +40,7 @@ namespace Backend.Core.Features.UserManagement.Commands
                 Location = new Location
                 {
                     City = "Bern",
-                    Zip = "3011",
+                    PostalCode = "3011",
                     Latitude = 46.944699,
                     Longitude = 7.443788
                 }

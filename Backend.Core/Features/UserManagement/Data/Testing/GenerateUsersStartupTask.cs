@@ -55,7 +55,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                     Location = new Location
                     {
                         City = "Bern",
-                        Zip = "3011",
+                        PostalCode = "3011",
                         Latitude = 46.944699,
                         Longitude = 7.443788
                     }
@@ -72,7 +72,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                     Location = new Location
                     {
                         City = "Bern",
-                        Zip = "3011",
+                        PostalCode = "3011",
                         Latitude = 46.944699,
                         Longitude = 7.443788
                     }
@@ -89,7 +89,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                     Location = new Location
                     {
                         City = "Bern",
-                        Zip = "3011",
+                        PostalCode = "3011",
                         Latitude = 46.944699,
                         Longitude = 7.443788
                     }
@@ -101,7 +101,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                 IList<string> zips = new[] { "3001", "3006", "3010", "3013", "3018", "3027", "3004", "3007", "3014" };
 
                 Faker<Location> locationFaker = new Faker<Location>()
-                    .RuleFor(u => u.Zip, f => f.PickRandom(zips))
+                    .RuleFor(u => u.PostalCode, f => f.PickRandom(zips))
                     .RuleFor(u => u.City, "Bern")
                     .RuleFor(u => u.Latitude, f => f.Location().AreaCircle(46.944699, 7.443788, 10000).Latitude)
                     .RuleFor(u => u.Longitude, f => f.Location().AreaCircle(46.944699, 7.443788, 10000).Longitude);

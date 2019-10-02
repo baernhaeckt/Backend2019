@@ -29,9 +29,9 @@ namespace Backend.Core.Features.UserManagement.Controllers
         }
 
         [HttpPatch]
-        public async Task Update([FromBody] ProfileUpdateModel model)
+        public async Task Update([FromBody] UpdateProfileModel model)
         {
-            var command = new UpdateProfileCommand(HttpContext.User.Id(), model.DisplayName);
+            var command = new UpdateProfileCommand(HttpContext.User.Id(), model.DisplayName, model.City, model.Street, model.PostalCode);
             await _commandPublisher.ExecuteAsync(command);
         }
 

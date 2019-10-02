@@ -8,6 +8,7 @@ using Backend.Core.Features.Points;
 using Backend.Core.Features.Quiz;
 using Backend.Core.Features.UserManagement;
 using Backend.Infrastructure.Email;
+using Backend.Infrastructure.Geolocation;
 using Backend.Infrastructure.Persistence;
 using Backend.Web.Middleware;
 using Backend.Web.Setup;
@@ -43,6 +44,7 @@ namespace Backend.Web
             // Infrastructure
             services.AddMongoDbPersistence(_configuration);
             services.AddInfrastructureEmail(_configuration);
+            services.AddGeolocation(_configuration);
 
             // Features
             services.AddFeatureUserManagement(_hostEnvironment);

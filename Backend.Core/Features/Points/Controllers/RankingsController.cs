@@ -40,7 +40,7 @@ namespace Backend.Core.Features.Points.Controllers
         [HttpGet("local")]
         public async Task<IEnumerable<UserResponse>> GetLocalAsync(string zip)
         {
-            IEnumerable<User> users = await _unitOfWork.WhereAsync<User>(u => u.Location.Zip == zip);
+            IEnumerable<User> users = await _unitOfWork.WhereAsync<User>(u => u.Location.PostalCode == zip);
 
             IEnumerable<UserResponse> results = CreateResult(users);
 
@@ -59,11 +59,11 @@ namespace Backend.Core.Features.Points.Controllers
         public async Task<RankingSummary> GetSummary()
         {
             User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(_principal.Id());
-            string zipCode = user.Location?.Zip ?? "3000";
+            string zipCode = user.Location?.PostalCode ?? "3000";
 
             IEnumerable<User> allUsers = await _unitOfWork.GetAllAsync<User>();
             IOrderedEnumerable<UserResponse> global = CreateResult(allUsers).OrderByDescending(u => u.Points);
-            IOrderedEnumerable<UserResponse> local = CreateResult(allUsers.Where(u => u.Location != null && u.Location.Zip == zipCode)).OrderByDescending(u => u.Points);
+            IOrderedEnumerable<UserResponse> local = CreateResult(allUsers.Where(u => u.Location != null && u.Location.PostalCode == zipCode)).OrderByDescending(u => u.Points);
             IOrderedEnumerable<UserResponse> friends = CreateResult(await _friendsService.GetFriends()).OrderByDescending(u => u.Points);
 
             return new RankingSummary

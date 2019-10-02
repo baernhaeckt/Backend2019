@@ -21,7 +21,13 @@ namespace Backend.Tests.Integration
             _context.NewTestUser = await _context.NewUserHttpClient.CreateUserAndSignIn();
 
             var uri = new Uri("api/profile", UriKind.Relative);
-            StringContent content = new ProfileUpdateModel { DisplayName = "test1234" }.ToStringContent();
+            StringContent content = new UpdateProfileModel
+            {
+                DisplayName = "test1234",
+                PostalCode = "3032",
+                Street = "Kappelenring 33b",
+                City = "Hinterkappelen"
+            }.ToStringContent();
             HttpResponseMessage response = await _context.NewUserHttpClient.PatchAsync(uri, content);
             response.EnsureSuccessStatusCode();
         }
