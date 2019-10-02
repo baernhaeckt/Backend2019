@@ -61,7 +61,7 @@ namespace Backend.Core.Features.Points.Controllers
             User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(_principal.Id());
             string zipCode = user.Location?.PostalCode ?? "3000";
 
-            IEnumerable<User> allUsers = await _unitOfWork.GetAllAsync<User>();
+            IEnumerable<User> allUsers = (await _unitOfWork.GetAllAsync<User>()).ToList();
             IOrderedEnumerable<UserResponse> global = CreateResult(allUsers).OrderByDescending(u => u.Points);
             IOrderedEnumerable<UserResponse> local = CreateResult(allUsers.Where(u => u.Location != null && u.Location.PostalCode == zipCode)).OrderByDescending(u => u.Points);
             IOrderedEnumerable<UserResponse> friends = CreateResult(await _friendsService.GetFriends()).OrderByDescending(u => u.Points);
