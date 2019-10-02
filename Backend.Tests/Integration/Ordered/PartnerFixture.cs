@@ -55,5 +55,17 @@ namespace Backend.Tests.Integration
             HttpResponseMessage response = await _context.PartnerHttpClient.GetAsync(new Uri("api/tokens?partnerId=" + "abd14b11-5922-4e3e-bb54-03e72facaeb3", UriKind.Relative));
             response.EnsureNotSuccessStatusCode();
         }
+
+        [Fact]
+        [Order(2)]
+        public async Task TokensUse_Successful()
+        {
+            foreach (string tokenValue in _context.PartnerGeneratedTokens)
+            {
+                var url = new Uri("api/tokens?tokenGuid=" + tokenValue, UriKind.Relative);
+                HttpResponseMessage response = await _context.NewTestUserHttpClient.PostAsync(url, null);
+                response.EnsureSuccessStatusCode();
+            }
+        }
     }
 }

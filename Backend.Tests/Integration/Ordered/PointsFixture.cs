@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Backend.Core.Features.Points.Models;
+using Backend.Tests.Integration.Utilities.Extensions;
 using Xunit;
 using Xunit.Extensions.Ordering;
 
@@ -18,12 +22,10 @@ namespace Backend.Tests.Integration
         [Fact]
         public async Task TokensUse_Successful()
         {
-            foreach (string tokenValue in _context.PartnerGeneratedTokens)
-            {
-                var url = new Uri("api/tokens?tokenGuid=" + tokenValue, UriKind.Relative);
-                HttpResponseMessage response = await _context.NewTestUserHttpClient.PostAsync(url, null);
-                response.EnsureSuccessStatusCode();
-            }
+            var url = new Uri("api/points", UriKind.Relative);
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
+            IEnumerable<PointResponse> pointResponse = await response.OnSuccessDeserialize<IEnumerable<PointResponse>>();
+            Assert.Equal(4, pointResponse.Count());
         }
     }
 }
