@@ -97,7 +97,7 @@ namespace Backend.Core.Features.Points.Controllers
 
             foreach (User user in users)
             {
-                int pointsForUser = user.PointActions.Sum(p => p.Point);
+                int pointsForUser = user.PointHistory.Sum(p => p.Point);
 
                 results.Add(new UserResponse
                 {

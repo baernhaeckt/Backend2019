@@ -24,7 +24,7 @@ namespace Backend.Core.Features.Awards.EventHandler
         public async Task ExecuteAsync(UserNewPointsEvent @event)
         {
             IList<Award> newAwards = new List<Award>();
-            if (@event.User.PointActions.Count > 1
+            if (@event.User.PointHistory.Count > 1
                 && @event.User.Awards.All(a => !(a is OnBoardingAward)))
             {
                 // This is the first token the user gets, so this is worth an award.
@@ -32,7 +32,7 @@ namespace Backend.Core.Features.Awards.EventHandler
                 newAwards.Add(award);
             }
 
-            if (@event.User.PointActions.Count(t => t.SufficientType.Title == "Verpackung") >= 2
+            if (@event.User.PointHistory.Count(t => t.SufficientType.Title == "Verpackung") >= 2
                 && @event.User.Awards.All(a => !(a is TrashHeroAward)))
             {
                 var award = new TrashHeroAward();

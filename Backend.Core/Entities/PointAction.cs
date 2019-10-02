@@ -1,9 +1,8 @@
 ﻿using System;
-using Backend.Infrastructure.Persistence.Abstraction;
 
 namespace Backend.Core.Entities
 {
-    public class PointAction : Entity
+    public class PointAction
     {
         public int Point { get; set; }
 

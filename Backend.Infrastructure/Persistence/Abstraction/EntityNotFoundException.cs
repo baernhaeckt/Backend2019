@@ -13,10 +13,6 @@ namespace Backend.Infrastructure.Persistence.Abstraction
             Name = type.Name;
         }
 
-        public EntityNotFoundException(string message, Exception innerException)
-            : base(message, innerException) =>
-            Name = string.Empty;
-
         public string MethodName { get; }
 
         public string Filter { get; }

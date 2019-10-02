@@ -10,6 +10,6 @@ namespace Backend.Core.Features.Quiz.Models
 
         public string Question { get; set; } = string.Empty;
 
-        public IEnumerable<string> Answers { get; set; } = Enumerable.Empty<string>();
+        public IList<string> Answers { get; set; } = Enumerable.Empty<string>().ToList();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Backend.Infrastructure.Persistence.Abstraction;
@@ -65,7 +66,16 @@ namespace Backend.Infrastructure.Persistence
             foreach (PropertyInfo property in definition.GetType().GetProperties())
             {
                 UpdateDefinitionBuilder<TEntity> builder = Builders<TEntity>.Update;
-                updateDefinitions.Add(builder.Set(property.Name, property.GetValue(definition)));
+                if (property.PropertyType.GetInterfaces()
+                    .Any(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(ICollection<>)))
+                {
+                    // This will not replace child collections but add the elements to it.
+                    updateDefinitions.Add(builder.PushEach(property.Name, (IEnumerable<object>)property.GetValue(definition)));
+                }
+                else
+                {
+                    updateDefinitions.Add(builder.Set(property.Name, property.GetValue(definition)));
+                }
             }
 
             UpdateDefinition<TEntity> updateDefinition = Builders<TEntity>.Update.Combine(updateDefinitions);

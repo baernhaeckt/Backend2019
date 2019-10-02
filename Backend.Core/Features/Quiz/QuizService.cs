@@ -61,7 +61,7 @@ namespace Backend.Core.Features.Quiz
             await StoreAnswer(answer, questionAnswerResponse);
             if (isCorrectAnswer)
             {
-                await _eventPublisher.PublishAsync(new QuizQuestionCorrectAnsweredEvent(question.Points));
+                await _eventPublisher.PublishAsync(new QuizQuestionCorrectAnsweredEvent(_principal.Id(), question.Points));
             }
 
             return questionAnswerResponse;

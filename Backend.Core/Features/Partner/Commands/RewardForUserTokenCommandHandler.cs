@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Events;
 using Backend.Infrastructure.Persistence.Abstraction;
@@ -22,17 +23,15 @@ namespace Backend.Core.Features.Partner.Commands
 
         public async Task ExecuteAsync(RewardForUserTokenCommand command)
         {
-            Token token = await _unitOfWork.SingleAsync<Token>(t => t.Value == command.TokenId);
-
-            if (!token.Valid)
+            long count = await _unitOfWork.CountAsync<Token>(t => t.Value == command.TokenId && t.UserId == Guid.Empty);
+            if (count > 1)
             {
-                throw new ValidationException("Token already used.");
+                throw new ValidationException("Token doesn't exist or was already used.");
             }
 
-            token.UserId = command.UserId;
-            await _unitOfWork.UpdateAsync(token);
+            await _unitOfWork.UpdateAsync<User>(command.TokenId, new { UserId = command.UserId });
 
-            await _eventPublisher.PublishAsync(new PartnerTokenRegisteredEvent(token));
+            await _eventPublisher.PublishAsync(new PartnerTokenRegisteredEvent(command.UserId, command.TokenId));
         }
     }
 }

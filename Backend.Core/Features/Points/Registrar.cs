@@ -13,9 +13,6 @@ namespace Backend.Core.Features.Points
             services.AddScoped<PointsController>();
             services.AddScoped<RankingsController>();
 
-            // Services
-            services.AddScoped<PointService>();
-
             // EventHandlers
             services.AddScoped<ISubscriber, PartnerTokenRegisteredEventHandler>();
             services.AddScoped<ISubscriber, QuizQuestionCorrectAnsweredEventHandler>();

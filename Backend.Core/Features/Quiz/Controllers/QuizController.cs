@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Core.Features.Quiz.Controllers
 {
-    [Route("api/widgets/quiz")]
+    [Route("api/quiz")]
     [ApiController]
     public class QuizController : ControllerBase
     {
@@ -12,10 +12,10 @@ namespace Backend.Core.Features.Quiz.Controllers
 
         public QuizController(QuizService quizService) => _quizService = quizService;
 
-        [HttpGet("question")]
+        [HttpGet]
         public async Task<QuestionResponse> Get() => await _quizService.Get();
 
-        [HttpPost("question")]
+        [HttpPost]
         public async Task<QuestionAnswerResponse> Answer(QuestionAnswer questionAnswer) => await _quizService.Answer(questionAnswer);
     }
 }

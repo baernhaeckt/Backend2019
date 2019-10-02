@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Extensions;
 using Backend.Core.Features.Points.Models;
+using Backend.Infrastructure.Persistence.Abstraction;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Core.Features.Points.Controllers
@@ -12,15 +13,16 @@ namespace Backend.Core.Features.Points.Controllers
     [ApiController]
     public class PointsController : ControllerBase
     {
-        private readonly PointService _pointService;
+        private readonly IReader _reader;
 
-        public PointsController(PointService pointService) => _pointService = pointService;
+        public PointsController(IReader reader) => _reader = reader;
 
         [HttpGet]
         public async Task<IEnumerable<PointResponse>> Get()
         {
-            IEnumerable<PointAction> pointList = await _pointService.GetPointHistory(HttpContext.User.Id());
-            return pointList.OrderByDescending(p => p.Date).Take(25).Select(p => new PointResponse
+            // TODO: Refactor to query.
+            IEnumerable<PointAction> pointList = await _reader.GetByIdOrThrowAsync<User, IEnumerable<PointAction>>(HttpContext.User.Id(), u => u.PointHistory.Take(25));
+            return pointList.OrderByDescending(p => p.Date).Select(p => new PointResponse
             {
                 Date = p.Date,
                 Text = p.Action,

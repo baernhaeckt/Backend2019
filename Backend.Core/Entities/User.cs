@@ -22,7 +22,7 @@ namespace Backend.Core.Entities
 
         public double Co2Saving { get; set; }
 
-        public IList<PointAction> PointActions { get; set; } = Enumerable.Empty<PointAction>().ToList();
+        public IList<PointAction> PointHistory { get; set; } = Enumerable.Empty<PointAction>().ToList();
 
         public IList<Award> Awards { get; set; } = Enumerable.Empty<Award>().ToList();
 

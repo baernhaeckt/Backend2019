@@ -15,7 +15,7 @@ namespace Backend.Infrastructure.Persistence.Abstraction
         Task InsertManyAsync<TEntity>(IEnumerable<TEntity> records)
             where TEntity : Entity, new();
 
-        Task UpdateAsync<TEntity>(Guid id, dynamic updateDefinition)
+        Task UpdateAsync<TEntity>(Guid id, object updateDefinition)
             where TEntity : Entity, new();
 
         Task UpdateAsync<TEntity>(TEntity record)

@@ -1,12 +1,18 @@
-﻿using Backend.Core.Entities;
+﻿using System;
 using Silverback.Messaging.Messages;
 
 namespace Backend.Core.Events
 {
     public class PartnerTokenRegisteredEvent : IEvent
     {
-        public PartnerTokenRegisteredEvent(Token token) => Token = token;
+        public PartnerTokenRegisteredEvent(Guid userId, Guid tokenId)
+        {
+            UserId = userId;
+            TokenId = tokenId;
+        }
 
-        public Token Token { get; }
+        public Guid UserId { get; }
+
+        public Guid TokenId { get; }
     }
 }

@@ -15,8 +15,6 @@ namespace Backend.Core.Entities
 
         public Guid UserId { get; set; }
 
-        public bool Valid => UserId == Guid.Empty;
-
         public Guid Value { get; set; }
 
         public SufficientType SufficientType { get; set; } = new SufficientType();
