@@ -1,24 +1,25 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Backend.Infrastructure.Persistence.Abstraction
 {
+    [SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "Must not be invoked with those constructors.")]
     public class EntityNotFoundException : Exception
     {
-        public EntityNotFoundException(Type type) => Name = type.Name;
-
-        public EntityNotFoundException() => Name = string.Empty;
-
-        public EntityNotFoundException(string message)
-            : base(message)
+        public EntityNotFoundException(Type type, string methodName, string filter)
         {
-            Name = string.Empty;
+            MethodName = methodName;
+            Filter = filter;
+            Name = type.Name;
         }
 
         public EntityNotFoundException(string message, Exception innerException)
-            : base(message, innerException)
-        {
+            : base(message, innerException) =>
             Name = string.Empty;
-        }
+
+        public string MethodName { get; }
+
+        public string Filter { get; }
 
         public string Name { get; }
     }
