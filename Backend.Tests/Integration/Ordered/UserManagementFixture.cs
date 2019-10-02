@@ -69,7 +69,7 @@ namespace Backend.Tests.Integration
         {
             _output.WriteLine("Update profile of user: " + _context.NewTestUser);
             var url = new Uri("api/profile", UriKind.Relative);
-            StringContent content = new UpdateProfileModel { DisplayName = "abc" }.ToStringContent();
+            StringContent content = new UpdateProfileModel { DisplayName = "abc", Street = "Abc", City = "Abc", PostalCode = "3032" }.ToStringContent();
             HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(url, content);
             response.EnsureSuccessStatusCode();
         }
