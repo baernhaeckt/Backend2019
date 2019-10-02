@@ -4,6 +4,7 @@ using Backend.Core.Features.UserManagement.Controllers;
 using Backend.Core.Features.UserManagement.Data;
 using Backend.Core.Features.UserManagement.Data.Testing;
 using Backend.Core.Features.UserManagement.EventSubscriber;
+using Backend.Core.Features.UserManagement.Queries;
 using Backend.Core.Features.UserManagement.Security;
 using Backend.Core.Features.UserManagement.Security.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,10 @@ namespace Backend.Core.Features.UserManagement
             // CommandHandlers
             services.AddTransient<ISubscriber, RegisterUserCommandHandler>();
             services.AddTransient<ISubscriber, ChangePasswordCommandHandler>();
+            services.AddTransient<ISubscriber, UpdateProfileCommandHandler>();
+
+            // QueryHandlers
+            services.AddTransient<ISubscriber, UserProfileQueryHandler>();
 
             // Data setup
             services.AddStartupTask<SetIndexOnEmailStartupTask>();

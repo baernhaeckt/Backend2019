@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Backend.Core.Entities;
 using Backend.Core.Extensions;
 using Backend.Core.Features.UserManagement.Commands;
 using Backend.Core.Features.UserManagement.Models;
+using Backend.Core.Features.UserManagement.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Silverback.Messaging.Publishing;
 
@@ -12,36 +12,28 @@ namespace Backend.Core.Features.UserManagement.Controllers
     [ApiController]
     public class ProfileController : ControllerBase
     {
-        private readonly UserService _userService;
-
         private readonly ICommandPublisher _commandPublisher;
 
-        public ProfileController(UserService userService, ICommandPublisher commandPublisher)
+        private readonly IQueryPublisher _queryPublisher;
+
+        public ProfileController(ICommandPublisher commandPublisher, IQueryPublisher queryPublisher)
         {
-            _userService = userService;
             _commandPublisher = commandPublisher;
+            _queryPublisher = queryPublisher;
         }
 
         [HttpGet]
-        public async Task<PrivateUserResponse> Get()
+        public async Task<UserProfileQueryResult> Get()
         {
-            User user = await _userService.GetCurrentUser();
-            return new PrivateUserResponse
-            {
-                Id = user.Id,
-                DisplayName = user.DisplayName,
-                Email = user.Email,
-                Location = new LocationResponse
-                {
-                    Latitude = user.Location?.Latitude ?? 0.0,
-                    Longitude = user.Location?.Longitude ?? 0.0
-                },
-                Points = user.Points
-            };
+            return await _queryPublisher.ExecuteAsync(new UserProfileQuery(HttpContext.User.Id()));
         }
 
         [HttpPatch]
-        public async Task Update([FromBody] UserUpdateRequest userUpdateRequest) => await _userService.Update(userUpdateRequest);
+        public async Task Update([FromBody] ProfileUpdateModel model)
+        {
+            var command = new UpdateProfileCommand(HttpContext.User.Id(), model.DisplayName);
+            await _commandPublisher.ExecuteAsync(command);
+        }
 
         [HttpPatch("password")]
         public async Task ChangePassword([FromBody] ChangePasswordModel model)

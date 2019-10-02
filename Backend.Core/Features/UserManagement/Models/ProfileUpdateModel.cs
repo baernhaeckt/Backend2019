@@ -1,6 +1,6 @@
 ﻿namespace Backend.Core.Features.UserManagement.Models
 {
-    public class UserUpdateRequest
+    public class ProfileUpdateModel
     {
         public string DisplayName { get; set; } = string.Empty;
     }

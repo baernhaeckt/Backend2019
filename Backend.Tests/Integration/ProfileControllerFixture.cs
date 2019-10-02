@@ -19,6 +19,27 @@ namespace Backend.Tests.Integration
         }
 
         [Fact]
+        public async Task UpdateProfile_Successful()
+        {
+            _context.NewTestUser = await _context.NewUserHttpClient.CreateUserAndSignIn();
+
+            var uri = new Uri("api/profile", UriKind.Relative);
+            StringContent content = new ProfileUpdateModel { DisplayName = "test1234" }.ToStringContent();
+            HttpResponseMessage response = await _context.NewUserHttpClient.PatchAsync(uri, content);
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async Task GetProfile_Successful()
+        {
+            _context.NewTestUser = await _context.NewUserHttpClient.CreateUserAndSignIn();
+
+            var uri = new Uri("api/profile", UriKind.Relative);
+            HttpResponseMessage response = await _context.NewUserHttpClient.GetAsync(uri);
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
         public async Task ChangePassword_Successful()
         {
             _context.NewTestUser = await _context.NewUserHttpClient.CreateUserAndSignIn();
