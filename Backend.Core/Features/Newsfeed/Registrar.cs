@@ -1,5 +1,5 @@
-﻿using Backend.Core.Features.Awards.EventHandler;
-using Backend.Core.Features.Newsfeed.Abstraction;
+﻿using Backend.Core.Features.Newsfeed.Abstraction;
+using Backend.Core.Features.Newsfeed.EventHandler;
 using Microsoft.Extensions.DependencyInjection;
 using Silverback.Messaging.Subscribers;
 
