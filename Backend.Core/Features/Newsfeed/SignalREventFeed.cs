@@ -11,10 +11,7 @@ namespace Backend.Core.Features.Newsfeed
     {
         private readonly IHubContext<NewsfeedHub> _hubContext;
 
-        public SignalREventFeed(IHubContext<NewsfeedHub> hubContext)
-        {
-            _hubContext = hubContext;
-        }
+        public SignalREventFeed(IHubContext<NewsfeedHub> hubContext) => _hubContext = hubContext;
 
         public async Task PublishAsync(NewsfeedEvent newsfeedEvent)
         {

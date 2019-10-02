@@ -59,7 +59,7 @@ namespace Backend.Tests.Integration
             _output.WriteLine("Get profile of user: " + _context.NewTestUser);
             var url = new Uri("api/profile", UriKind.Relative);
             HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
-            var userResponse = await response.OnSuccessDeserialize<PrivateUserResponse>();
+            PrivateUserResponse userResponse = await response.OnSuccessDeserialize<PrivateUserResponse>();
             Assert.Equal(_context.NewTestUser.ToLowerInvariant(), userResponse.Email);
         }
 

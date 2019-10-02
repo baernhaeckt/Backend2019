@@ -13,9 +13,9 @@ namespace Backend.Core.Features.Partner.Controllers
     [ApiController]
     public class TokensController : ControllerBase
     {
-        private readonly TokenService _tokenGenerationService;
-
         private readonly ICommandPublisher _commandPublisher;
+
+        private readonly TokenService _tokenGenerationService;
 
         public TokensController(TokenService tokenGenerationService, ICommandPublisher commandPublisher)
         {

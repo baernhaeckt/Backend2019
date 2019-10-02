@@ -13,10 +13,7 @@ namespace Backend.Core.Features.Baseline.Controllers
     {
         private readonly SufficientTypeService _sufficientTypeService;
 
-        public SufficientTypeController(SufficientTypeService sufficientTypeService)
-        {
-            _sufficientTypeService = sufficientTypeService;
-        }
+        public SufficientTypeController(SufficientTypeService sufficientTypeService) => _sufficientTypeService = sufficientTypeService;
 
         [HttpGet("baseline")]
         public async Task<IEnumerable<BaselineResponse>> GetBaseLinePoints()

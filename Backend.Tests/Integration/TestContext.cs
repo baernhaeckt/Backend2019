@@ -10,10 +10,7 @@ namespace Backend.Tests.Integration
 {
     public class TestContext : WebApplicationFactory<Startup>
     {
-        public TestContext()
-        {
-            NewUserHttpClient = CreateClient();
-        }
+        public TestContext() => NewUserHttpClient = CreateClient();
 
         public InMemoryEmailService EmailService { get; } = new InMemoryEmailService();
 

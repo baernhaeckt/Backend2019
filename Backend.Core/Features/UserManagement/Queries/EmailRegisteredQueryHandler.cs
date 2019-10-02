@@ -9,10 +9,7 @@ namespace Backend.Core.Features.UserManagement.Queries
     {
         private readonly IReader _reader;
 
-        public EmailRegisteredQueryHandler(IReader reader)
-        {
-            _reader = reader;
-        }
+        public EmailRegisteredQueryHandler(IReader reader) => _reader = reader;
 
         public async Task<EmailRegisteredQueryResult> ExecuteAsync(EmailRegisteredQuery query)
         {

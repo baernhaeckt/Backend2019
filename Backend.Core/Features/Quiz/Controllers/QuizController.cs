@@ -10,10 +10,7 @@ namespace Backend.Core.Features.Quiz.Controllers
     {
         private readonly QuizService _quizService;
 
-        public QuizController(QuizService quizService)
-        {
-            _quizService = quizService;
-        }
+        public QuizController(QuizService quizService) => _quizService = quizService;
 
         [HttpGet("question")]
         public async Task<QuestionResponse> Get()

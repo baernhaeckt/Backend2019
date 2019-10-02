@@ -8,10 +8,7 @@ namespace Backend.Core.Features.Points.EventHandler
     {
         private readonly PointService _pointService;
 
-        public PartnerTokenRegisteredEventHandler(PointService pointService)
-        {
-            _pointService = pointService;
-        }
+        public PartnerTokenRegisteredEventHandler(PointService pointService) => _pointService = pointService;
 
         public async Task ExecuteAsync(PartnerTokenRegisteredEvent command)
         {

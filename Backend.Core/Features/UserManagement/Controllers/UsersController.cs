@@ -12,9 +12,9 @@ namespace Backend.Core.Features.UserManagement.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IQueryPublisher _queryPublisher;
-
         private readonly ICommandPublisher _commandPublisher;
+
+        private readonly IQueryPublisher _queryPublisher;
 
         public UsersController(IQueryPublisher queryPublisher, ICommandPublisher commandPublisher)
         {
@@ -30,7 +30,7 @@ namespace Backend.Core.Features.UserManagement.Controllers
             if (!result.IsRegistered)
             {
                 await _commandPublisher.ExecuteAsync(new RegisterUserCommand(email));
-                var tokenResult = await _queryPublisher.ExecuteAsync(new SecurityTokenForUserQuery(email));
+                SecurityTokenForUserQueryResult tokenResult = await _queryPublisher.ExecuteAsync(new SecurityTokenForUserQuery(email));
                 return new LoginResponse { Token = tokenResult.Token };
             }
 

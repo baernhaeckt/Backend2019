@@ -9,10 +9,7 @@ namespace Backend.Core.Features.UserManagement.Security
     {
         private readonly IConfiguration _configuration;
 
-        public SymmetricSecurityKeyProvider(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+        public SymmetricSecurityKeyProvider(IConfiguration configuration) => _configuration = configuration;
 
         public SymmetricSecurityKey GetSecurityKey()
         {

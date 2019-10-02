@@ -9,9 +9,9 @@ namespace Backend.Core.Features.UserManagement.Commands
 {
     internal class ChangePasswordCommandHandler : ISubscriber
     {
-        private readonly IUnitOfWork _unitOfWork;
-
         private readonly IPasswordStorage _passwordStorage;
+
+        private readonly IUnitOfWork _unitOfWork;
 
         public ChangePasswordCommandHandler(IUnitOfWork unitOfWork, IPasswordStorage passwordStorage)
         {

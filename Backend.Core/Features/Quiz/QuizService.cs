@@ -18,9 +18,9 @@ namespace Backend.Core.Features.Quiz
     {
         private const string DateKeyFormat = "yyyyMMdd";
 
-        private readonly ClaimsPrincipal _principal;
-
         private readonly IEventPublisher _eventPublisher;
+
+        private readonly ClaimsPrincipal _principal;
 
         private readonly IUnitOfWork _unitOfWork;
 

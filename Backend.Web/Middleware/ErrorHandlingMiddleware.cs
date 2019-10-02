@@ -11,10 +11,7 @@ namespace Backend.Web.Middleware
     {
         private readonly RequestDelegate _next;
 
-        public ErrorHandlingMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
+        public ErrorHandlingMiddleware(RequestDelegate next) => _next = next;
 
         public async Task Invoke(HttpContext context)
         {

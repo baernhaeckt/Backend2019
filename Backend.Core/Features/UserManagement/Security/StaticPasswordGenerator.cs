@@ -7,10 +7,7 @@ namespace Backend.Core.Features.UserManagement.Security
     {
         private readonly IConfiguration _configuration;
 
-        public StaticPasswordGenerator(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+        public StaticPasswordGenerator(IConfiguration configuration) => _configuration = configuration;
 
         public string Generate()
         {

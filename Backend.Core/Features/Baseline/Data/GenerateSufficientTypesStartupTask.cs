@@ -11,10 +11,7 @@ namespace Backend.Core.Features.Baseline.Data
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public GenerateSufficientTypesStartupTask(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+        public GenerateSufficientTypesStartupTask(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {

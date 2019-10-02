@@ -15,10 +15,7 @@ namespace Backend.Core.Features.Awards.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public AwardsController(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+        public AwardsController(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
         [HttpGet]
         public async Task<IEnumerable<AwardsResponse>> GetAsync()

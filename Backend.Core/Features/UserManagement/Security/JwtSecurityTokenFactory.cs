@@ -13,10 +13,7 @@ namespace Backend.Core.Features.UserManagement.Security
     {
         private readonly ISecurityKeyProvider _securityKeyProvider;
 
-        public JwtSecurityTokenFactory(ISecurityKeyProvider securityKeyProvider)
-        {
-            _securityKeyProvider = securityKeyProvider;
-        }
+        public JwtSecurityTokenFactory(ISecurityKeyProvider securityKeyProvider) => _securityKeyProvider = securityKeyProvider;
 
         public string Create(Guid id, string email, IEnumerable<string> roles)
         {

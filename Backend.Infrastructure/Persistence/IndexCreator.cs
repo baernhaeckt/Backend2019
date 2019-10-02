@@ -12,10 +12,7 @@ namespace Backend.Infrastructure.Persistence
     {
         private readonly DbContextFactory _dbContextFactory;
 
-        public IndexCreator(DbContextFactory dbContextFactory)
-        {
-            _dbContextFactory = dbContextFactory;
-        }
+        public IndexCreator(DbContextFactory dbContextFactory) => _dbContextFactory = dbContextFactory;
 
         public async Task Create<TEntity>(string field, CancellationToken cancellationToken)
             where TEntity : Entity, new()

@@ -9,10 +9,7 @@ namespace Backend.Core.Features.UserManagement.Queries
     {
         private readonly IReader _reader;
 
-        public UserProfileQueryHandler(IReader reader)
-        {
-            _reader = reader;
-        }
+        public UserProfileQueryHandler(IReader reader) => _reader = reader;
 
         public async Task<UserProfileQueryResult> ExecuteAsync(UserProfileQuery query)
         {

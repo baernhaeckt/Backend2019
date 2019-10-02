@@ -2,10 +2,7 @@
 {
     public class SecurityTokenForUserQueryResult
     {
-        public SecurityTokenForUserQueryResult(string token)
-        {
-            Token = token;
-        }
+        public SecurityTokenForUserQueryResult(string token) => Token = token;
 
         public string Token { get; }
     }

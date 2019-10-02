@@ -10,10 +10,7 @@ namespace Backend.Core.Features.Partner
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public TokenService(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+        public TokenService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
         public async Task<string> GenerateForPartnerAsync(Guid partnerId)
         {

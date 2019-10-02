@@ -17,10 +17,7 @@ namespace Backend.Core.Features.Friendship.Controllers
     {
         private readonly FriendsService _friendService;
 
-        public FriendsController(FriendsService friendService)
-        {
-            _friendService = friendService;
-        }
+        public FriendsController(FriendsService friendService) => _friendService = friendService;
 
         [HttpGet]
         public async Task<IEnumerable<FriendResponse>> Get()

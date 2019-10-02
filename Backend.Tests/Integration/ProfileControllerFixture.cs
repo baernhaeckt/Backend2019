@@ -13,10 +13,7 @@ namespace Backend.Tests.Integration
     {
         private readonly TestContext _context;
 
-        public ProfileControllerFixture(TestContext context)
-        {
-            _context = context;
-        }
+        public ProfileControllerFixture(TestContext context) => _context = context;
 
         [Fact]
         public async Task UpdateProfile_Successful()

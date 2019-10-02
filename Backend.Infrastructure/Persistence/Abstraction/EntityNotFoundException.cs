@@ -4,15 +4,9 @@ namespace Backend.Infrastructure.Persistence.Abstraction
 {
     public class EntityNotFoundException : Exception
     {
-        public EntityNotFoundException(Type type)
-        {
-            Name = type.Name;
-        }
+        public EntityNotFoundException(Type type) => Name = type.Name;
 
-        public EntityNotFoundException()
-        {
-            Name = string.Empty;
-        }
+        public EntityNotFoundException() => Name = string.Empty;
 
         public EntityNotFoundException(string message)
             : base(message)

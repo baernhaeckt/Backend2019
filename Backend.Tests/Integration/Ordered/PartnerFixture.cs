@@ -16,10 +16,7 @@ namespace Backend.Tests.Integration
     {
         private readonly OrderedTestContext _context;
 
-        public PartnerFixture(OrderedTestContext context)
-        {
-            _context = context;
-        }
+        public PartnerFixture(OrderedTestContext context) => _context = context;
 
         [Order(0)]
         [Fact]

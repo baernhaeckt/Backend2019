@@ -17,9 +17,9 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
     {
         private const int SeedCount = 20;
 
-        private readonly IPasswordStorage _passwordStorage;
-
         private readonly IPasswordGenerator _passwordGenerator;
+
+        private readonly IPasswordStorage _passwordStorage;
 
         private readonly IUnitOfWork _unitOfWork;
 

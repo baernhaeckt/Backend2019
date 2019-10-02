@@ -10,10 +10,7 @@ namespace Backend.Core.Features.Newsfeed.EventHandler
     {
         private readonly IEventFeed _eventFeed;
 
-        public UserNewAwardEventHandler(IEventFeed eventFeed)
-        {
-            _eventFeed = eventFeed;
-        }
+        public UserNewAwardEventHandler(IEventFeed eventFeed) => _eventFeed = eventFeed;
 
         public async Task ExecuteAsync(UserNewAwardEvent @event)
         {

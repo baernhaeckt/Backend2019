@@ -9,10 +9,7 @@ namespace Backend.Core.Features.Points.EventHandler
     {
         private readonly PointService _pointService;
 
-        public QuizQuestionCorrectAnsweredEventHandler(PointService pointService)
-        {
-            _pointService = pointService;
-        }
+        public QuizQuestionCorrectAnsweredEventHandler(PointService pointService) => _pointService = pointService;
 
         public async Task ExecuteAsync(QuizQuestionCorrectAnsweredEvent @event)
         {

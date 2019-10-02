@@ -10,10 +10,7 @@ namespace Backend.Infrastructure.Persistence
 {
     internal class MongoDbReader : IReader
     {
-        public MongoDbReader(DbContextFactory dbContextFactory)
-        {
-            DbContextFactory = dbContextFactory;
-        }
+        public MongoDbReader(DbContextFactory dbContextFactory) => DbContextFactory = dbContextFactory;
 
         protected DbContextFactory DbContextFactory { get; }
 

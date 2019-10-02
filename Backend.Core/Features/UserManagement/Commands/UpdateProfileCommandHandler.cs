@@ -9,10 +9,7 @@ namespace Backend.Core.Features.UserManagement.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public UpdateProfileCommandHandler(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+        public UpdateProfileCommandHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
         public async Task ExecuteAsync(UpdateProfileCommand command)
         {

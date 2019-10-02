@@ -13,9 +13,9 @@ namespace Backend.Core.Features.Points
 {
     public class PointService
     {
-        private readonly ClaimsPrincipal _principal;
-
         private readonly IEventPublisher _eventPublisher;
+
+        private readonly ClaimsPrincipal _principal;
 
         private readonly IUnitOfWork _unitOfWork;
 
