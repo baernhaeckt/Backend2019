@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Backend.Core.Features.UserManagement.Models;
 using Backend.Tests.Integration.Utilities;
 using Backend.Tests.Integration.Utilities.Extensions;
-using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Extensions.Ordering;
@@ -70,8 +68,19 @@ namespace Backend.Tests.Integration
         public async Task Profile_UpdateSuccessful()
         {
             _output.WriteLine("Update profile of user: " + _context.NewTestUser);
-            var content = new StringContent(JsonConvert.SerializeObject(new UserUpdateRequest { DisplayName = "abc" }), Encoding.UTF8, "application/json");
             var url = new Uri("api/profile", UriKind.Relative);
+            StringContent content = new UserUpdateRequest { DisplayName = "abc" }.ToStringContent();
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(url, content);
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        [Order(4)]
+        public async Task ProfilePasswordChange_Successful()
+        {
+            _output.WriteLine("Change password of user: " + _context.NewTestUser);
+            StringContent content = new ChangePasswordModel { OldPassword = "1234", NewPassword = "12345678" }.ToStringContent();
+            var url = new Uri("api/profile/password", UriKind.Relative);
             HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(url, content);
             response.EnsureSuccessStatusCode();
         }

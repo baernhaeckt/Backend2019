@@ -28,6 +28,7 @@ namespace Backend.Core.Features.UserManagement
 
             // CommandHandlers
             services.AddTransient<ISubscriber, RegisterUserCommandHandler>();
+            services.AddTransient<ISubscriber, ChangePasswordCommandHandler>();
 
             // Data setup
             services.AddStartupTask<SetIndexOnEmailStartupTask>();

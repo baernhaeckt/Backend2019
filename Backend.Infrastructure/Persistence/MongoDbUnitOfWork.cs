@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using System.Threading.Tasks;
 using Backend.Infrastructure.Persistence.Abstraction;
 using MongoDB.Driver;
@@ -53,6 +54,23 @@ namespace Backend.Infrastructure.Persistence
             record.UpdatedAt = DateTime.UtcNow;
             FilterDefinition<TEntity> filter = new ExpressionFilterDefinition<TEntity>(u => u.Id == record.Id);
             await dbContext.GetCollection<TEntity>().ReplaceOneAsync(filter, record);
+        }
+
+        public virtual async Task UpdateAsync<TEntity>(Guid id, object definition)
+            where TEntity : Entity, new()
+        {
+            DbContext dbContext = DbContextFactory.Create();
+
+            IList<UpdateDefinition<TEntity>> updateDefinitions = new List<UpdateDefinition<TEntity>>();
+            foreach (PropertyInfo property in definition.GetType().GetProperties())
+            {
+                UpdateDefinitionBuilder<TEntity> builder = Builders<TEntity>.Update;
+                updateDefinitions.Add(builder.Set(property.Name, property.GetValue(definition)));
+            }
+
+            UpdateDefinition<TEntity> updateDefinition = Builders<TEntity>.Update.Combine(updateDefinitions);
+            FilterDefinition<TEntity> filter = Builders<TEntity>.Filter.Eq(nameof(Entity.Id), id);
+            await dbContext.GetCollection<TEntity>().UpdateOneAsync(filter, updateDefinition);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Backend.Infrastructure.Email.Abstraction;
+﻿using System.Net.Http;
+using Backend.Infrastructure.Email.Abstraction;
 using Backend.Tests.Integration.Utilities.Fakes;
 using Backend.Web;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -9,7 +10,16 @@ namespace Backend.Tests.Integration
 {
     public class TestContext : WebApplicationFactory<Startup>
     {
+        public TestContext()
+        {
+            NewUserHttpClient = CreateClient();
+        }
+
         public InMemoryEmailService EmailService { get; } = new InMemoryEmailService();
+
+        public string NewTestUser { get; set; } = string.Empty;
+
+        public HttpClient NewUserHttpClient { get; }
 
         protected override IHost CreateHost(IHostBuilder builder)
         {
