@@ -5,8 +5,6 @@ namespace Backend.Core.Features.Points.Models
 {
     public class PointResponse
     {
-        public Guid Id { get; set; }
-
         public string Text { get; set; } = string.Empty;
 
         public int Value { get; set; }

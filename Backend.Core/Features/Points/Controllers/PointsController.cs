@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
@@ -24,7 +23,6 @@ namespace Backend.Core.Features.Points.Controllers
             return pointList.OrderByDescending(p => p.Date).Take(25).Select(p => new PointResponse
             {
                 Date = p.Date,
-                Id = p.Id,
                 Text = p.Action,
                 Value = p.Point,
                 Co2Saving = p.Co2Saving,
