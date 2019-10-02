@@ -20,10 +20,7 @@ namespace Backend.Core.Features.Baseline
             _principal = principal;
         }
 
-        public async Task<IEnumerable<SufficientType>> GetSufficientTypes()
-        {
-            return await _unitOfWork.GetAllAsync<SufficientType>();
-        }
+        public async Task<IEnumerable<SufficientType>> GetSufficientTypes() => await _unitOfWork.GetAllAsync<SufficientType>();
 
         public async Task<IEnumerable<UserSufficientType>> GetSufficientTypesFromUser()
         {

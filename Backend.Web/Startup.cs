@@ -71,10 +71,7 @@ namespace Backend.Web
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Leaf API V1");
-            });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Leaf API V1"); });
 
             app.UseCors(x =>
                 x.AllowAnyMethod()

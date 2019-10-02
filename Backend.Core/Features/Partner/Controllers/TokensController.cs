@@ -25,10 +25,7 @@ namespace Backend.Core.Features.Partner.Controllers
 
         [HttpGet]
         [Authorize(Roles = Roles.Partner)]
-        public async Task<ActionResult<string>> Get(Guid partnerId)
-        {
-            return await _tokenGenerationService.GenerateForPartnerAsync(partnerId);
-        }
+        public async Task<ActionResult<string>> Get(Guid partnerId) => await _tokenGenerationService.GenerateForPartnerAsync(partnerId);
 
         [HttpPost]
         [Authorize(Roles = Roles.User)]

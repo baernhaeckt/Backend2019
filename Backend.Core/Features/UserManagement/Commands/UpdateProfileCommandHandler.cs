@@ -10,11 +10,11 @@ namespace Backend.Core.Features.UserManagement.Commands
 {
     internal class UpdateProfileCommandHandler : ISubscriber
     {
-        private readonly IUnitOfWork _unitOfWork;
-
         private readonly IGeocodingService _geocodingService;
 
         private readonly ILogger<UpdateProfileCommandHandler> _logger;
+
+        private readonly IUnitOfWork _unitOfWork;
 
         public UpdateProfileCommandHandler(IUnitOfWork unitOfWork, IGeocodingService geocodingService, ILogger<UpdateProfileCommandHandler> logger)
         {

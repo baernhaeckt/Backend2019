@@ -11,9 +11,6 @@ namespace Backend.Core.Features.UserManagement.Security
 
         public SymmetricSecurityKeyProvider(IConfiguration configuration) => _configuration = configuration;
 
-        public SymmetricSecurityKey GetSecurityKey()
-        {
-            return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
-        }
+        public SymmetricSecurityKey GetSecurityKey() => new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
     }
 }

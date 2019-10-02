@@ -12,9 +12,9 @@ namespace Backend.Infrastructure.Email
 {
     public class SendGridEmailService : IEmailService
     {
-        private readonly ILogger<SendGridEmailService> _logger;
-
         private readonly SendGridOptions _config;
+
+        private readonly ILogger<SendGridEmailService> _logger;
 
         public SendGridEmailService(IOptions<SendGridOptions> configuration, ILogger<SendGridEmailService> logger)
         {

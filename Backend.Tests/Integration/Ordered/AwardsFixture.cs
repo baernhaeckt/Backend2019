@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Backend.Core.Features.Awards.Models;
 using Backend.Tests.Integration.Utilities.Extensions;
 using Xunit;
 using Xunit.Extensions.Ordering;

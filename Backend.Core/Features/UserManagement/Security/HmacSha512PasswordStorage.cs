@@ -156,14 +156,12 @@ namespace Backend.Core.Features.UserManagement.Security
             return diff == 0;
         }
 
-        private static byte[] Generate(string password, byte[] salt, int iterations, KeyDerivationPrf keyDerivationPrf, int outputBytes)
-        {
-            return KeyDerivation.Pbkdf2(
+        private static byte[] Generate(string password, byte[] salt, int iterations, KeyDerivationPrf keyDerivationPrf, int outputBytes) =>
+            KeyDerivation.Pbkdf2(
                 password,
                 salt,
                 keyDerivationPrf,
                 iterations,
                 outputBytes);
-        }
     }
 }

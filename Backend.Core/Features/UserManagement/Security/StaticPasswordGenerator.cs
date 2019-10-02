@@ -9,9 +9,6 @@ namespace Backend.Core.Features.UserManagement.Security
 
         public StaticPasswordGenerator(IConfiguration configuration) => _configuration = configuration;
 
-        public string Generate()
-        {
-            return _configuration["DefaultPassword"];
-        }
+        public string Generate() => _configuration["DefaultPassword"];
     }
 }

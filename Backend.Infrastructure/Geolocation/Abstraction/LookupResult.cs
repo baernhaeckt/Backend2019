@@ -9,10 +9,7 @@
             Latitude = latitude;
         }
 
-        public LookupResult()
-        {
-            Failed = true;
-        }
+        public LookupResult() => Failed = true;
 
         public bool Failed { get; }
 

@@ -12,6 +12,9 @@ namespace Backend.Core.Features.UserManagement.Data
 
         public SetIndexOnEmailStartupTask(IIndexCreator indexCreator) => _indexCreator = indexCreator;
 
-        public async Task ExecuteAsync(CancellationToken cancellationToken) => await _indexCreator.Create<User>(nameof(User.Email), cancellationToken);
+        public async Task ExecuteAsync(CancellationToken cancellationToken)
+        {
+            await _indexCreator.Create<User>(nameof(User.Email), cancellationToken);
+        }
     }
 }

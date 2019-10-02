@@ -12,10 +12,7 @@ namespace Backend.Infrastructure.Geolocation
     {
         private readonly IOptions<GeocodingOptions> _options;
 
-        public BingGeocodingService(IOptions<GeocodingOptions> options)
-        {
-            _options = options;
-        }
+        public BingGeocodingService(IOptions<GeocodingOptions> options) => _options = options;
 
         public async Task<LookupResult> LookupAsync(string postalCode, string city, string street)
         {

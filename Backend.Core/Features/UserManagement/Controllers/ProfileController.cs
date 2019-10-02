@@ -23,10 +23,7 @@ namespace Backend.Core.Features.UserManagement.Controllers
         }
 
         [HttpGet]
-        public async Task<UserProfileQueryResult> Get()
-        {
-            return await _queryPublisher.ExecuteAsync(new UserProfileQuery(HttpContext.User.Id()));
-        }
+        public async Task<UserProfileQueryResult> Get() => await _queryPublisher.ExecuteAsync(new UserProfileQuery(HttpContext.User.Id()));
 
         [HttpPatch]
         public async Task Update([FromBody] UpdateProfileModel model)

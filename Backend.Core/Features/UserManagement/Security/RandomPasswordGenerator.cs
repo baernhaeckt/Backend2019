@@ -12,10 +12,7 @@ namespace Backend.Core.Features.UserManagement.Security
 
         private static readonly char[] _punctuations = "!@#$%^&*()_-+=[{]};:>|./?".ToCharArray();
 
-        public string Generate()
-        {
-            return GeneratePassword(PasswordLength, NumberOfNonAlphanumericCharacters);
-        }
+        public string Generate() => GeneratePassword(PasswordLength, NumberOfNonAlphanumericCharacters);
 
         // https://referencesource.microsoft.com/#system.web/Security/Membership.cs,fe744ec40cace139,references
         private static string GeneratePassword(int length, int numberOfNonAlphanumericCharacters)

@@ -3,10 +3,10 @@ using System.Net.Http;
 using Backend.Infrastructure.Email.Abstraction;
 using Backend.Infrastructure.Email.Fakes;
 using Backend.Web;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 namespace Backend.Tests.Integration
 {
     public class OrderedTestContext : WebApplicationFactory<Startup>
