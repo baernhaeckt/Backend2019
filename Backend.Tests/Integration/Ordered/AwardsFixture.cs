@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Backend.Core.Entities.Awards;
 using Backend.Tests.Integration.Utilities.Extensions;
 using Xunit;
 using Xunit.Extensions.Ordering;
@@ -22,7 +23,7 @@ namespace Backend.Tests.Integration
         {
             var url = new Uri("api/awards", UriKind.Relative);
             HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
-            List<AwardsResponse> awards = await response.OnSuccessDeserialize<List<AwardsResponse>>();
+            List<Award> awards = await response.OnSuccessDeserialize<List<Award>>();
             Assert.Equal(2, awards.Count);
         }
     }
