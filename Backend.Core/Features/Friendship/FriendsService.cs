@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Extensions;
+using Backend.Core.Features.UserManagement.Security;
 using Backend.Infrastructure.Persistence.Abstraction;
 
 namespace Backend.Core.Features.Friendship
@@ -29,7 +30,8 @@ namespace Backend.Core.Features.Friendship
 
         public async Task ConnectFriends(Guid userId, string friendEmail)
         {
-            User friendUser = await _unitOfWork.SingleAsync<User>(u => u.Email == friendEmail);
+            User friendUser = await _unitOfWork.SingleAsync<User>(u => u.Email == friendEmail && u.Roles.Any(r => r == Roles.User));
+
             if (userId == friendUser.Id)
             {
                 throw new ValidationException("Can't be your own friend.");
