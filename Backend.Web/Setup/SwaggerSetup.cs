@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 
 namespace Backend.Web.Setup
 {
@@ -11,19 +10,27 @@ namespace Backend.Web.Setup
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Leaf" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Leaf" });
                 c.AddSecurityDefinition(
-                    "Bearer",
-                    new ApiKeyScheme
+                    "bearer",
+                    new OpenApiSecurityScheme
                     {
-                        In = "header",
+                        In = ParameterLocation.Header,
                         Description = "Please enter into field the word 'Bearer' following by space and JWT",
                         Name = "Authorization",
-                        Type = "apiKey"
+                        BearerFormat = "JWT",
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "bearer"
                     });
-                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    { "Bearer", Enumerable.Empty<string>() }
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearer" }
+                        },
+                        Array.Empty<string>()
+                    }
                 });
             });
         }

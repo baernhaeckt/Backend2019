@@ -35,7 +35,7 @@ namespace Backend.Web
         {
             services.AddApplicationInsightsTelemetry();
 
-            // services.AddApiDocumentation(); Wait for Swagger v5
+            services.AddApiDocumentation();
             services.AddBus(options => options.UseModel());
             services.AddMvcWithCors();
             services.AddJwtAuthentication();
@@ -66,12 +66,12 @@ namespace Backend.Web
 
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
-            // Wait for Swagger v5
-            // app.UseSwagger();
-            // app.UseSwaggerUI(c =>
-            // {
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Leaf API V1");
-            // });
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Leaf API V1");
+            });
+
             app.UseCors(x =>
                 x.AllowAnyMethod()
                     .WithOrigins("http://localhost:8080", "https://baernhaeckt.z16.web.core.windows.net")
