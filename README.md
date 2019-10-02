@@ -20,7 +20,6 @@
 
 ### Small
 
-- Delete UnitOfWorkExtensions.cs
 - Use IReader where possible instead of IUnitOfWork (will make it simpler to use queries later)
 - Move partners to database (currently hardcoded in TokenService.cs)
 
@@ -28,7 +27,6 @@
 
 - Implement EventFeed using ISubscriber
 - Introduce localization
-- Decouple Points & Awards
 - Make sure that the integration tests can run in memory as well
 - For token generation, use id from currently logged in partner but enable to generate a specific kind, of a token
 
@@ -51,6 +49,7 @@
 - Hosting (check for Domain & Certificate)
 
 ## 5. Testing
+
 - Load test with 500 users
 
 ## Frontend only

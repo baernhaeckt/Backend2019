@@ -29,12 +29,7 @@ namespace Backend.Core.Features.Friendship
 
         public async Task ConnectFriends(Guid userId, string friendEmail)
         {
-            User friendUser = await _unitOfWork.GetByEmailAsync(friendEmail);
-            if (friendUser == null)
-            {
-                throw new ValidationException($"No user with email: {friendEmail} found.");
-            }
-
+            User friendUser = await _unitOfWork.SingleAsync<User>(u => u.Email == friendEmail);
             if (userId == friendUser.Id)
             {
                 throw new ValidationException("Can't be your own friend.");
