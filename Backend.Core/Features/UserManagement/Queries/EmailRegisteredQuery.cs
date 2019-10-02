@@ -10,6 +10,5 @@ namespace Backend.Core.Features.UserManagement.Queries
         }
 
         public string Email { get; }
-
     }
 }
