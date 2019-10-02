@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using Backend.Core.Entities;
-using Backend.Infrastructure.Geolocation;
+using Backend.Infrastructure.Geolocation.Abstraction;
 using Backend.Infrastructure.Persistence.Abstraction;
+using Microsoft.Extensions.Logging;
 using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Features.UserManagement.Commands
@@ -10,17 +12,30 @@ namespace Backend.Core.Features.UserManagement.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IGeolocationService _geolocationService;
+        private readonly IGeocodingService _geocodingService;
 
-        public UpdateProfileCommandHandler(IUnitOfWork unitOfWork, IGeolocationService _geolocationService)
+        private readonly ILogger<UpdateProfileCommandHandler> _logger;
+
+        public UpdateProfileCommandHandler(IUnitOfWork unitOfWork, IGeocodingService geocodingService, ILogger<UpdateProfileCommandHandler> logger)
         {
             _unitOfWork = unitOfWork;
-            this._geolocationService = _geolocationService;
+            _geocodingService = geocodingService;
+            _logger = logger;
         }
 
         public async Task ExecuteAsync(UpdateProfileCommand command)
         {
-            ReverseGeolocationResult result = await _geolocationService.Reverse(command.PostalCode, command.City, command.Street);
+            LookupResult result = await _geocodingService.LookupAsync(command.PostalCode, command.City, command.Street);
+
+            if (result.Failed)
+            {
+                // Save all other infos than location, also if the location couldn't be resolved
+                await _unitOfWork.UpdateAsync<User>(command.Id, new { command.DisplayName });
+
+                _logger.UnableToLookupAddress(command.City, command.Street, command.PostalCode);
+
+                throw new ValidationException("Address lookup failed.");
+            }
 
             await _unitOfWork.UpdateAsync<User>(command.Id, new
             {
