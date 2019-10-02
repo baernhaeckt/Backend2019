@@ -25,7 +25,7 @@ namespace Backend.Core.Features.Awards.EventHandler
         {
             IList<Award> newAwards = new List<Award>();
             if (@event.User.PointActions.Count > 1
-                && @event.User.Awards.All(a => a.Kind != AwardKind.Onboarding))
+                && @event.User.Awards.All(a => !(a is OnBoardingAward)))
             {
                 // This is the first token the user gets, so this is worth an award.
                 var award = new OnBoardingAward();
@@ -33,7 +33,7 @@ namespace Backend.Core.Features.Awards.EventHandler
             }
 
             if (@event.User.PointActions.Count(t => t.SufficientType.Title == "Verpackung") >= 2
-                && @event.User.Awards.All(a => a.Kind != AwardKind.TrashHero))
+                && @event.User.Awards.All(a => !(a is TrashHeroAward)))
             {
                 var award = new TrashHeroAward();
                 newAwards.Add(award);

@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Backend.Core.Entities;
+using Backend.Core.Entities.Awards;
 using Backend.Core.Extensions;
-using Backend.Core.Features.Awards.Models;
-using Backend.Infrastructure.Persistence.Abstraction;
+using Backend.Core.Features.Awards.Queries;
 using Microsoft.AspNetCore.Mvc;
+using Silverback.Messaging.Publishing;
 
 namespace Backend.Core.Features.Awards.Controllers
 {
@@ -13,20 +12,15 @@ namespace Backend.Core.Features.Awards.Controllers
     [ApiController]
     public class AwardsController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IQueryPublisher _queryPublisher;
 
-        public AwardsController(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+        public AwardsController(IQueryPublisher queryPublisher) => _queryPublisher = queryPublisher;
 
         [HttpGet]
-        public async Task<IEnumerable<AwardsResponse>> GetAsync()
+        public async Task<IEnumerable<Award>> GetAsync()
         {
-            User currentUser = await _unitOfWork.GetByIdOrDefaultAsync<User>(HttpContext.User.Id());
-
-            return currentUser.Awards.Select(a => new AwardsResponse
-            {
-                Title = a.Title,
-                Kind = a.Kind.ToString()
-            });
+            UserAwardsQueryResult result = await _queryPublisher.ExecuteAsync(new UserAwardsQuery(HttpContext.User.Id()));
+            return result.Awards;
         }
     }
 }

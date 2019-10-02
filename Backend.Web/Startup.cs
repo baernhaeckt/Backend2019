@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Backend.Core.Features.Awards;
 using Backend.Core.Features.Baseline;
 using Backend.Core.Features.Friendship;
 using Backend.Core.Features.Newsfeed;
@@ -54,6 +55,7 @@ namespace Backend.Web
             services.AddFeaturePartner();
             services.AddFeaturePoints();
             services.AddFeatureQuiz();
+            services.AddFeatureAward();
 
             services.AddHostedService<StartupTaskRunner>();
         }

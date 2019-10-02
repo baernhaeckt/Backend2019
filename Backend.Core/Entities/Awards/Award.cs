@@ -8,8 +8,8 @@ namespace Backend.Core.Entities.Awards
 
         public string Title { get; protected set; } = string.Empty;
 
-        public AwardKind Kind { get; protected set; }
-
         public string Description { get; protected set; } = string.Empty;
+
+        public string Kind => GetType().Name;
     }
 }
