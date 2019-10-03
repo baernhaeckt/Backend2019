@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Backend.Core.Features.UserManagement.Security.Abstraction;
+using Backend.Infrastructure.Security.Abstraction;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;

@@ -6,8 +6,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Extensions;
-using Backend.Core.Features.UserManagement.Security;
 using Backend.Infrastructure.Persistence.Abstraction;
+using Backend.Infrastructure.Security.Abstraction;
 
 namespace Backend.Core.Features.Friendship
 {

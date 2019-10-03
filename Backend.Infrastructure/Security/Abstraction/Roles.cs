@@ -1,4 +1,4 @@
-﻿namespace Backend.Core.Features.UserManagement.Security
+﻿namespace Backend.Infrastructure.Security.Abstraction
 {
     public static class Roles
     {

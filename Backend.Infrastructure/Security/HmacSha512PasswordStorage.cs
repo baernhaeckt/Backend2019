@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Globalization;
 using System.Security.Cryptography;
-using Backend.Core.Features.UserManagement.Security.Abstraction;
+using Backend.Infrastructure.Security.Abstraction;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
-namespace Backend.Core.Features.UserManagement.Security
+namespace Backend.Infrastructure.Security
 {
     public class HmacSha512PasswordStorage : IPasswordStorage
     {

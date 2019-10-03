@@ -25,7 +25,7 @@ namespace Backend.Tests.Integration
             var url = new Uri("api/points", UriKind.Relative);
             HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
             IEnumerable<PointResponse> pointResponse = await response.OnSuccessDeserialize<IEnumerable<PointResponse>>();
-            Assert.Equal(4, pointResponse.Count());
+            Assert.Equal(8, pointResponse.Count());
         }
     }
 }

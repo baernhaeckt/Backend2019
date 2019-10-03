@@ -1,4 +1,4 @@
-﻿using Backend.Core.Features.UserManagement.Security;
+﻿using Backend.Infrastructure.Security;
 using Xunit;
 
 namespace Backend.Tests.Unit.Core.Security

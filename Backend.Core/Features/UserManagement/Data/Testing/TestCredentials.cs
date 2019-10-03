@@ -2,10 +2,6 @@
 {
     public static class TestCredentials
     {
-        public const string Partner = "partner@leaf.ch";
-
-        public const string PartnerPassword = "partner";
-
         public const string User1 = "user@leaf.ch";
 
         public const string User1Password = "user";

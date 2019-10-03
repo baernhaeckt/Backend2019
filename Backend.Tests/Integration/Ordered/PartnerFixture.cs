@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Backend.Core.Features.UserManagement.Data.Testing;
+using Backend.Core.Features.Partner.Data.Testing;
 using Backend.Tests.Integration.Utilities.Extensions;
 using Xunit;
 using Xunit.Extensions.Ordering;
@@ -20,40 +20,53 @@ namespace Backend.Tests.Integration
 
         [Order(0)]
         [Fact]
-        public async Task UsersLogin_PartnerLoginSuccessful()
+        public async Task TokenIssuersLogin_Successful()
         {
-            await _context.PartnerHttpClient.SignIn(TestCredentials.Partner, TestCredentials.PartnerPassword);
+            await _context.PartnerHttpClient.SignInTokenIssuer(TokenIssuerTestCredentials.Id2, TokenIssuerTestCredentials.Secret2);
         }
 
         [Order(1)]
         [Fact]
         public async Task TokensCreate_ValidPartnerId_Ok()
         {
-            IList<string> partnerIds = new List<string>
-            {
-                "ccc14b11-5922-4e3e-bb54-03e71facaeb3",
-                "acc14b11-5922-4e3e-bb54-03e71facaeb3",
-                "bcc14b11-5922-4e3e-bb54-03e71facaeb3",
-                "ccc14b11-5922-4e3e-bb54-03e71facaeb3"
-            };
+            await _context.PartnerHttpClient.SignInTokenIssuer(TokenIssuerTestCredentials.Id1, TokenIssuerTestCredentials.Secret1);
+            var url = new Uri("api/tokens?tokenType=VerpAckUng", UriKind.Relative);
 
-            foreach (string partnerId in partnerIds)
-            {
-                var url = new Uri("api/tokens?partnerId=" + partnerId, UriKind.Relative);
-                HttpResponseMessage response = await _context.PartnerHttpClient.GetAsync(url);
-                response.EnsureSuccessStatusCode();
-                string tokenValue = await response.Content.ReadAsStringAsync();
-                Assert.True(!string.IsNullOrWhiteSpace(tokenValue));
-                _context.PartnerGeneratedTokens.Add(await response.Content.ReadAsStringAsync());
-            }
+            HttpResponseMessage response = await _context.PartnerHttpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            string tokenValue = await response.Content.ReadAsStringAsync();
+            Assert.True(!string.IsNullOrWhiteSpace(tokenValue));
+            _context.PartnerGeneratedTokens.Add(await response.Content.ReadAsStringAsync());
+
+            response = await _context.PartnerHttpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            tokenValue = await response.Content.ReadAsStringAsync();
+            Assert.True(!string.IsNullOrWhiteSpace(tokenValue));
+            _context.PartnerGeneratedTokens.Add(await response.Content.ReadAsStringAsync());
+
+            await _context.PartnerHttpClient.SignInTokenIssuer(TokenIssuerTestCredentials.Id3, TokenIssuerTestCredentials.Secret3);
+            url = new Uri("api/tokens?tokenType=TeIleN", UriKind.Relative);
+
+            response = await _context.PartnerHttpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            tokenValue = await response.Content.ReadAsStringAsync();
+            Assert.True(!string.IsNullOrWhiteSpace(tokenValue));
+            _context.PartnerGeneratedTokens.Add(await response.Content.ReadAsStringAsync());
+
+            url = new Uri("api/tokens?tokenType=multiuse", UriKind.Relative);
+            response = await _context.PartnerHttpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            tokenValue = await response.Content.ReadAsStringAsync();
+            Assert.True(!string.IsNullOrWhiteSpace(tokenValue));
+            _context.PartnerGeneratedTokens.Add(await response.Content.ReadAsStringAsync());
         }
 
         [Order(1)]
         [Fact]
-        public async Task GetToken_InvalidPartnerId_NOk()
+        public async Task GetToken_InvalidTokenType_NOk()
         {
-            HttpResponseMessage response = await _context.PartnerHttpClient.GetAsync(new Uri("api/tokens?partnerId=" + "abd14b11-5922-4e3e-bb54-03e72facaeb3", UriKind.Relative));
-            response.EnsureNotSuccessStatusCode();
+            HttpResponseMessage response = await _context.PartnerHttpClient.GetAsync(new Uri("api/tokens?tokenType=bla", UriKind.Relative));
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
@@ -66,6 +79,43 @@ namespace Backend.Tests.Integration
                 HttpResponseMessage response = await _context.NewTestUserHttpClient.PostAsync(url, null);
                 response.EnsureSuccessStatusCode();
             }
+        }
+
+        [Order(3)]
+        [Fact]
+        public async Task UseToken_SingleUseAlreadyUsed_NOk()
+        {
+            await _context.PartnerHttpClient.SignInTokenIssuer(TokenIssuerTestCredentials.Id3, TokenIssuerTestCredentials.Secret3);
+            HttpResponseMessage response = await _context.PartnerHttpClient.GetAsync(new Uri("api/tokens?tokenType=TeIleN", UriKind.Relative));
+            response.EnsureSuccessStatusCode();
+            string tokenValue = await response.Content.ReadAsStringAsync();
+
+            var url = new Uri("api/tokens?tokenGuid=" + tokenValue, UriKind.Relative);
+            response = await _context.NewTestUserHttpClient.PostAsync(url, null);
+            response.EnsureSuccessStatusCode();
+
+            response = await _context.NewTestUserHttpClient.PostAsync(url, null);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Order(4)]
+        [Fact]
+        public async Task UseToken_MultiUseAlreadyUsed_Ok()
+        {
+            await _context.PartnerHttpClient.SignInTokenIssuer(TokenIssuerTestCredentials.Id3, TokenIssuerTestCredentials.Secret3);
+            HttpResponseMessage response = await _context.PartnerHttpClient.GetAsync(new Uri("api/tokens?tokenType=multiuse", UriKind.Relative));
+            response.EnsureSuccessStatusCode();
+            string tokenValue = await response.Content.ReadAsStringAsync();
+
+            var url = new Uri("api/tokens?tokenGuid=" + tokenValue, UriKind.Relative);
+            response = await _context.NewTestUserHttpClient.PostAsync(url, null);
+            response.EnsureSuccessStatusCode();
+
+            response = await _context.NewTestUserHttpClient.PostAsync(url, null);
+            response.EnsureSuccessStatusCode();
+
+            response = await _context.NewTestUserHttpClient.PostAsync(url, null);
+            response.EnsureSuccessStatusCode();
         }
     }
 }

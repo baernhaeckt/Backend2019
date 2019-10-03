@@ -3,9 +3,9 @@ using Silverback.Messaging.Messages;
 
 namespace Backend.Core.Features.Partner.Commands
 {
-    public class RewardForUserTokenCommand : ICommand
+    public class RewardUserTokenCommand : ICommand
     {
-        public RewardForUserTokenCommand(Guid tokenId, Guid userId)
+        public RewardUserTokenCommand(Guid tokenId, Guid userId)
         {
             TokenId = tokenId;
             UserId = userId;

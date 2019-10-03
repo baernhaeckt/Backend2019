@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Security.Cryptography;
-using Backend.Core.Features.UserManagement.Security.Abstraction;
+using Backend.Infrastructure.Security.Abstraction;
 
-namespace Backend.Core.Features.UserManagement.Security
+namespace Backend.Infrastructure.Security
 {
     public class RandomPasswordGenerator : IPasswordGenerator
     {

@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Infrastructure.Persistence.Abstraction;
 using Backend.Infrastructure.Security.Abstraction;
 using Silverback.Messaging.Subscribers;
 
-namespace Backend.Core.Features.UserManagement.Queries
+namespace Backend.Core.Features.Partner.Queries
 {
     internal class SignInQueryHandler : ISubscriber
     {
@@ -25,22 +24,21 @@ namespace Backend.Core.Features.UserManagement.Queries
 
         public async Task<SignInQueryResult> ExecuteAsync(SignInQuery query)
         {
-            Tuple<Guid, string, string, IEnumerable<string>> userByEmail = await _reader.SingleOrDefaultAsync<User, Tuple<Guid, string, string, IEnumerable<string>>>(
-                u => u.Email == query.Email.ToLowerInvariant(),
-                u => new Tuple<Guid, string, string, IEnumerable<string>>(u.Id, u.PasswordHash, u.Email, u.Roles));
+            Tuple<Guid, string, string> result = await _reader.GetByIdOrThrowAsync<TokenIssuer, Tuple<Guid, string, string>>(
+                query.Id, u => new Tuple<Guid, string, string>(u.Id, u.Name, u.SecretHash));
 
-            if (userByEmail == null)
+            if (result == null)
             {
                 return new SignInQueryResult(true, false, string.Empty);
             }
 
-            bool passwordOk = _passwordStorage.Match(query.Password, userByEmail.Item2);
+            bool passwordOk = _passwordStorage.Match(query.Secret, result.Item3);
             if (!passwordOk)
             {
                 return new SignInQueryResult(false, true, string.Empty);
             }
 
-            string token = _securityTokenFactory.Create(userByEmail.Item1, userByEmail.Item3, userByEmail.Item4);
+            string token = _securityTokenFactory.Create(result.Item1, result.Item2, new[] { Roles.Partner });
             return new SignInQueryResult(false, false, token);
         }
     }

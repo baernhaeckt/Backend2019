@@ -1,7 +1,7 @@
-﻿using Backend.Core.Features.UserManagement.Security.Abstraction;
+﻿using Backend.Infrastructure.Security.Abstraction;
 using Microsoft.Extensions.Configuration;
 
-namespace Backend.Core.Features.UserManagement.Security
+namespace Backend.Infrastructure.Security
 {
     public class StaticPasswordGenerator : IPasswordGenerator
     {

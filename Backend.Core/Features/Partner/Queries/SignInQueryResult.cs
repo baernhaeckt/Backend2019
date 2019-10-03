@@ -1,4 +1,4 @@
-﻿namespace Backend.Core.Features.UserManagement.Queries
+﻿namespace Backend.Core.Features.Partner.Queries
 {
     public class SignInQueryResult
     {

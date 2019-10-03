@@ -4,8 +4,8 @@ using Backend.Core.Entities.Awards;
 using Backend.Core.Extensions;
 using Backend.Core.Features.Newsfeed.Abstraction;
 using Backend.Core.Features.Newsfeed.Events;
-using Backend.Core.Features.UserManagement.Security;
 using Backend.Infrastructure.Persistence.Abstraction;
+using Backend.Infrastructure.Security.Abstraction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

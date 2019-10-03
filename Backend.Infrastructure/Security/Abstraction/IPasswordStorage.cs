@@ -1,4 +1,4 @@
-﻿namespace Backend.Core.Features.UserManagement.Security.Abstraction
+﻿namespace Backend.Infrastructure.Security.Abstraction
 {
     public interface IPasswordStorage
     {

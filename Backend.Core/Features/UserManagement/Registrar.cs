@@ -5,8 +5,6 @@ using Backend.Core.Features.UserManagement.Data;
 using Backend.Core.Features.UserManagement.Data.Testing;
 using Backend.Core.Features.UserManagement.EventSubscriber;
 using Backend.Core.Features.UserManagement.Queries;
-using Backend.Core.Features.UserManagement.Security;
-using Backend.Core.Features.UserManagement.Security.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Silverback.Messaging.Subscribers;
@@ -43,19 +41,6 @@ namespace Backend.Core.Features.UserManagement
             }
 
             services.AddStartupTask<AdminUsersStartupTask>();
-
-            // Security Utilities
-            services.AddSingleton<IPasswordStorage, HmacSha512PasswordStorage>();
-            services.AddSingleton<ISecurityTokenFactory, JwtSecurityTokenFactory>();
-            services.AddSingleton<ISecurityKeyProvider, SymmetricSecurityKeyProvider>();
-            if (hostEnvironment.IsDevelopment())
-            {
-                services.AddSingleton<IPasswordGenerator, StaticPasswordGenerator>();
-            }
-            else
-            {
-                services.AddSingleton<IPasswordGenerator, RandomPasswordGenerator>();
-            }
 
             return services;
         }

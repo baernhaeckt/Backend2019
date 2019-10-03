@@ -19,6 +19,15 @@ namespace Backend.Tests.Integration.Utilities.Extensions
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginResponse.Token);
         }
 
+        public static async Task SignInTokenIssuer(this HttpClient client, Guid id, string secret)
+        {
+            var url = new Uri($"api/tokenIssuers/Login?id={id}&secret={secret}", UriKind.Relative);
+            HttpResponseMessage responseWithJwt = await client.PostAsync(url, null);
+            responseWithJwt.EnsureSuccessStatusCode();
+            string jwt = await responseWithJwt.Content.ReadAsStringAsync();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+        }
+
         public static async Task<string> CreateUserAndSignIn(this HttpClient client)
         {
             string email = DataGenerator.RandomEmail();

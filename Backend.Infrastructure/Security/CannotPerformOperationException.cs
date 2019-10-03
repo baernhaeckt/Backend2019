@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Backend.Core.Features.UserManagement.Security
+namespace Backend.Infrastructure.Security
 {
     public class CannotPerformOperationException : Exception
     {

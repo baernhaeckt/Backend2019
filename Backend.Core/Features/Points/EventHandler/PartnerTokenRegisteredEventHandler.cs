@@ -40,7 +40,7 @@ namespace Backend.Core.Features.Points.EventHandler
                         Point = token.Points,
                         Action = token.Text,
                         Co2Saving = token.Co2Saving,
-                        SponsorRef = token.Partner,
+                        SponsorRef = token.Name,
                         SufficientType = new UserSufficientType
                         {
                             Title = token.SufficientType.Title

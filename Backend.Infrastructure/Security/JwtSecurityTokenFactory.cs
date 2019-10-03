@@ -4,10 +4,11 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using Backend.Core.Features.UserManagement.Security.Abstraction;
+using Backend.Infrastructure.Security.Abstraction;
 using Microsoft.IdentityModel.Tokens;
+using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
-namespace Backend.Core.Features.UserManagement.Security
+namespace Backend.Infrastructure.Security
 {
     public class JwtSecurityTokenFactory : ISecurityTokenFactory
     {
@@ -15,14 +16,14 @@ namespace Backend.Core.Features.UserManagement.Security
 
         public JwtSecurityTokenFactory(ISecurityKeyProvider securityKeyProvider) => _securityKeyProvider = securityKeyProvider;
 
-        public string Create(Guid id, string email, IEnumerable<string> roles)
+        public string Create(Guid id, string subject, IEnumerable<string> roles)
         {
             DateTime now = DateTime.Now;
             var claims = new List<Claim>
             {
                 new Claim(LeafClaimTypes.UserId, id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, email),
-                new Claim(JwtRegisteredClaimNames.Sub, email),
+                new Claim(JwtRegisteredClaimNames.Email, subject),
+                new Claim(JwtRegisteredClaimNames.Sub, subject),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, now.ToUniversalTime().ToString(CultureInfo.CurrentCulture), ClaimValueTypes.Integer64)
             };

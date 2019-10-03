@@ -4,10 +4,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
-using Backend.Core.Features.UserManagement.Security;
-using Backend.Core.Features.UserManagement.Security.Abstraction;
 using Backend.Infrastructure.Hosting.Abstraction;
 using Backend.Infrastructure.Persistence.Abstraction;
+using Backend.Infrastructure.Security.Abstraction;
 using Bogus;
 using Bogus.Locations;
 
@@ -69,23 +68,6 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                     Email = TestCredentials.User3,
                     Roles = new List<string> { Roles.User },
                     PasswordHash = _passwordStorage.Create(TestCredentials.User3Password),
-                    Location = new Location
-                    {
-                        City = "Bern",
-                        PostalCode = "3011",
-                        Latitude = 46.944699,
-                        Longitude = 7.443788
-                    }
-                });
-            }
-
-            if (await _unitOfWork.CountAsync<User>(u => u.Email == TestCredentials.Partner) < 1)
-            {
-                users.Add(new User
-                {
-                    Email = TestCredentials.Partner,
-                    Roles = new List<string> { Roles.Partner },
-                    PasswordHash = _passwordStorage.Create(TestCredentials.PartnerPassword),
                     Location = new Location
                     {
                         City = "Bern",

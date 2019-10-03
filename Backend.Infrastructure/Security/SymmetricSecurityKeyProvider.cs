@@ -1,9 +1,9 @@
 ﻿using System.Text;
-using Backend.Core.Features.UserManagement.Security.Abstraction;
+using Backend.Infrastructure.Security.Abstraction;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Backend.Core.Features.UserManagement.Security
+namespace Backend.Infrastructure.Security
 {
     public class SymmetricSecurityKeyProvider : ISecurityKeyProvider
     {

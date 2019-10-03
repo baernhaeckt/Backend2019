@@ -70,7 +70,17 @@ namespace Backend.Infrastructure.Persistence
                     .Any(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(ICollection<>)))
                 {
                     // This will not replace child collections but add the elements to it.
-                    updateDefinitions.Add(builder.PushEach(property.Name, (IEnumerable<object>)property.GetValue(definition)));
+                    object propertyValue = property.GetValue(definition);
+
+                    // This needs to be treated specially...
+                    if (propertyValue is IEnumerable<Guid> value)
+                    {
+                        updateDefinitions.Add(builder.PushEach(property.Name, value));
+                    }
+                    else
+                    {
+                        updateDefinitions.Add(builder.PushEach(property.Name, (IEnumerable<object>)propertyValue));
+                    }
                 }
                 else
                 {
@@ -80,7 +90,7 @@ namespace Backend.Infrastructure.Persistence
 
             UpdateDefinition<TEntity> updateDefinition = Builders<TEntity>.Update.Combine(updateDefinitions);
             FilterDefinition<TEntity> filter = Builders<TEntity>.Filter.Eq(nameof(Entity.Id), id);
-            await dbContext.GetCollection<TEntity>().UpdateOneAsync(filter, updateDefinition);
+            UpdateResult result = await dbContext.GetCollection<TEntity>().UpdateOneAsync(filter, updateDefinition);
         }
     }
 }

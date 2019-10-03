@@ -11,6 +11,7 @@ using Backend.Core.Features.UserManagement;
 using Backend.Infrastructure.Email;
 using Backend.Infrastructure.Geolocation;
 using Backend.Infrastructure.Persistence;
+using Backend.Infrastructure.Security;
 using Backend.Web.Middleware;
 using Backend.Web.Setup;
 using Microsoft.AspNetCore.Builder;
@@ -46,13 +47,14 @@ namespace Backend.Web
             services.AddMongoDbPersistence(_configuration);
             services.AddInfrastructureEmail(_configuration, _hostEnvironment);
             services.AddGeolocation(_configuration, _hostEnvironment);
+            services.AddSecurity(_hostEnvironment);
 
             // Features
             services.AddFeatureUserManagement(_hostEnvironment);
             services.AddFeatureBaseline();
             services.AddFeatureFriendship();
             services.AddFeatureNewsfeed();
-            services.AddFeaturePartner();
+            services.AddFeaturePartner(_hostEnvironment);
             services.AddFeaturePoints();
             services.AddFeatureQuiz();
             services.AddFeatureAward();
