@@ -14,6 +14,7 @@ namespace Backend.Core.Features.Newsfeed
 
             // EventHandlers
             services.AddScoped<ISubscriber, UserNewPointsEventHandler>();
+            services.AddScoped<ISubscriber, UserNewAwardEventHandler>();
 
             return services;
         }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Backend.Core.Features.UserManagement.Models;
+using Backend.Core.Features.UserManagement.Queries;
 using Backend.Tests.Integration.Utilities;
 using Backend.Tests.Integration.Utilities.Extensions;
 using Xunit;
@@ -59,7 +61,7 @@ namespace Backend.Tests.Integration
             _output.WriteLine("Get profile of user: " + _context.NewTestUser);
             var url = new Uri("api/profile", UriKind.Relative);
             HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
-            PrivateUserResponse userResponse = await response.OnSuccessDeserialize<PrivateUserResponse>();
+            UserProfileQueryResult userResponse = await response.OnSuccessDeserialize<UserProfileQueryResult>();
             Assert.Equal(_context.NewTestUser.ToLowerInvariant(), userResponse.Email);
         }
 
@@ -83,6 +85,24 @@ namespace Backend.Tests.Integration
             var url = new Uri("api/profile/password", UriKind.Relative);
             HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(url, content);
             response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        [Order(5)]
+        public async Task UsersLogin_WrongPassword_NOk()
+        {
+            var url = new Uri($"api/users/Login?email={_context.NewTestUser}&password=12345", UriKind.Relative);
+            HttpResponseMessage responseWithJwt = await _context.AnonymousHttpClient.PostAsync(url, null);
+            Assert.Equal(HttpStatusCode.Forbidden, responseWithJwt.StatusCode);
+        }
+
+        [Fact]
+        [Order(6)]
+        public async Task UsersLogin_WrongUsername_NOk()
+        {
+            var url = new Uri("api/users/Login?email=bla@bla.ch&password=12345", UriKind.Relative);
+            HttpResponseMessage responseWithJwt = await _context.AnonymousHttpClient.PostAsync(url, null);
+            Assert.Equal(HttpStatusCode.NotFound, responseWithJwt.StatusCode);
         }
     }
 }

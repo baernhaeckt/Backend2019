@@ -27,5 +27,37 @@ namespace Backend.Tests.Integration
             IEnumerable<PointResponse> pointResponse = await response.OnSuccessDeserialize<IEnumerable<PointResponse>>();
             Assert.Equal(8, pointResponse.Count());
         }
+
+        [Fact]
+        public async Task RankingGlobal_Successful()
+        {
+            var url = new Uri("api/rankings/global", UriKind.Relative);
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async Task RankingLocal_Successful()
+        {
+            var url = new Uri("api/rankings/local?zip=3008", UriKind.Relative);
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async Task RankingFriends_Successful()
+        {
+            var url = new Uri("api/rankings/friends", UriKind.Relative);
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async Task RankingSummary_Successful()
+        {
+            var url = new Uri("api/rankings/friends", UriKind.Relative);
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+        }
     }
 }

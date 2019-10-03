@@ -19,22 +19,38 @@ namespace Backend.Infrastructure.Persistence
         public virtual async Task<TEntity> InsertAsync<TEntity>(TEntity record)
             where TEntity : Entity, new()
         {
-            DbContext dbContext = DbContextFactory.Create();
-            record.CreatedAt = DateTime.UtcNow;
-            await dbContext.GetCollection<TEntity>().InsertOneAsync(record);
-            return record;
+            try
+            {
+                DbContext dbContext = DbContextFactory.Create();
+                record.CreatedAt = DateTime.UtcNow;
+                await dbContext.GetCollection<TEntity>().InsertOneAsync(record);
+                return record;
+            }
+            catch (MongoWriteException e)
+                when (e.WriteError.Category == ServerErrorCategory.DuplicateKey)
+            {
+                throw new DuplicateKeyException();
+            }
         }
 
         public virtual async Task InsertManyAsync<TEntity>(IEnumerable<TEntity> records)
             where TEntity : Entity, new()
         {
-            DbContext dbContext = DbContextFactory.Create();
-            foreach (TEntity record in records)
+            try
             {
-                record.CreatedAt = DateTime.UtcNow;
-            }
+                DbContext dbContext = DbContextFactory.Create();
+                foreach (TEntity record in records)
+                {
+                    record.CreatedAt = DateTime.UtcNow;
+                }
 
-            await dbContext.GetCollection<TEntity>().InsertManyAsync(records);
+                await dbContext.GetCollection<TEntity>().InsertManyAsync(records);
+            }
+            catch (MongoBulkWriteException e)
+                when (e.WriteErrors.Any(w => w.Category == ServerErrorCategory.DuplicateKey))
+            {
+                throw new DuplicateKeyException();
+            }
         }
 
         public virtual async Task DeleteAsync<TEntity>(Guid id)

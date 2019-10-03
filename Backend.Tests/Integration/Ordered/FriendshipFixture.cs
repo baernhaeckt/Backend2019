@@ -36,8 +36,10 @@ namespace Backend.Tests.Integration
         {
             HttpResponseMessage response = await _context.NewTestUserHttpClient.PostAsync(new Uri($"api/friends?friendEmail={TestCredentials.User2}", UriKind.Relative), null);
             response.EnsureSuccessStatusCode();
+
             response = await _context.NewTestUserHttpClient.PostAsync(new Uri($"api/friends?friendEmail={TestCredentials.User3}", UriKind.Relative), null);
             response.EnsureSuccessStatusCode();
+
             response = await _context.NewTestUserHttpClient.GetAsync(new Uri("api/friends", UriKind.Relative));
             List<FriendResponse> friendResponse = await response.OnSuccessDeserialize<List<FriendResponse>>();
             Assert.Equal(2, friendResponse.Count);
@@ -62,18 +64,10 @@ namespace Backend.Tests.Integration
             string id = friendResponse.First().Id.ToString();
             response = await _context.NewTestUserHttpClient.DeleteAsync(new Uri("api/friends?friendUserId=" + id, UriKind.Relative));
             response.EnsureSuccessStatusCode();
+
             response = await _context.NewTestUserHttpClient.GetAsync(new Uri("api/friends", UriKind.Relative));
             friendResponse = await response.OnSuccessDeserialize<List<FriendResponse>>();
             Assert.Single(friendResponse);
-
-            // Remove the second, none is left.
-            id = friendResponse.First().Id.ToString();
-            response = await _context.NewTestUserHttpClient.DeleteAsync(new Uri("api/friends?friendUserId=" + id, UriKind.Relative));
-            response.EnsureSuccessStatusCode();
-            response = await _context.NewTestUserHttpClient.GetAsync(new Uri("api/friends", UriKind.Relative));
-            friendResponse = await response.OnSuccessDeserialize<List<FriendResponse>>();
-
-            Assert.Empty(friendResponse);
         }
     }
 }

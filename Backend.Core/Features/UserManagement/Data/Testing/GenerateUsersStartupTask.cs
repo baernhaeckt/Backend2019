@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Infrastructure.Hosting.Abstraction;
+using Backend.Infrastructure.Persistence;
 using Backend.Infrastructure.Persistence.Abstraction;
 using Backend.Infrastructure.Security.Abstraction;
 using Bogus;
@@ -116,7 +117,15 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
 
             if (users.Any())
             {
-                await _unitOfWork.InsertManyAsync(users);
+                try
+                {
+                    await _unitOfWork.InsertManyAsync(users);
+                }
+                catch (DuplicateKeyException)
+                {
+                    // The tests are executed in parallel.
+                    // Just ignore.
+                }
             }
         }
     }

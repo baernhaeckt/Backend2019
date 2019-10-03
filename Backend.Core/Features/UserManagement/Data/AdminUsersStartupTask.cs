@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Infrastructure.Hosting.Abstraction;
+using Backend.Infrastructure.Persistence;
 using Backend.Infrastructure.Persistence.Abstraction;
 using Backend.Infrastructure.Security.Abstraction;
 using Microsoft.Extensions.Configuration;
@@ -35,7 +36,16 @@ namespace Backend.Core.Features.UserManagement.Data
                 DisplayName = "Admin",
                 Roles = new List<string> { Roles.Administrator }
             };
-            await _unitOfWork.InsertAsync(user);
+
+            try
+            {
+                await _unitOfWork.InsertAsync(user);
+            }
+            catch (DuplicateKeyException)
+            {
+                // The tests are executed in parallel.
+                // Just ignore.
+            }
         }
     }
 }
