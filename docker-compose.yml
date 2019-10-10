@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  backend.web:
+    image: ${DOCKER_REGISTRY-}backendweb
+    build:
+      context: .
+      dockerfile: Backend.Web/Dockerfile
+  mongo:
+    image: mongo
+    ports:
+    - "27017:27017"
