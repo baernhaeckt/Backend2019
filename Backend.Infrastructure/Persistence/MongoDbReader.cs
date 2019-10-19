@@ -15,10 +15,8 @@ namespace Backend.Infrastructure.Persistence
         protected DbContextFactory DbContextFactory { get; }
 
         public virtual async Task<TEntity> GetByIdOrDefaultAsync<TEntity>(Guid id)
-            where TEntity : Entity, new()
-        {
-            return await SingleOrDefaultAsync<TEntity>(e => e.Id == id);
-        }
+            where TEntity : Entity, new() =>
+            await SingleOrDefaultAsync<TEntity>(e => e.Id == id);
 
         public async Task<TEntity> GetByIdOrThrowAsync<TEntity>(Guid id)
             where TEntity : Entity, new()
@@ -27,18 +25,16 @@ namespace Backend.Infrastructure.Persistence
             return result ?? throw new EntityNotFoundException(typeof(TEntity), nameof(GetByIdOrThrowAsync), id.ToString());
         }
 
-        public Task<TProjection> GetByIdOrDefaultAsync<TEntity, TProjection>(Guid id, Expression<Func<TEntity, TProjection>> selectPredicate)
+        public Task<TProjection?> GetByIdOrDefaultAsync<TEntity, TProjection>(Guid id, Expression<Func<TEntity, TProjection>> selectPredicate)
             where TEntity : Entity, new()
-            where TProjection : class
-        {
-            return SingleOrDefaultAsync(e => e.Id == id, selectPredicate);
-        }
+            where TProjection : class =>
+            SingleOrDefaultAsync(e => e.Id == id, selectPredicate);
 
         public async Task<TProjection> GetByIdOrThrowAsync<TEntity, TProjection>(Guid id, Expression<Func<TEntity, TProjection>> selectPredicate)
             where TEntity : Entity, new()
             where TProjection : class
         {
-            TProjection result = await GetByIdOrDefaultAsync(id, selectPredicate);
+            TProjection? result = await GetByIdOrDefaultAsync(id, selectPredicate);
             return result ?? throw new EntityNotFoundException(typeof(TEntity), nameof(GetByIdOrThrowAsync), id.ToString());
         }
 
@@ -103,7 +99,7 @@ namespace Backend.Infrastructure.Persistence
             return result ?? throw new EntityNotFoundException(typeof(TEntity), nameof(SingleAsync), filterPredicate.ToString());
         }
 
-        public async Task<TProjection> SingleOrDefaultAsync<TEntity, TProjection>(Expression<Func<TEntity, bool>> filterPredicate, Expression<Func<TEntity, TProjection>> selectPredicate)
+        public async Task<TProjection?> SingleOrDefaultAsync<TEntity, TProjection>(Expression<Func<TEntity, bool>> filterPredicate, Expression<Func<TEntity, TProjection>> selectPredicate)
             where TEntity : Entity, new()
             where TProjection : class
         {

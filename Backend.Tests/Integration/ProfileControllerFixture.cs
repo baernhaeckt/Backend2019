@@ -18,7 +18,7 @@ namespace Backend.Tests.Integration
         [Fact]
         public async Task UpdateProfile_Successful()
         {
-            _context.NewTestUser = await _context.NewUserHttpClient.CreateUserAndSignIn();
+            _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
 
             var uri = new Uri("api/profile", UriKind.Relative);
             StringContent content = new UpdateProfileModel
@@ -28,50 +28,50 @@ namespace Backend.Tests.Integration
                 Street = "Kappelenring 33b",
                 City = "Hinterkappelen"
             }.ToStringContent();
-            HttpResponseMessage response = await _context.NewUserHttpClient.PatchAsync(uri, content);
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(uri, content);
             response.EnsureSuccessStatusCode();
         }
 
         [Fact]
         public async Task GetProfile_Successful()
         {
-            _context.NewTestUser = await _context.NewUserHttpClient.CreateUserAndSignIn();
+            _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
 
             var uri = new Uri("api/profile", UriKind.Relative);
-            HttpResponseMessage response = await _context.NewUserHttpClient.GetAsync(uri);
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(uri);
             response.EnsureSuccessStatusCode();
         }
 
         [Fact]
         public async Task ChangePassword_Successful()
         {
-            _context.NewTestUser = await _context.NewUserHttpClient.CreateUserAndSignIn();
+            _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
 
             var uri = new Uri("api/profile/password", UriKind.Relative);
             StringContent content = new ChangePasswordModel { OldPassword = "1234", NewPassword = "12345678" }.ToStringContent();
-            HttpResponseMessage response = await _context.NewUserHttpClient.PatchAsync(uri, content);
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(uri, content);
             response.EnsureSuccessStatusCode();
         }
 
         [Fact]
         public async Task ChangePassword_OldPasswordInvalid_BadRequest()
         {
-            _context.NewTestUser = await _context.NewUserHttpClient.CreateUserAndSignIn();
+            _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
 
             var uri = new Uri("api/profile/password", UriKind.Relative);
             StringContent content = new ChangePasswordModel { OldPassword = "12345", NewPassword = "12345678" }.ToStringContent();
-            HttpResponseMessage response = await _context.NewUserHttpClient.PatchAsync(uri, content);
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(uri, content);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
         public async Task ChangePassword_NewPasswordTooShort_BadRequest()
         {
-            _context.NewTestUser = await _context.NewUserHttpClient.CreateUserAndSignIn();
+            _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
 
             var uri = new Uri("api/profile/password", UriKind.Relative);
             StringContent content = new ChangePasswordModel { OldPassword = "1234", NewPassword = "1234567" }.ToStringContent();
-            HttpResponseMessage response = await _context.NewUserHttpClient.PatchAsync(uri, content);
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(uri, content);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
     }

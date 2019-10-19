@@ -22,10 +22,10 @@ namespace Backend.Core.Features.Partner.Commands
                 throw new EntityNotFoundException(typeof(Token), nameof(ExecuteAsync), "Issuer: " + tokenIssuer.Id + "TokenType: " + command.TokenType);
             }
 
-            tokenPrototype.PartnerId = tokenIssuer.Id;
-
-            await _unitOfWork.InsertAsync(tokenPrototype);
-            return tokenPrototype.Id;
+            Token newToken = tokenPrototype.CreateFromPrototype();
+            newToken.PartnerId = tokenIssuer.Id;
+            await _unitOfWork.InsertAsync(newToken);
+            return newToken.Id;
         }
     }
 }

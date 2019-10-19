@@ -1,8 +1,9 @@
-﻿using Backend.Infrastructure.Persistence.Abstraction;
+﻿using System;
+using Backend.Infrastructure.Persistence.Abstraction;
 
 namespace Backend.Core.Entities
 {
-    public class SufficientType : Entity
+    public class SufficientType : Entity, ICloneable
     {
         public string Title { get; set; } = string.Empty;
 
@@ -11,5 +12,7 @@ namespace Backend.Core.Entities
         public int BaselinePoint { get; set; }
 
         public double BaselineCo2Saving { get; set; }
+
+        public object Clone() => MemberwiseClone();
     }
 }

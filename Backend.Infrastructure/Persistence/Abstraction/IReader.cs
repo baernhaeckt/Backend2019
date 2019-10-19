@@ -22,7 +22,7 @@ namespace Backend.Infrastructure.Persistence.Abstraction
         Task<TEntity> GetByIdOrThrowAsync<TEntity>(Guid id)
             where TEntity : Entity, new();
 
-        Task<TProjection> GetByIdOrDefaultAsync<TEntity, TProjection>(Guid id, Expression<Func<TEntity, TProjection>> selectPredicate)
+        Task<TProjection?> GetByIdOrDefaultAsync<TEntity, TProjection>(Guid id, Expression<Func<TEntity, TProjection>> selectPredicate)
             where TEntity : Entity, new()
             where TProjection : class;
 
@@ -39,7 +39,7 @@ namespace Backend.Infrastructure.Persistence.Abstraction
         Task<TEntity> SingleOrDefaultAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
             where TEntity : Entity, new();
 
-        Task<TProjection> SingleOrDefaultAsync<TEntity, TProjection>(Expression<Func<TEntity, bool>> filterPredicate, Expression<Func<TEntity, TProjection>> selectPredicate)
+        Task<TProjection?> SingleOrDefaultAsync<TEntity, TProjection>(Expression<Func<TEntity, bool>> filterPredicate, Expression<Func<TEntity, TProjection>> selectPredicate)
             where TEntity : Entity, new()
             where TProjection : class;
 

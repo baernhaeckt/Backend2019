@@ -31,7 +31,7 @@ namespace Backend.Core.Features.Partner.Commands
                 throw new ValidationException("Token has already been used.");
             }
 
-            // TOD=: Actually, this here is a race condition! Solve it with version..
+            // TODO: Actually, this here is a race condition! Solve it with version..
             await _unitOfWork.UpdateAsync<Token>(command.TokenId, new { UsedBy = new List<Guid> { command.UserId } });
 
             await _eventPublisher.PublishAsync(new PartnerTokenRegisteredEvent(command.UserId, command.TokenId));

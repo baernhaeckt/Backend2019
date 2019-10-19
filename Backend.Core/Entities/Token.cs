@@ -5,7 +5,7 @@ using Backend.Infrastructure.Persistence.Abstraction;
 
 namespace Backend.Core.Entities
 {
-    public class Token : Entity
+    public class Token : Entity, ICloneable
     {
         public string Text { get; set; } = string.Empty;
 
@@ -24,5 +24,17 @@ namespace Backend.Core.Entities
         public bool IsSingleUse { get; set; } = true;
 
         public IList<Guid> UsedBy { get; set; } = Enumerable.Empty<Guid>().ToList();
+
+        public Token CreateFromPrototype()
+        {
+            var newToken = (Token)MemberwiseClone();
+            newToken.Id = Guid.Empty;
+            newToken.PartnerId = Guid.Empty;
+            newToken.UsedBy = Enumerable.Empty<Guid>().ToList();
+            newToken.SufficientType = (SufficientType)SufficientType.Clone();
+            return newToken;
+        }
+
+        public object Clone() => MemberwiseClone();
     }
 }

@@ -17,9 +17,9 @@ namespace Backend.Tests.Integration
         [Fact]
         public async Task GetAndAnswer_Successful()
         {
-            _context.NewTestUser = await _context.NewUserHttpClient.CreateUserAndSignIn();
+            _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
             var uri = new Uri("api/quiz", UriKind.Relative);
-            HttpResponseMessage response = await _context.NewUserHttpClient.GetAsync(uri);
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(uri);
             QuestionResponse questionResponse = await response.OnSuccessDeserialize<QuestionResponse>();
 
             StringContent content = new QuestionAnswer
@@ -28,7 +28,7 @@ namespace Backend.Tests.Integration
                 Answers = questionResponse.Answers
             }.ToStringContent();
 
-            response = await _context.NewUserHttpClient.PostAsync(uri, content);
+            response = await _context.NewTestUserHttpClient.PostAsync(uri, content);
             response.EnsureSuccessStatusCode();
         }
     }
