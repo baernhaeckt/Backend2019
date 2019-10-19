@@ -25,7 +25,7 @@ namespace Backend.Core.Features.UserManagement.Queries
 
         public async Task<SignInQueryResult> ExecuteAsync(SignInQuery query)
         {
-            Tuple<Guid, string, string, IEnumerable<string>> userByEmail = await _reader.SingleOrDefaultAsync<User, Tuple<Guid, string, string, IEnumerable<string>>>(
+            Tuple<Guid, string, string, IEnumerable<string>>? userByEmail = await _reader.SingleOrDefaultAsync<User, Tuple<Guid, string, string, IEnumerable<string>>>(
                 u => u.Email == query.Email.ToLowerInvariant(),
                 u => new Tuple<Guid, string, string, IEnumerable<string>>(u.Id, u.PasswordHash, u.Email, u.Roles));
 

@@ -23,7 +23,7 @@ namespace Backend.Core.Features.Points.EventHandler
 
         public async Task ExecuteAsync(QuizQuestionCorrectAnsweredEvent @event)
         {
-            (Guid id, int points) = await _unitOfWork.GetByIdOrDefaultAsync<User, Tuple<Guid, int>>(@event.UserId, u => new Tuple<Guid, int>(u.Id, u.Points));
+            (Guid id, int points) = await _unitOfWork.GetByIdOrThrowAsync<User, Tuple<Guid, int>>(@event.UserId, u => new Tuple<Guid, int>(u.Id, u.Points));
 
             await _unitOfWork.UpdateAsync<User>(id, new
             {

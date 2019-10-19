@@ -24,7 +24,7 @@ namespace Backend.Core.Features.Points.EventHandler
         public async Task ExecuteAsync(PartnerTokenRegisteredEvent @event)
         {
             (Guid id, int points, double co2Saving) = await _unitOfWork
-                .GetByIdOrDefaultAsync<User, Tuple<Guid, int, double>>(
+                .GetByIdOrThrowAsync<User, Tuple<Guid, int, double>>(
                     @event.UserId, u => new Tuple<Guid, int, double>(u.Id, u.Points, u.Co2Saving));
 
             Token token = await _unitOfWork.GetByIdOrThrowAsync<Token>(@event.TokenId);
