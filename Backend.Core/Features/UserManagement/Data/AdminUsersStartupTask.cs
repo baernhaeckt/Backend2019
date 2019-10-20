@@ -14,12 +14,15 @@ namespace Backend.Core.Features.UserManagement.Data
     {
         private readonly IConfiguration _configuration;
 
+        private readonly IPasswordStorage _passwordStorage;
+
         private readonly IUnitOfWork _unitOfWork;
 
-        public AdminUsersStartupTask(IUnitOfWork unitOfWork, IConfiguration configuration)
+        public AdminUsersStartupTask(IUnitOfWork unitOfWork, IConfiguration configuration, IPasswordStorage passwordStorage)
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;
+            _passwordStorage = passwordStorage;
         }
 
         public async Task ExecuteAsync(CancellationToken cancellationToken)
@@ -32,7 +35,7 @@ namespace Backend.Core.Features.UserManagement.Data
             var user = new User
             {
                 Email = _configuration["AdminEmail"],
-                PasswordHash = _configuration["AdminPassword"],
+                PasswordHash = _passwordStorage.Create(_configuration["AdminPassword"]),
                 DisplayName = "Admin",
                 Roles = new List<string> { Roles.Administrator }
             };
