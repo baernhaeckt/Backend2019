@@ -12,7 +12,7 @@ namespace Backend.Tests.Integration
 {
     public class TestContext : WebApplicationFactory<Startup>
     {
-        private const bool UseMongoDb = true;
+        private const bool UseMongoDb = false;
 
         public TestContext() => NewTestUserHttpClient = CreateClient();
 
