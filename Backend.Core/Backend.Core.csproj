@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bogus" Version="28.3.1" />
-    <PackageReference Include="Bogus.Locations" Version="28.3.1" />
+    <PackageReference Include="Bogus" Version="28.4.1" />
+    <PackageReference Include="Bogus.Locations" Version="28.4.1" />
     <PackageReference Include="Silverback.Core" Version="0.10.0" />
     <PackageReference Include="Silverback.Core.Model" Version="0.10.0" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
