@@ -7,6 +7,8 @@ using Backend.Web;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NSubstitute;
 
 namespace Backend.Tests.Integration
 {
@@ -16,7 +18,7 @@ namespace Backend.Tests.Integration
 
         public TestContext() => NewTestUserHttpClient = CreateClient();
 
-        public InMemoryEmailService EmailService { get; } = new InMemoryEmailService();
+        public InMemoryEmailService EmailService { get; } = new InMemoryEmailService(Substitute.For<ILogger<InMemoryEmailService>>());
 
         public string NewTestUser { get; set; } = string.Empty;
 
