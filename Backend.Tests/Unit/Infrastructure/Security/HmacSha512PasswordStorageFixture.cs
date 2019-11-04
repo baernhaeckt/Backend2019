@@ -1,7 +1,7 @@
 ﻿using Backend.Infrastructure.Security;
 using Xunit;
 
-namespace Backend.Tests.Unit.Core.Security
+namespace Backend.Tests.Unit.Infrastructure.Security
 {
     public class HmacSha512PasswordStorageFixture
     {
