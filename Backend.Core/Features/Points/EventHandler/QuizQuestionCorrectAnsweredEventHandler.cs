@@ -34,6 +34,7 @@ namespace Backend.Core.Features.Points.EventHandler
                     {
                         Action = "Hat eine korrekte Quizantwort gegeben.",
                         Co2Saving = 0.0,
+                        Point = @event.QuestionPoints,
                         SponsorRef = "Quiz",
                         SufficientType = new UserSufficientType { Title = "Wissen" }
                     }
