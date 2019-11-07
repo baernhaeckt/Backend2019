@@ -21,7 +21,7 @@ namespace Backend.Core.Features.UserManagement
 
         public static void UserSignInSuccessful(this ILogger logger, string email)
         {
-            logger.LogInformation(new EventId(4), typeof(Logging).Namespace, "Successful sign in from partner {email}.");
+            logger.LogInformation(new EventId(4), typeof(Logging).Namespace, "Successful sign in from partner {email}.", email);
         }
 
         public static void UnableToLookupAddress(this ILogger logger, string city, string street, string postalCode)
