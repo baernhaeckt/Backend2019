@@ -2,13 +2,16 @@
 {
     public class UserProfileQueryResult
     {
-        public UserProfileQueryResult(string displayName, int points, string email, double latitude, double longitude)
+        public UserProfileQueryResult(string displayName, int points, string email, in double locationLatitude, in double locationLongitude, string locationCity, string locationStreet, string city, string locationPostalCode)
         {
             DisplayName = displayName;
             Points = points;
             Email = email;
-            Latitude = latitude;
-            Longitude = longitude;
+            Latitude = locationLatitude;
+            Longitude = locationLongitude;
+            City = locationCity;
+            Street = locationStreet;
+            PostalCode = locationPostalCode;
         }
 
         public string DisplayName { get; }
@@ -20,5 +23,11 @@
         public double Latitude { get; }
 
         public double Longitude { get; }
+
+        public string PostalCode { get; }
+
+        public string City { get; }
+
+        public string Street { get; }
     }
 }
