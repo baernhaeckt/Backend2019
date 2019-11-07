@@ -4,11 +4,6 @@ namespace Backend.Core.Features.UserManagement
 {
     public static class Logging
     {
-        public static void UnableToLookupAddress(this ILogger logger, string city, string street, string postalCode)
-        {
-            logger.LogWarning(new EventId(5), nameof(Logging), "Unable to get coordinates for location. {city}, {street}, {postalCode}", city, street, postalCode);
-        }
-
         public static void UserSignInInitiated(this ILogger logger, string email)
         {
             logger.LogInformation(new EventId(1), typeof(Logging).Namespace, "Process sign in request for {email}.", email);
@@ -27,6 +22,11 @@ namespace Backend.Core.Features.UserManagement
         public static void UserSignInSuccessful(this ILogger logger, string email)
         {
             logger.LogInformation(new EventId(4), typeof(Logging).Namespace, "Successful sign in from partner {email}.");
+        }
+
+        public static void UnableToLookupAddress(this ILogger logger, string city, string street, string postalCode)
+        {
+            logger.LogWarning(new EventId(5), nameof(Logging), "Unable to get coordinates for location. {city}, {street}, {postalCode}", city, street, postalCode);
         }
     }
 }
