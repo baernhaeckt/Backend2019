@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: Backend.Web/Dockerfile
+    ports:
+    - 5000:80
   mongo:
     image: mongo
     ports:
