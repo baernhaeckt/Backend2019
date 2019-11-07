@@ -6,7 +6,7 @@ namespace Backend.Core.Features.UserManagement
     {
         public static void UnableToLookupAddress(this ILogger logger, string city, string street, string postalCode)
         {
-            logger.LogWarning(new EventId(1), nameof(Logging), "Unable to get coordinates for location. {city}, {street}, {postalCode}", city, street, postalCode);
+            logger.LogWarning(new EventId(5), nameof(Logging), "Unable to get coordinates for location. {city}, {street}, {postalCode}", city, street, postalCode);
         }
 
         public static void UserSignInInitiated(this ILogger logger, string email)
