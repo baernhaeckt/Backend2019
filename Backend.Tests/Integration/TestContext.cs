@@ -14,15 +14,21 @@ namespace Backend.Tests.Integration
 {
     public class TestContext : WebApplicationFactory<Startup>
     {
-        private const bool UseMongoDb = false;
+        public TestContext()
+        {
+            NewTestUserHttpClient = CreateClient();
+            AnonymousHttpClient = CreateClient();
+        }
 
-        public TestContext() => NewTestUserHttpClient = CreateClient();
+        public bool UseMongoDb { get; } = false;
 
         public InMemoryEmailService EmailService { get; } = new InMemoryEmailService(Substitute.For<ILogger<InMemoryEmailService>>());
 
         public string NewTestUser { get; set; } = string.Empty;
 
         public HttpClient NewTestUserHttpClient { get; }
+
+        public HttpClient AnonymousHttpClient { get; }
 
         protected override IHost CreateHost(IHostBuilder builder)
         {

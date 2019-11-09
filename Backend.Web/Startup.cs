@@ -12,9 +12,11 @@ using Backend.Infrastructure.Email;
 using Backend.Infrastructure.Geolocation;
 using Backend.Infrastructure.Persistence;
 using Backend.Infrastructure.Security;
+using Backend.Web.Diagnostics;
 using Backend.Web.Middleware;
 using Backend.Web.Setup;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -43,8 +45,10 @@ namespace Backend.Web
             services.AddMvcWithCors();
             services.AddJwtAuthentication();
 
+            IHealthChecksBuilder healthChecksBuilder = services.AddHealthChecks();
+
             // Infrastructure
-            services.AddMongoDbPersistence(_configuration);
+            services.AddMongoDbPersistence(_configuration, healthChecksBuilder);
             services.AddInfrastructureEmail(_configuration, _hostEnvironment);
             services.AddGeolocation(_configuration, _hostEnvironment);
             services.AddSecurity(_hostEnvironment);
@@ -82,6 +86,12 @@ namespace Backend.Web
                     .AllowCredentials());
 
             app.UseRouting();
+
+            app.UseHealthChecks("/health", new HealthCheckOptions
+            {
+                Predicate = _ => true,
+                ResponseWriter = HealthCheckJsonResponseWriter.WriteHealthCheckJsonResponse
+            });
 
             app.UseAuthentication();
             app.UseAuthorization();

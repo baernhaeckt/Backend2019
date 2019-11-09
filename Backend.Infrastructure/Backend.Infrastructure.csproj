@@ -17,6 +17,8 @@
     <PackageReference Include="MongoDbGenericRepository" Version="1.4.0" />
     <!-- Remove when MongoDbGenericRepository was updated. -->
     <PackageReference Include="MongoDB.Driver" Version="2.9.2" />
+    <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="3.0.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.6.0" />
   </ItemGroup>
 

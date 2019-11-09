@@ -7,11 +7,8 @@ namespace Backend.Tests.Integration
     {
         public OrderedTestContext()
         {
-            AnonymousHttpClient = CreateClient();
             PartnerHttpClient = CreateClient();
         }
-
-        public HttpClient AnonymousHttpClient { get; }
 
         public HttpClient PartnerHttpClient { get; }
 
