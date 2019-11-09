@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Security.Cryptography;
-using Backend.Infrastructure.Security.Abstraction;
+using Backend.Infrastructure.Abstraction.Security;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Backend.Infrastructure.Security

@@ -6,7 +6,7 @@ using Backend.Core.Entities;
 using Backend.Core.Extensions;
 using Backend.Core.Features.Friendship;
 using Backend.Core.Features.Points.Models;
-using Backend.Infrastructure.Persistence.Abstraction;
+using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Core.Features.Points.Controllers

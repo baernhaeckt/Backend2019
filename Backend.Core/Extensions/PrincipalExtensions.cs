@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
-using Backend.Infrastructure.Security.Abstraction;
+using Backend.Infrastructure.Abstraction.Security;
 
 namespace Backend.Core.Extensions
 {

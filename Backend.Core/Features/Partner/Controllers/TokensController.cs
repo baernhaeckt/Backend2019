@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Backend.Core.Extensions;
 using Backend.Core.Features.Partner.Commands;
-using Backend.Infrastructure.Security.Abstraction;
+using Backend.Infrastructure.Abstraction.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Silverback.Messaging.Publishing;

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
-using Backend.Infrastructure.Security.Abstraction;
+using Backend.Infrastructure.Abstraction.Security;
 
 namespace Backend.Infrastructure.Security
 {

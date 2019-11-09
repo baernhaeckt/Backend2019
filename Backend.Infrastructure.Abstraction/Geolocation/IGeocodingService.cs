@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Backend.Infrastructure.Geolocation.Abstraction
+namespace Backend.Infrastructure.Abstraction.Geolocation
 {
     public interface IGeocodingService
     {

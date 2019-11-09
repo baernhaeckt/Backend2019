@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Backend.Infrastructure.Email.Abstraction;
+using Backend.Infrastructure.Abstraction.Email;
 using Microsoft.Extensions.Logging;
 
 namespace Backend.Infrastructure.Email.Fakes
@@ -11,10 +11,7 @@ namespace Backend.Infrastructure.Email.Fakes
 
         private readonly IList<EmailMessage> _messages = new List<EmailMessage>();
 
-        public InMemoryEmailService(ILogger<InMemoryEmailService> logger)
-        {
-            _logger = logger;
-        }
+        public InMemoryEmailService(ILogger<InMemoryEmailService> logger) => _logger = logger;
 
         public IEnumerable<EmailMessage> Messages => _messages;
 

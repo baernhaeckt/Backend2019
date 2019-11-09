@@ -9,7 +9,7 @@ using Backend.Core.Entities.Quiz;
 using Backend.Core.Events;
 using Backend.Core.Extensions;
 using Backend.Core.Features.Quiz.Models;
-using Backend.Infrastructure.Persistence.Abstraction;
+using Backend.Infrastructure.Abstraction.Persistence;
 using Silverback.Messaging.Publishing;
 
 namespace Backend.Core.Features.Quiz

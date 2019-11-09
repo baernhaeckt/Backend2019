@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Backend.Core.Entities.Quiz;
-using Backend.Infrastructure.Hosting.Abstraction;
-using Backend.Infrastructure.Persistence.Abstraction;
+using Backend.Infrastructure.Abstraction.Hosting;
+using Backend.Infrastructure.Abstraction.Persistence;
 
 namespace Backend.Core.Features.Quiz.Data
 {

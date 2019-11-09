@@ -1,5 +1,5 @@
 ﻿using System;
-using Backend.Infrastructure.Persistence.Abstraction;
+using Backend.Infrastructure.Abstraction.Persistence;
 
 namespace Backend.Core.Entities
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
-using Backend.Infrastructure.Persistence.Abstraction;
+using Backend.Infrastructure.Abstraction.Persistence;
 
 namespace Backend.Tests.Integration.Utilities
 {
@@ -26,49 +26,49 @@ namespace Backend.Tests.Integration.Utilities
         protected IDictionary<Type, IList<object>> Entities => _entities;
 
         public Task<long> CountAsync<TEntity>()
-            where TEntity : Entity, new() =>
+            where TEntity : IEntity, new() =>
             Task.FromResult(_entities[typeof(TEntity)].LongCount());
 
         public Task<long> CountAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
-            where TEntity : Entity, new() =>
+            where TEntity : IEntity, new() =>
             Task.FromResult(_entities[typeof(TEntity)].LongCount(record => filterPredicate.Compile().Invoke((TEntity)record)));
 
         public Task<IEnumerable<TEntity>> GetAllAsync<TEntity>()
-            where TEntity : Entity, new() =>
+            where TEntity : IEntity, new() =>
             Task.FromResult(_entities[typeof(TEntity)].Cast<TEntity>());
 
         public Task<TEntity> GetByIdOrDefaultAsync<TEntity>(Guid id)
-            where TEntity : Entity, new() =>
+            where TEntity : IEntity, new() =>
             Task.FromResult(_entities[typeof(TEntity)].Cast<TEntity>().SingleOrDefault(e => e.Id == id));
 
         public Task<TEntity> GetByIdOrThrowAsync<TEntity>(Guid id)
-            where TEntity : Entity, new() =>
+            where TEntity : IEntity, new() =>
             Task.FromResult(_entities[typeof(TEntity)].Cast<TEntity>().Single(e => e.Id == id));
 
         public Task<TProjection?> GetByIdOrDefaultAsync<TEntity, TProjection>(Guid id, Expression<Func<TEntity, TProjection>> selectPredicate)
-            where TEntity : Entity, new()
+            where TEntity : IEntity, new()
             where TProjection : class =>
             SingleOrDefaultAsync(e => e.Id == id, selectPredicate);
 
         public Task<TProjection> GetByIdOrThrowAsync<TEntity, TProjection>(Guid id, Expression<Func<TEntity, TProjection>> selectPredicate)
-            where TEntity : Entity, new()
+            where TEntity : IEntity, new()
             where TProjection : class =>
             Task.FromResult(selectPredicate.Compile().Invoke(_entities[typeof(TEntity)].Cast<TEntity>().Single(e => e.Id == id)));
 
         public Task<IEnumerable<TEntity>> WhereAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
-            where TEntity : Entity, new() =>
+            where TEntity : IEntity, new() =>
             Task.FromResult(_entities[typeof(TEntity)].Cast<TEntity>().Where(filterPredicate.Compile()));
 
         public Task<TEntity> FirstOrDefaultAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
-            where TEntity : Entity, new() =>
+            where TEntity : IEntity, new() =>
             Task.FromResult(_entities[typeof(TEntity)].Cast<TEntity>().FirstOrDefault(filterPredicate.Compile()));
 
         public Task<TEntity> SingleOrDefaultAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
-            where TEntity : Entity, new() =>
+            where TEntity : IEntity, new() =>
             Task.FromResult(_entities[typeof(TEntity)].Cast<TEntity>().SingleOrDefault(filterPredicate.Compile()));
 
         public Task<TProjection?> SingleOrDefaultAsync<TEntity, TProjection>(Expression<Func<TEntity, bool>> filterPredicate, Expression<Func<TEntity, TProjection>> selectPredicate)
-            where TEntity : Entity, new()
+            where TEntity : IEntity, new()
             where TProjection : class
         {
             TEntity queryResult = _entities[typeof(TEntity)].Cast<TEntity>().SingleOrDefault(filterPredicate.Compile());
@@ -82,11 +82,11 @@ namespace Backend.Tests.Integration.Utilities
         }
 
         public Task<TEntity> SingleAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
-            where TEntity : Entity, new() =>
+            where TEntity : IEntity, new() =>
             Task.FromResult(_entities[typeof(TEntity)].Cast<TEntity>().Single(filterPredicate.Compile()));
 
         public Task<TProjection> SingleAsync<TEntity, TProjection>(Expression<Func<TEntity, bool>> filterPredicate, Expression<Func<TEntity, TProjection>> selectPredicate)
-            where TEntity : Entity, new()
+            where TEntity : IEntity, new()
             where TProjection : class =>
             Task.FromResult(selectPredicate.Compile().Invoke(_entities[typeof(TEntity)].Cast<TEntity>().Single(filterPredicate.Compile())));
     }

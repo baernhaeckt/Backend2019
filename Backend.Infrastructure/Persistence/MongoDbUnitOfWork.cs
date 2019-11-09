@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Backend.Infrastructure.Persistence.Abstraction;
+using Backend.Infrastructure.Abstraction.Persistence;
 using MongoDB.Driver;
 
 namespace Backend.Infrastructure.Persistence
@@ -17,7 +17,7 @@ namespace Backend.Infrastructure.Persistence
         }
 
         public virtual async Task<TEntity> InsertAsync<TEntity>(TEntity record)
-            where TEntity : Entity, new()
+            where TEntity : IEntity, new()
         {
             try
             {
@@ -34,7 +34,7 @@ namespace Backend.Infrastructure.Persistence
         }
 
         public virtual async Task InsertManyAsync<TEntity>(IEnumerable<TEntity> records)
-            where TEntity : Entity, new()
+            where TEntity : IEntity, new()
         {
             try
             {
@@ -54,7 +54,7 @@ namespace Backend.Infrastructure.Persistence
         }
 
         public virtual async Task DeleteAsync<TEntity>(Guid id)
-            where TEntity : Entity, new()
+            where TEntity : IEntity, new()
         {
             var filter = new ExpressionFilterDefinition<TEntity>(collection => collection.Id == id);
             DeleteResult result = await DbContextFactory.Create().GetCollection<TEntity>().DeleteOneAsync(filter);
@@ -65,7 +65,7 @@ namespace Backend.Infrastructure.Persistence
         }
 
         public virtual async Task UpdateAsync<TEntity>(TEntity record)
-            where TEntity : Entity, new()
+            where TEntity : IEntity, new()
         {
             DbContext dbContext = DbContextFactory.Create();
             record.UpdatedAt = DateTime.UtcNow;
@@ -74,7 +74,7 @@ namespace Backend.Infrastructure.Persistence
         }
 
         public virtual async Task UpdateAsync<TEntity>(Guid id, object definition)
-            where TEntity : Entity, new()
+            where TEntity : IEntity, new()
         {
             DbContext dbContext = DbContextFactory.Create();
 
@@ -105,7 +105,7 @@ namespace Backend.Infrastructure.Persistence
             }
 
             UpdateDefinition<TEntity> updateDefinition = Builders<TEntity>.Update.Combine(updateDefinitions);
-            FilterDefinition<TEntity> filter = Builders<TEntity>.Filter.Eq(nameof(Entity.Id), id);
+            FilterDefinition<TEntity> filter = Builders<TEntity>.Filter.Eq(nameof(IEntity.Id), id);
             UpdateResult result = await dbContext.GetCollection<TEntity>().UpdateOneAsync(filter, updateDefinition);
         }
     }

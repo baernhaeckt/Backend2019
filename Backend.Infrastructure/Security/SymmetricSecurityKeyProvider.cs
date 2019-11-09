@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using Backend.Infrastructure.Security.Abstraction;
+using Backend.Infrastructure.Abstraction.Security;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 

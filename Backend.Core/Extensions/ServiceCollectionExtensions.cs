@@ -1,4 +1,4 @@
-﻿using Backend.Infrastructure.Hosting.Abstraction;
+﻿using Backend.Infrastructure.Abstraction.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backend.Core.Extensions

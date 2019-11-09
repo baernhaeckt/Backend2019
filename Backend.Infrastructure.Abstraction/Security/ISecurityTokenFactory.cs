@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Backend.Infrastructure.Security.Abstraction
+namespace Backend.Infrastructure.Abstraction.Security
 {
     public interface ISecurityTokenFactory
     {

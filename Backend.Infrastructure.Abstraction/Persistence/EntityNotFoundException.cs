@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Backend.Infrastructure.Persistence.Abstraction
+namespace Backend.Infrastructure.Abstraction.Persistence
 {
     [SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "Must not be invoked with those constructors.")]
     public class EntityNotFoundException : Exception

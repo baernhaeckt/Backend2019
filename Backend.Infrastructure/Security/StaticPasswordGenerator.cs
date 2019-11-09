@@ -1,4 +1,4 @@
-﻿using Backend.Infrastructure.Security.Abstraction;
+﻿using Backend.Infrastructure.Abstraction.Security;
 using Microsoft.Extensions.Configuration;
 
 namespace Backend.Infrastructure.Security

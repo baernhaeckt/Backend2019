@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Backend.Infrastructure.Persistence.Abstraction;
+using Backend.Infrastructure.Abstraction.Persistence;
 
 namespace Backend.Tests.Integration.Utilities
 {
     public class InMemoryUnitOfWork : InMemoryReader, IUnitOfWork
     {
         public Task DeleteAsync<TEntity>(Guid id)
-            where TEntity : Entity, new()
+            where TEntity : IEntity, new()
         {
             TEntity record = Entities[typeof(TEntity)].Cast<TEntity>().Single(e => e.Id == id);
             Entities[typeof(TEntity)].Remove(record);
@@ -19,7 +19,7 @@ namespace Backend.Tests.Integration.Utilities
         }
 
         public Task<TEntity> InsertAsync<TEntity>(TEntity record)
-            where TEntity : Entity, new()
+            where TEntity : IEntity, new()
         {
             if (record.Id == Guid.Empty)
             {
@@ -31,7 +31,7 @@ namespace Backend.Tests.Integration.Utilities
         }
 
         public Task InsertManyAsync<TEntity>(IEnumerable<TEntity> records)
-            where TEntity : Entity, new()
+            where TEntity : IEntity, new()
         {
             foreach (TEntity record in records)
             {
@@ -42,7 +42,7 @@ namespace Backend.Tests.Integration.Utilities
         }
 
         public async Task UpdateAsync<TEntity>(Guid id, object updateDefinition)
-            where TEntity : Entity, new()
+            where TEntity : IEntity, new()
         {
             TEntity record = await GetByIdOrThrowAsync<TEntity>(id);
             foreach (PropertyInfo propertyInfo in updateDefinition.GetType().GetProperties())
@@ -83,7 +83,7 @@ namespace Backend.Tests.Integration.Utilities
         }
 
         public async Task UpdateAsync<TEntity>(TEntity record)
-            where TEntity : Entity, new()
+            where TEntity : IEntity, new()
         {
             await DeleteAsync<TEntity>(record.Id);
             await InsertAsync(record);

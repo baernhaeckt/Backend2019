@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Backend.Infrastructure.Geolocation.Abstraction;
+using Backend.Infrastructure.Abstraction.Geolocation;
 using Geocoding;
 using Geocoding.Microsoft;
 using Microsoft.Extensions.Options;

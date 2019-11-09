@@ -1,4 +1,4 @@
-﻿using Backend.Infrastructure.Persistence.Abstraction;
+﻿using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

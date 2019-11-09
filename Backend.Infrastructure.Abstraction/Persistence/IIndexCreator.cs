@@ -1,11 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Backend.Infrastructure.Persistence.Abstraction
+namespace Backend.Infrastructure.Abstraction.Persistence
 {
     public interface IIndexCreator
     {
         Task Create<TEntity>(string field, CancellationToken cancellationToken)
-            where TEntity : Entity, new();
+            where TEntity : IEntity, new();
     }
 }

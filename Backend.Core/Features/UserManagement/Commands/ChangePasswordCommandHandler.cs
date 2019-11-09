@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
-using Backend.Infrastructure.Persistence.Abstraction;
-using Backend.Infrastructure.Security.Abstraction;
+using Backend.Infrastructure.Abstraction.Persistence;
+using Backend.Infrastructure.Abstraction.Security;
 using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Features.UserManagement.Commands

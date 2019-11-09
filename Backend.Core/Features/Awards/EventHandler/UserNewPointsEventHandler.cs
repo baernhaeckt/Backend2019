@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Entities.Awards;
 using Backend.Core.Events;
-using Backend.Infrastructure.Persistence.Abstraction;
+using Backend.Infrastructure.Abstraction.Persistence;
 using Silverback.Messaging.Publishing;
 using Silverback.Messaging.Subscribers;
 

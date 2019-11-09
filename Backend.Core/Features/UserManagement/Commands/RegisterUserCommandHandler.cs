@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Events;
-using Backend.Infrastructure.Persistence.Abstraction;
-using Backend.Infrastructure.Security.Abstraction;
+using Backend.Infrastructure.Abstraction.Persistence;
+using Backend.Infrastructure.Abstraction.Security;
 using Silverback.Messaging.Publishing;
 using Silverback.Messaging.Subscribers;
 

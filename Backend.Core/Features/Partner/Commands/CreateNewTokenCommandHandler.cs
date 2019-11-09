@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
-using Backend.Infrastructure.Persistence.Abstraction;
+using Backend.Infrastructure.Abstraction.Persistence;
 using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Features.Partner.Commands

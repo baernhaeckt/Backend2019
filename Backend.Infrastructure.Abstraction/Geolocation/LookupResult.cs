@@ -1,4 +1,4 @@
-﻿namespace Backend.Infrastructure.Geolocation.Abstraction
+﻿namespace Backend.Infrastructure.Abstraction.Geolocation
 {
     public class LookupResult
     {

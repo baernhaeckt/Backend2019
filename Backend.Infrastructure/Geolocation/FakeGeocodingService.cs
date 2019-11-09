@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Backend.Infrastructure.Geolocation.Abstraction;
+using Backend.Infrastructure.Abstraction.Geolocation;
 
 namespace Backend.Infrastructure.Geolocation
 {

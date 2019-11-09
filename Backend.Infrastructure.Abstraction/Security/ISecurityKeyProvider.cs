@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 
-namespace Backend.Infrastructure.Security.Abstraction
+namespace Backend.Infrastructure.Abstraction.Security
 {
     public interface ISecurityKeyProvider
     {

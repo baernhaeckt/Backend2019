@@ -2,7 +2,7 @@
 {
     public class UserProfileQueryResult
     {
-        public UserProfileQueryResult(string displayName, int points, string email, in double locationLatitude, in double locationLongitude, string locationCity, string locationStreet, string city, string locationPostalCode)
+        public UserProfileQueryResult(string displayName, int points, string email, in double locationLatitude, in double locationLongitude, string locationCity, string locationStreet, string locationPostalCode)
         {
             DisplayName = displayName;
             Points = points;

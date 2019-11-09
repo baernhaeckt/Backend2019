@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Backend.Infrastructure.Persistence.Abstraction;
+using Backend.Infrastructure.Abstraction.Persistence;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -15,7 +15,7 @@ namespace Backend.Infrastructure.Persistence
         public IndexCreator(DbContextFactory dbContextFactory) => _dbContextFactory = dbContextFactory;
 
         public async Task Create<TEntity>(string field, CancellationToken cancellationToken)
-            where TEntity : Entity, new()
+            where TEntity : IEntity, new()
         {
             DbContext dbContext = _dbContextFactory.Create();
 

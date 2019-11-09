@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Backend.Infrastructure.Persistence
+namespace Backend.Infrastructure.Abstraction.Persistence
 {
     public class DuplicateKeyException : Exception
     {

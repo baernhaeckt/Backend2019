@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
-using Backend.Infrastructure.Geolocation.Abstraction;
-using Backend.Infrastructure.Persistence.Abstraction;
+using Backend.Infrastructure.Abstraction.Geolocation;
+using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.Extensions.Logging;
 using Silverback.Messaging.Subscribers;
 

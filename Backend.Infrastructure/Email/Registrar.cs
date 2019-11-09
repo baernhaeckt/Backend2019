@@ -1,4 +1,4 @@
-﻿using Backend.Infrastructure.Email.Abstraction;
+﻿using Backend.Infrastructure.Abstraction.Email;
 using Backend.Infrastructure.Email.Fakes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

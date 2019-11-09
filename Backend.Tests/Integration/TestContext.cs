@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
-using Backend.Infrastructure.Email.Abstraction;
+using Backend.Infrastructure.Abstraction.Email;
+using Backend.Infrastructure.Abstraction.Persistence;
 using Backend.Infrastructure.Email.Fakes;
-using Backend.Infrastructure.Persistence.Abstraction;
 using Backend.Tests.Integration.Utilities;
 using Backend.Web;
 using Microsoft.AspNetCore.Mvc.Testing;

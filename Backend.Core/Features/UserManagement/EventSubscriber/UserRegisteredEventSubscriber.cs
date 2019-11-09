@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Backend.Core.Events;
-using Backend.Infrastructure.Email.Abstraction;
+using Backend.Infrastructure.Abstraction.Email;
 using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Features.UserManagement.EventSubscriber

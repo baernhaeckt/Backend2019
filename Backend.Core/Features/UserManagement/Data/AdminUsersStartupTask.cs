@@ -2,10 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
-using Backend.Infrastructure.Hosting.Abstraction;
-using Backend.Infrastructure.Persistence;
-using Backend.Infrastructure.Persistence.Abstraction;
-using Backend.Infrastructure.Security.Abstraction;
+using Backend.Infrastructure.Abstraction.Hosting;
+using Backend.Infrastructure.Abstraction.Persistence;
+using Backend.Infrastructure.Abstraction.Security;
 using Microsoft.Extensions.Configuration;
 
 namespace Backend.Core.Features.UserManagement.Data

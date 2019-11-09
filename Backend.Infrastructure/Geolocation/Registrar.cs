@@ -1,4 +1,4 @@
-﻿using Backend.Infrastructure.Geolocation.Abstraction;
+﻿using Backend.Infrastructure.Abstraction.Geolocation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
