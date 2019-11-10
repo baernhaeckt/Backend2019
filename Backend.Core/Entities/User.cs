@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Backend.Core.Entities.Awards;
-using Backend.Infrastructure.Abstraction.Persistence;
 
 namespace Backend.Core.Entities
 {
@@ -18,8 +17,10 @@ namespace Backend.Core.Entities
 
         public IList<Guid> Friends { get; set; } = Enumerable.Empty<Guid>().ToList();
 
+        [Obsolete("Calculate using the point history.")]
         public int Points { get; set; }
 
+        [Obsolete("Calculate using the point history.")]
         public double Co2Saving { get; set; }
 
         public IList<PointAction> PointHistory { get; set; } = Enumerable.Empty<PointAction>().ToList();

@@ -53,6 +53,13 @@ namespace Backend.Infrastructure.Persistence
             return (await dbContext.GetCollection<TEntity>().FindAsync(FilterDefinition<TEntity>.Empty)).ToEnumerable();
         }
 
+        public IQueryable<TEntity> GetQueryable<TEntity>()
+            where TEntity : IEntity, new()
+        {
+            DbContext dbContext = DbContextFactory.Create();
+            return dbContext.GetCollection<TEntity>().AsQueryable();
+        }
+
         public async Task<long> CountAsync<TEntity>()
             where TEntity : IEntity, new()
         {

@@ -25,12 +25,12 @@ namespace Backend.Core.Features.Friendship
 
         public async Task AddFriend(string friendEmail)
         {
-            await ConnectFriends(_principal.Id(), friendEmail);
+            await ConnectFriends(_principal.Id(), friendEmail.ToLowerInvariant());
         }
 
         public async Task ConnectFriends(Guid userId, string friendEmail)
         {
-            User friendUser = await _unitOfWork.SingleAsync<User>(u => u.Email == friendEmail && u.Roles.Any(r => r == Roles.User));
+            User friendUser = await _unitOfWork.SingleAsync<User>(u => u.Email == friendEmail.ToLowerInvariant() && u.Roles.Any(r => r == Roles.User));
 
             if (userId == friendUser.Id)
             {

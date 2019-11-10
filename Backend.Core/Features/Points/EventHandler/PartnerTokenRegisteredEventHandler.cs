@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Events;
@@ -25,7 +26,7 @@ namespace Backend.Core.Features.Points.EventHandler
         {
             (Guid id, int points, double co2Saving) = await _unitOfWork
                 .GetByIdOrThrowAsync<User, Tuple<Guid, int, double>>(
-                    @event.UserId, u => new Tuple<Guid, int, double>(u.Id, u.Points, u.Co2Saving));
+                    @event.UserId, u => new Tuple<Guid, int, double>(u.Id, u.PointHistory.Sum(pa => pa.Point), u.PointHistory.Sum(pa => pa.Co2Saving)));
 
             Token token = await _unitOfWork.GetByIdOrThrowAsync<Token>(@event.TokenId);
 

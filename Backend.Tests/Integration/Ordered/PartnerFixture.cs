@@ -3,13 +3,14 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Backend.Core.Features.Partner.Data.Testing;
+using Backend.Core.Features.UserManagement.Models;
 using Backend.Tests.Integration.Utilities.Extensions;
 using Xunit;
 using Xunit.Extensions.Ordering;
 
 namespace Backend.Tests.Integration
 {
-    [Order(2)]
+    [Order(3)]
     [Collection("IntegrationTests")]
     [Trait("Category", "Integration")]
     public class PartnerFixture
@@ -107,14 +108,46 @@ namespace Backend.Tests.Integration
             response.EnsureSuccessStatusCode();
             string tokenValue = await response.Content.ReadAsStringAsync();
 
+            for (int i = 0; i < 2; i++)
+            {
+                await UseMultiuseToken(_context.NewTestUserHttpClient, tokenValue);
+            }
+
+            // Will be used to test the ranking.
+            // Prepare some users and use tokens to get them points.
+            // One of them hasn't the same Zip and one is not friend.
+            for (int i = 0; i < 5; i++)
+            {
+                await CreateUserMakeFriendWithTestUserAndUseToken("4000", tokenValue, i);
+            }
+
+            // This user shouldn't be in the "local" ranking later.
+            await CreateUserMakeFriendWithTestUserAndUseToken("4001", tokenValue, 5);
+        }
+
+        private async Task CreateUserMakeFriendWithTestUserAndUseToken(string zip, string tokenValue, int numberOfTokenUse)
+        {
+            var newHttpClient = _context.CreateNewHttpClient();
+            string newUserEmail = await newHttpClient.CreateUserAndSignIn();
+
+            var url = new Uri("api/profile", UriKind.Relative);
+            StringContent content = new UpdateProfileModel { DisplayName = "abc1", Street = "Abc", City = "Abc", PostalCode = zip }.ToStringContent();
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(url, content);
+            response.EnsureSuccessStatusCode();
+
+            for (int i = 0; i < numberOfTokenUse; i++)
+            {
+                await UseMultiuseToken(newHttpClient, tokenValue);
+            }
+
+            response = await _context.NewTestUserHttpClient.PostAsync(new Uri($"api/friends?friendEmail={newUserEmail}", UriKind.Relative), null);
+            response.EnsureSuccessStatusCode();
+        }
+
+        private static async Task UseMultiuseToken(HttpClient client, string tokenValue)
+        {
             var url = new Uri("api/tokens?tokenGuid=" + tokenValue, UriKind.Relative);
-            response = await _context.NewTestUserHttpClient.PostAsync(url, null);
-            response.EnsureSuccessStatusCode();
-
-            response = await _context.NewTestUserHttpClient.PostAsync(url, null);
-            response.EnsureSuccessStatusCode();
-
-            response = await _context.NewTestUserHttpClient.PostAsync(url, null);
+            HttpResponseMessage response = await client.PostAsync(url, null);
             response.EnsureSuccessStatusCode();
         }
     }

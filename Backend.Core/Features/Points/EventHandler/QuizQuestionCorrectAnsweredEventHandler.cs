@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Events;
@@ -23,7 +24,7 @@ namespace Backend.Core.Features.Points.EventHandler
 
         public async Task ExecuteAsync(QuizQuestionCorrectAnsweredEvent @event)
         {
-            (Guid id, int points) = await _unitOfWork.GetByIdOrThrowAsync<User, Tuple<Guid, int>>(@event.UserId, u => new Tuple<Guid, int>(u.Id, u.Points));
+            (Guid id, int points) = await _unitOfWork.GetByIdOrThrowAsync<User, Tuple<Guid, int>>(@event.UserId, u => new Tuple<Guid, int>(u.Id, u.PointHistory.Sum(pa => pa.Point)));
 
             await _unitOfWork.UpdateAsync<User>(id, new
             {

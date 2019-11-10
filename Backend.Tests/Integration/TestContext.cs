@@ -30,6 +30,8 @@ namespace Backend.Tests.Integration
 
         public HttpClient AnonymousHttpClient { get; }
 
+        public HttpClient CreateNewHttpClient() => CreateClient();
+
         protected override IHost CreateHost(IHostBuilder builder)
         {
             builder.UseEnvironment(Environments.Development);

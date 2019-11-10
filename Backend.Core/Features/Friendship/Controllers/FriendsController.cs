@@ -33,7 +33,8 @@ namespace Backend.Core.Features.Friendship.Controllers
                     Longitude = u.Location?.Longitude ?? 0.0,
                     Latitude = u.Location?.Latitude ?? 0.0
                 },
-                Points = u.Points
+                Points = u.PointHistory.Sum(p => p.Point),
+                Co2Saving = u.PointHistory.Sum(p => p.Co2Saving)
             });
         }
 

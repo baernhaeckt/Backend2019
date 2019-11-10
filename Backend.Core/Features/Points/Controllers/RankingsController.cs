@@ -1,13 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using Backend.Core.Entities;
 using Backend.Core.Extensions;
-using Backend.Core.Features.Friendship;
-using Backend.Core.Features.Points.Models;
-using Backend.Infrastructure.Abstraction.Persistence;
+using Backend.Core.Features.Points.Queries;
 using Microsoft.AspNetCore.Mvc;
+using Silverback.Messaging.Publishing;
 
 namespace Backend.Core.Features.Points.Controllers
 {
@@ -15,99 +11,32 @@ namespace Backend.Core.Features.Points.Controllers
     [ApiController]
     public class RankingsController : ControllerBase
     {
-        private readonly FriendsService _friendsService;
+        private readonly IQueryPublisher _queryPublisher;
 
-        private readonly ClaimsPrincipal _principal;
-
-        private readonly IUnitOfWork _unitOfWork;
-
-        public RankingsController(IUnitOfWork unitOfWork, ClaimsPrincipal principal, FriendsService friendsService)
-        {
-            _unitOfWork = unitOfWork;
-            _principal = principal;
-            _friendsService = friendsService;
-        }
+        public RankingsController(IQueryPublisher queryPublisher) => _queryPublisher = queryPublisher;
 
         [HttpGet("global")]
-        public async Task<IEnumerable<UserResponse>> GetGlobalAsync()
+        public async Task<IEnumerable<RankingQueryResult>> GetGlobal()
         {
-            IEnumerable<User> users = await _unitOfWork.GetAllAsync<User>();
-            IEnumerable<UserResponse> results = CreateResult(users);
-
-            return results.OrderByDescending(r => r.Points);
+            var rankingQuery = new RankingQuery();
+            return await _queryPublisher.ExecuteAsync(rankingQuery);
         }
 
         [HttpGet("local")]
-        public async Task<IEnumerable<UserResponse>> GetLocalAsync(string zip)
+        public async Task<IEnumerable<RankingQueryResult>> GetLocal(string zip)
         {
-            IEnumerable<User> users = await _unitOfWork.WhereAsync<User>(u => u.Location.PostalCode == zip);
-
-            IEnumerable<UserResponse> results = CreateResult(users);
-
-            return results.OrderByDescending(r => r.Points);
+            var rankingQuery = new RankingByZipQuery(zip);
+            return await _queryPublisher.ExecuteAsync(rankingQuery);
         }
 
         [HttpGet("friends")]
-        public async Task<IEnumerable<UserResponse>> GetFriendsAsync()
+        public async Task<IEnumerable<RankingQueryResult>> GetFriends()
         {
-            IEnumerable<UserResponse> results = CreateResult(await _friendsService.GetFriends());
-
-            return results.OrderByDescending(u => u.Points);
+            var rankingQuery = new RankingForUserFriendsQuery(HttpContext.User.Id());
+            return await _queryPublisher.ExecuteAsync(rankingQuery);
         }
 
         [HttpGet("summary")]
-        public async Task<RankingSummary> GetSummary()
-        {
-            User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(_principal.Id());
-            string zipCode = user.Location?.PostalCode ?? "3000";
-
-            IEnumerable<User> allUsers = (await _unitOfWork.GetAllAsync<User>()).ToList();
-            IOrderedEnumerable<UserResponse> global = CreateResult(allUsers).OrderByDescending(u => u.Points);
-            IOrderedEnumerable<UserResponse> local = CreateResult(allUsers.Where(u => u.Location != null && u.Location.PostalCode == zipCode)).OrderByDescending(u => u.Points);
-            IOrderedEnumerable<UserResponse> friends = CreateResult(await _friendsService.GetFriends()).OrderByDescending(u => u.Points);
-
-            return new RankingSummary
-            {
-                FriendRank = GetRank(friends, user),
-                GlobalRank = GetRank(global, user),
-                LocalRank = GetRank(local, user)
-            };
-        }
-
-        private static int GetRank(IEnumerable<UserResponse> list, User user)
-        {
-            var rank = 1;
-            foreach (UserResponse u in list)
-            {
-                if (u.Id == user.Id)
-                {
-                    break;
-                }
-
-                rank++;
-            }
-
-            return rank;
-        }
-
-        private static IEnumerable<UserResponse> CreateResult(IEnumerable<User> users)
-        {
-            users = users.ToList();
-            IList<UserResponse> results = new List<UserResponse>(users.Count());
-
-            foreach (User user in users)
-            {
-                int pointsForUser = user.PointHistory.Sum(p => p.Point);
-
-                results.Add(new UserResponse
-                {
-                    Id = user.Id,
-                    DisplayName = user.DisplayName,
-                    Points = pointsForUser
-                });
-            }
-
-            return results;
-        }
+        public async Task<RankingSummaryQueryResult> GetSummary() => await _queryPublisher.ExecuteAsync(new RankingSummaryQuery(HttpContext.User.Id()));
     }
 }

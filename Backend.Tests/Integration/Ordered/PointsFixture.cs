@@ -25,7 +25,7 @@ namespace Backend.Tests.Integration
             var url = new Uri("api/points", UriKind.Relative);
             HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
             IEnumerable<PointResponse> pointResponse = await response.OnSuccessDeserialize<IEnumerable<PointResponse>>();
-            Assert.Equal(8, pointResponse.Count());
+            Assert.Equal(7, pointResponse.Count());
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace Backend.Tests.Integration
         [Fact]
         public async Task RankingSummary_Successful()
         {
-            var url = new Uri("api/rankings/friends", UriKind.Relative);
+            var url = new Uri("api/rankings/summary", UriKind.Relative);
             HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
         }

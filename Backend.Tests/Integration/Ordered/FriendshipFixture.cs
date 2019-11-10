@@ -12,7 +12,7 @@ using Xunit.Extensions.Ordering;
 
 namespace Backend.Tests.Integration
 {
-    [Order(3)]
+    [Order(2)]
     [Collection("IntegrationTests")]
     [Trait("Category", "Integration")]
     public class FriendshipFixture

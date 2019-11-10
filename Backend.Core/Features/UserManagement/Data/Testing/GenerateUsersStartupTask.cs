@@ -92,7 +92,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
 
                 Faker<User> faker = new Faker<User>()
                     .RuleFor(u => u.Id, f => Guid.NewGuid())
-                    .RuleFor(u => u.Email, f => f.Internet.Email())
+                    .RuleFor(u => u.Email, f => f.Internet.Email().ToLowerInvariant())
                     .RuleFor(u => u.PasswordHash, _passwordStorage.Create(_passwordGenerator.Generate()))
                     .RuleFor(u => u.DisplayName, f => f.Name.FirstName())
                     .RuleFor(u => u.Roles, new List<string> { Roles.User })
