@@ -21,7 +21,7 @@ namespace Backend.Tests.Integration
             AnonymousHttpClient = CreateClient();
         }
 
-        public bool UseMongoDb { get; } = false;
+        public bool UseMongoDb { get; } = true;
 
         public InMemoryEmailService EmailService { get; } = new InMemoryEmailService(Substitute.For<ILogger<InMemoryEmailService>>());
 
