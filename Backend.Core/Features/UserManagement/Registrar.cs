@@ -7,7 +7,6 @@ using Backend.Core.Features.UserManagement.EventSubscriber;
 using Backend.Core.Features.UserManagement.Queries;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Features.UserManagement
 {
@@ -20,18 +19,18 @@ namespace Backend.Core.Features.UserManagement
             services.AddScoped<UsersController>();
 
             // Subscribers
-            services.AddTransient<ISubscriber, UserRegisteredEventSubscriber>();
+            services.AddScopedSubscriber<UserRegisteredEventSubscriber>();
 
             // CommandHandlers
-            services.AddTransient<ISubscriber, RegisterUserCommandHandler>();
-            services.AddTransient<ISubscriber, ChangePasswordCommandHandler>();
-            services.AddTransient<ISubscriber, UpdateProfileCommandHandler>();
+            services.AddScopedSubscriber<RegisterUserCommandHandler>();
+            services.AddScopedSubscriber<ChangePasswordCommandHandler>();
+            services.AddScopedSubscriber<UpdateProfileCommandHandler>();
 
             // QueryHandlers
-            services.AddTransient<ISubscriber, UserProfileQueryHandler>();
-            services.AddTransient<ISubscriber, EmailRegisteredQueryHandler>();
-            services.AddTransient<ISubscriber, SecurityTokenForUserQueryHandler>();
-            services.AddTransient<ISubscriber, SignInQueryHandler>();
+            services.AddScopedSubscriber<UserProfileQueryHandler>();
+            services.AddScopedSubscriber<EmailRegisteredQueryHandler>();
+            services.AddScopedSubscriber<SecurityTokenForUserQueryHandler>();
+            services.AddScopedSubscriber<SignInQueryHandler>();
 
             // Data setup
             services.AddStartupTask<SetIndexOnEmailStartupTask>();

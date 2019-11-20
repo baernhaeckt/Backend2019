@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Silverback.Messaging.Configuration;
 
 namespace Backend.Web
 {
@@ -41,7 +42,8 @@ namespace Backend.Web
             services.AddApplicationInsightsTelemetry();
 
             services.AddApiDocumentation();
-            services.AddBus(options => options.UseModel());
+            services.AddSilverback()
+                .UseModel();
             services.AddMvcWithCors();
             services.AddJwtAuthentication();
 
@@ -67,7 +69,7 @@ namespace Backend.Web
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Framework demand.")]
-        public void Configure(IApplicationBuilder app, IHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env, BusConfigurator busConfigurator)
         {
             if (env.IsDevelopment())
             {
@@ -101,6 +103,8 @@ namespace Backend.Web
                 endpoints.MapControllers().RequireAuthorization();
                 endpoints.MapHub<NewsfeedHub>("/newsfeed");
             });
+
+            busConfigurator.ScanSubscribers();
         }
     }
 }

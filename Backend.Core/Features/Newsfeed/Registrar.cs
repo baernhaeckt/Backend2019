@@ -1,7 +1,6 @@
 ﻿using Backend.Core.Features.Newsfeed.Abstraction;
 using Backend.Core.Features.Newsfeed.EventHandler;
 using Microsoft.Extensions.DependencyInjection;
-using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Features.Newsfeed
 {
@@ -13,8 +12,8 @@ namespace Backend.Core.Features.Newsfeed
             services.AddSignalR();
 
             // EventHandlers
-            services.AddScoped<ISubscriber, UserNewPointsEventHandler>();
-            services.AddScoped<ISubscriber, UserNewAwardEventHandler>();
+            services.AddScopedSubscriber<UserNewPointsEventHandler>();
+            services.AddScopedSubscriber<UserNewAwardEventHandler>();
 
             return services;
         }

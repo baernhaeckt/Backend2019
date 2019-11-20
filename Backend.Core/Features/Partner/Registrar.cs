@@ -5,7 +5,6 @@ using Backend.Core.Features.Partner.Data.Testing;
 using Backend.Core.Features.Partner.Queries;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Features.Partner
 {
@@ -17,11 +16,11 @@ namespace Backend.Core.Features.Partner
             services.AddScoped<TokensController>();
 
             // Commands
-            services.AddScoped<ISubscriber, RewardUserTokenCommandHandler>();
-            services.AddScoped<ISubscriber, CreateNewTokenCommandHandler>();
+            services.AddScopedSubscriber<RewardUserTokenCommandHandler>();
+            services.AddScopedSubscriber<CreateNewTokenCommandHandler>();
 
             // Queries
-            services.AddScoped<ISubscriber, SignInQueryHandler>();
+            services.AddScopedSubscriber<SignInQueryHandler>();
 
             if (hostEnvironment.IsDevelopment())
             {

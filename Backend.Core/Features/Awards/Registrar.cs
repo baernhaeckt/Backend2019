@@ -2,7 +2,6 @@
 using Backend.Core.Features.Awards.EventHandler;
 using Backend.Core.Features.Awards.Queries;
 using Microsoft.Extensions.DependencyInjection;
-using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Features.Awards
 {
@@ -14,10 +13,10 @@ namespace Backend.Core.Features.Awards
             services.AddScoped<AwardsController>();
 
             // QueryHandlers
-            services.AddScoped<ISubscriber, UserAwardsQueryQueryHandler>();
+            services.AddScopedSubscriber<UserAwardsQueryQueryHandler>();
 
             // EventHandlers
-            services.AddScoped<ISubscriber, UserNewPointsEventHandler>();
+            services.AddScopedSubscriber<UserNewPointsEventHandler>();
 
             return services;
         }
