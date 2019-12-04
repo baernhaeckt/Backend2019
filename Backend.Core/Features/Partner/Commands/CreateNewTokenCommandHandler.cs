@@ -2,20 +2,24 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
+using Backend.Core.Framework;
 using Backend.Infrastructure.Abstraction.Persistence;
-using Silverback.Messaging.Subscribers;
+using Microsoft.Extensions.Logging;
 
 namespace Backend.Core.Features.Partner.Commands
 {
-    public class CreateNewTokenCommandHandler : ISubscriber
+    public class CreateNewTokenCommandHandler : CommandHandlerWithReturnValue<CreateNewTokenCommand, Guid>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public CreateNewTokenCommandHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
-
-        public async Task<Guid> ExecuteAsync(CreateNewTokenCommand command)
+        public CreateNewTokenCommandHandler(IUnitOfWork unitOfWork, ILogger<CreateNewTokenCommandHandler> logger)
+            : base(unitOfWork, logger)
         {
-            TokenIssuer tokenIssuer = await _unitOfWork.GetByIdOrThrowAsync<TokenIssuer>(command.PartnerId);
+        }
+
+        public override async Task<Guid> ExecuteAsync(CreateNewTokenCommand command)
+        {
+            Logger.InitiateCreateNewToken(command.PartnerId, command.TokenType);
+
+            TokenIssuer tokenIssuer = await UnitOfWork.GetByIdOrThrowAsync<TokenIssuer>(command.PartnerId);
             Token tokenPrototype = tokenIssuer.PrototypeTokens.SingleOrDefault(p => p.TokenType == command.TokenType.ToLowerInvariant());
             if (tokenPrototype == null)
             {
@@ -24,7 +28,10 @@ namespace Backend.Core.Features.Partner.Commands
 
             Token newToken = tokenPrototype.CreateFromPrototype();
             newToken.PartnerId = tokenIssuer.Id;
-            await _unitOfWork.InsertAsync(newToken);
+            await UnitOfWork.InsertAsync(newToken);
+
+            Logger.CreateNewTokenSuccessful(command.PartnerId, command.TokenType, newToken.Id);
+
             return newToken.Id;
         }
     }

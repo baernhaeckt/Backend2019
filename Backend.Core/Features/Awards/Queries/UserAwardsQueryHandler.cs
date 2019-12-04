@@ -15,6 +15,8 @@ namespace Backend.Core.Features.Awards.Queries
 
         public override async Task<UserAwardsQueryResult> ExecuteAsync(UserAwardsQuery query)
         {
+            Logger.ExecuteUserAwardsQuery(query.Id);
+
             UserAwardsQueryResult result = await Reader.GetByIdOrThrowAsync<User, UserAwardsQueryResult>(query.Id, u => new UserAwardsQueryResult(u.Awards));
             return result;
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
 namespace Backend.Web
@@ -7,6 +8,8 @@ namespace Backend.Web
     {
         public static void Main(string[] args)
         {
+            Activity.DefaultIdFormat = ActivityIdFormat.W3C;
+
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -15,8 +18,7 @@ namespace Backend.Web
             return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webHost =>
                 {
-                    webHost
-                        .UseStartup<Startup>();
+                    webHost.UseStartup<Startup>();
                 });
         }
     }

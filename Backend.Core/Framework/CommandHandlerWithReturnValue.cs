@@ -6,10 +6,10 @@ using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Framework
 {
-    public abstract class CommandHandler<TCommand> : ISubscriber
+    public abstract class CommandHandlerWithReturnValue<TCommand, TResult> : ISubscriber
         where TCommand : ICommand
     {
-        protected CommandHandler(IUnitOfWork unitOfWork, ILogger logger)
+        protected CommandHandlerWithReturnValue(IUnitOfWork unitOfWork, ILogger logger)
         {
             UnitOfWork = unitOfWork;
             Logger = logger;
@@ -19,6 +19,6 @@ namespace Backend.Core.Framework
 
         protected ILogger Logger { get; }
 
-        public abstract Task ExecuteAsync(TCommand command);
+        public abstract Task<TResult> ExecuteAsync(TCommand command);
     }
 }

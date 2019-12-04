@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Framework;
 using Backend.Infrastructure.Abstraction.Persistence;
+using Backend.Infrastructure.Abstraction.Security;
 using Microsoft.Extensions.Logging;
 
 namespace Backend.Core.Features.Points.Queries
 {
     internal class RankingQueryHandler : QueryHandler<RankingSummaryQueryResult, RankingSummaryQuery>
     {
+        private const int MaxResults = 100;
+
         public RankingQueryHandler(IReader reader, ILogger<RankingQueryHandler> logger)
             : base(reader, logger)
         {
