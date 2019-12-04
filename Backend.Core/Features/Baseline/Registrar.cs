@@ -1,6 +1,7 @@
 ﻿using Backend.Core.Extensions;
 using Backend.Core.Features.Baseline.Controllers;
 using Backend.Core.Features.Baseline.Data;
+using Backend.Core.Features.Baseline.Queries;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backend.Core.Features.Baseline
@@ -12,8 +13,9 @@ namespace Backend.Core.Features.Baseline
             // Controllers
             services.AddScoped<SufficientTypeController>();
 
-            // Services
-            services.AddScoped<SufficientTypeService>();
+            // QueryHandlers
+            services.AddScopedSubscriber<AllSufficientTypesQueryHandler>();
+            services.AddScopedSubscriber<PointsPerSufficientTypesQueryHandler>();
 
             // Startup Tasks
             services.AddStartupTask<GenerateSufficientTypesStartupTask>();

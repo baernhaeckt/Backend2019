@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
-using Backend.Core.Features.Baseline.Models;
+using Backend.Core.Extensions;
+using Backend.Core.Features.Baseline.Queries;
 using Microsoft.AspNetCore.Mvc;
+using Silverback.Messaging.Publishing;
 
 namespace Backend.Core.Features.Baseline.Controllers
 {
@@ -11,32 +12,14 @@ namespace Backend.Core.Features.Baseline.Controllers
     [ApiController]
     public class SufficientTypeController : ControllerBase
     {
-        private readonly SufficientTypeService _sufficientTypeService;
+        private readonly IQueryPublisher _queryPublisher;
 
-        public SufficientTypeController(SufficientTypeService sufficientTypeService) => _sufficientTypeService = sufficientTypeService;
+        public SufficientTypeController(IQueryPublisher queryPublisher) => _queryPublisher = queryPublisher;
 
         [HttpGet("baseline")]
-        public async Task<IEnumerable<BaselineResponse>> GetBaseLinePoints()
-        {
-            IEnumerable<SufficientType> sufficientTypes = await _sufficientTypeService.GetSufficientTypes();
-            return sufficientTypes.Select(s => new BaselineResponse
-            {
-                Title = s.Title,
-                BaseLinePoint = s.BaselinePoint,
-                BaselineCo2Saving = s.BaselineCo2Saving
-            });
-        }
+        public async Task<IEnumerable<SufficientType>> GetBaseLinePoints() => await _queryPublisher.ExecuteAsync(new AllSufficientTypesQuery());
 
         [HttpGet("user")]
-        public async Task<IEnumerable<UserSufficientResponse>> GetUserPoints()
-        {
-            IEnumerable<UserSufficientType> userSufficientTypes = await _sufficientTypeService.GetSufficientTypesFromUser();
-            return userSufficientTypes.Select(u => new UserSufficientResponse
-            {
-                Title = u.Title,
-                Point = u.Point,
-                Co2Saving = u.Co2Saving
-            });
-        }
+        public async Task<IEnumerable<UserSufficientType>> GetUserPoints() => await _queryPublisher.ExecuteAsync(new PointsPerSufficientTypesQuery(User.Id()));
     }
 }
