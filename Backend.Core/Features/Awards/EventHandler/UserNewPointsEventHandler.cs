@@ -6,24 +6,25 @@ using Backend.Core.Entities;
 using Backend.Core.Entities.Awards;
 using Backend.Core.Events;
 using Backend.Infrastructure.Abstraction.Persistence;
+using Microsoft.Extensions.Logging;
 using Silverback.Messaging.Publishing;
-using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Features.Awards.EventHandler
 {
-    internal class UserNewPointsEventHandler : ISubscriber
+    internal class UserNewPointsEventHandler : Framework.EventHandler<UserNewPointsEvent>
     {
         private readonly IEventPublisher _eventPublisher;
 
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserNewPointsEventHandler(IUnitOfWork unitOfWork, IEventPublisher eventPublisher)
+        public UserNewPointsEventHandler(IUnitOfWork unitOfWork, ILogger<UserNewPointsEventHandler> logger, IEventPublisher eventPublisher)
+            : base(logger)
         {
             _unitOfWork = unitOfWork;
             _eventPublisher = eventPublisher;
         }
 
-        public async Task ExecuteAsync(UserNewPointsEvent @event)
+        public override async Task ExecuteAsync(UserNewPointsEvent @event)
         {
             IList<Award> newAwards = new List<Award>();
             if (@event.User.PointHistory.Count >= 1

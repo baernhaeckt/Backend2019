@@ -2,27 +2,28 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
+using Backend.Core.Framework;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Backend.Infrastructure.Abstraction.Security;
-using Silverback.Messaging.Subscribers;
+using Microsoft.Extensions.Logging;
 
 namespace Backend.Core.Features.UserManagement.Queries
 {
-    internal class SecurityTokenForUserQueryHandler : ISubscriber
+    internal class SecurityTokenForUserQueryHandler : QueryHandler<SecurityTokenForUserQueryResult, SecurityTokenForUserQuery>
     {
-        private readonly IReader _reader;
-
         private readonly ISecurityTokenFactory _securityTokenFactory;
 
-        public SecurityTokenForUserQueryHandler(IReader reader, ISecurityTokenFactory securityTokenFactory)
+        public SecurityTokenForUserQueryHandler(IReader reader, ILogger<SecurityTokenForUserQueryHandler> logger, ISecurityTokenFactory securityTokenFactory)
+            : base(reader, logger)
         {
-            _reader = reader;
             _securityTokenFactory = securityTokenFactory;
         }
 
-        public async Task<SecurityTokenForUserQueryResult> ExecuteAsync(SecurityTokenForUserQuery query)
+        public override async Task<SecurityTokenForUserQueryResult> ExecuteAsync(SecurityTokenForUserQuery query)
         {
-            Tuple<Guid, string, IEnumerable<string>> result = await _reader.SingleAsync<User, Tuple<Guid, string, IEnumerable<string>>>(
+            Logger.ExecuteSecurityTokenForUserQuery(query.Email);
+
+            Tuple<Guid, string, IEnumerable<string>> result = await Reader.SingleAsync<User, Tuple<Guid, string, IEnumerable<string>>>(
                 u => u.Email == query.Email.ToLowerInvariant(),
                 u => new Tuple<Guid, string, IEnumerable<string>>(u.Id, u.Email, u.Roles));
 

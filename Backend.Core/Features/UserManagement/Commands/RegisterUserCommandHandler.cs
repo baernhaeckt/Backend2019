@@ -2,14 +2,15 @@
 using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Events;
+using Backend.Core.Framework;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Backend.Infrastructure.Abstraction.Security;
+using Microsoft.Extensions.Logging;
 using Silverback.Messaging.Publishing;
-using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Features.UserManagement.Commands
 {
-    internal class RegisterUserCommandHandler : ISubscriber
+    internal class RegisterUserCommandHandler : CommandHandler<RegisterUserCommand>
     {
         private readonly IEventPublisher _eventPublisher;
 
@@ -17,18 +18,18 @@ namespace Backend.Core.Features.UserManagement.Commands
 
         private readonly IPasswordStorage _passwordStorage;
 
-        private readonly IUnitOfWork _unitOfWork;
-
-        public RegisterUserCommandHandler(IUnitOfWork unitOfWork, IPasswordGenerator passwordGenerator, IPasswordStorage passwordStorage, IEventPublisher eventPublisher)
+        public RegisterUserCommandHandler(IUnitOfWork unitOfWork, ILogger<RegisterUserCommandHandler> logger, IPasswordGenerator passwordGenerator, IPasswordStorage passwordStorage, IEventPublisher eventPublisher)
+            : base(unitOfWork, logger)
         {
-            _unitOfWork = unitOfWork;
             _passwordGenerator = passwordGenerator;
             _passwordStorage = passwordStorage;
             _eventPublisher = eventPublisher;
         }
 
-        public async Task ExecuteAsync(RegisterUserCommand command)
+        public override async Task ExecuteAsync(RegisterUserCommand command)
         {
+            Logger.UserInitiateRegistration(command.Email);
+
             string newPassword = _passwordGenerator.Generate();
             var newUser = new User
             {
@@ -44,7 +45,9 @@ namespace Backend.Core.Features.UserManagement.Commands
                     Longitude = 7.443788
                 }
             };
-            newUser = await _unitOfWork.InsertAsync(newUser);
+            newUser = await UnitOfWork.InsertAsync(newUser);
+
+            Logger.UserRegistrationSuccessful(newUser.Id, command.Email);
 
             await _eventPublisher.PublishAsync(new UserRegisteredEvent(newUser, newPassword));
         }

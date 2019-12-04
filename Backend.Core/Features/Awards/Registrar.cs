@@ -13,7 +13,7 @@ namespace Backend.Core.Features.Awards
             services.AddScoped<AwardsController>();
 
             // QueryHandlers
-            services.AddScopedSubscriber<UserAwardsQueryQueryHandler>();
+            services.AddScopedSubscriber<UserAwardsQueryHandler>();
 
             // EventHandlers
             services.AddScopedSubscriber<UserNewPointsEventHandler>();

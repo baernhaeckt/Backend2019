@@ -1,20 +1,24 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
+using Backend.Core.Framework;
 using Backend.Infrastructure.Abstraction.Persistence;
-using Silverback.Messaging.Subscribers;
+using Microsoft.Extensions.Logging;
 
 namespace Backend.Core.Features.UserManagement.Queries
 {
-    internal class UserProfileQueryHandler : ISubscriber
+    internal class UserProfileQueryHandler : QueryHandler<UserProfileQueryResult, UserProfileQuery>
     {
-        private readonly IReader _reader;
-
-        public UserProfileQueryHandler(IReader reader) => _reader = reader;
-
-        public async Task<UserProfileQueryResult> ExecuteAsync(UserProfileQuery query)
+        public UserProfileQueryHandler(IReader reader, ILogger<UserProfileQueryHandler> logger)
+            : base(reader, logger)
         {
-            return await _reader.SingleAsync<User, UserProfileQueryResult>(
+        }
+
+        public override async Task<UserProfileQueryResult> ExecuteAsync(UserProfileQuery query)
+        {
+            Logger.ExecuteUserProfileQuery(query.Id);
+
+            return await Reader.SingleAsync<User, UserProfileQueryResult>(
                 u => u.Id == query.Id,
                 u => new UserProfileQueryResult(u.DisplayName, u.PointHistory.Sum(pa => pa.Point), u.Email, u.Location.Latitude, u.Location.Longitude, u.Location.City, u.Location.Street, u.Location.PostalCode));
         }

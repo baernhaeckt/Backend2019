@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Backend.Infrastructure.Abstraction.Persistence;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -12,7 +13,13 @@ namespace Backend.Infrastructure.Persistence
     {
         private readonly DbContextFactory _dbContextFactory;
 
-        public IndexCreator(DbContextFactory dbContextFactory) => _dbContextFactory = dbContextFactory;
+        private readonly ILogger<IndexCreator> _logger;
+
+        public IndexCreator(DbContextFactory dbContextFactory, ILogger<IndexCreator> logger)
+        {
+            _dbContextFactory = dbContextFactory;
+            _logger = logger;
+        }
 
         public async Task Create<TEntity>(string field, CancellationToken cancellationToken)
             where TEntity : IEntity, new()
@@ -32,7 +39,10 @@ namespace Backend.Infrastructure.Persistence
 
             if (!indexExists)
             {
-                await dbContext.GetCollection<TEntity>().Indexes.CreateOneAsync(new CreateIndexModel<TEntity>("{ \"" + field + "\": 1 }", new CreateIndexOptions { Unique = true }), null, cancellationToken);
+                IMongoCollection<TEntity> collection = dbContext.GetCollection<TEntity>();
+
+                _logger.IndexCreatorCreateIndexFor(field, typeof(TEntity).FullName, collection.CollectionNamespace.FullName, collection.Database.DatabaseNamespace.DatabaseName);
+                await collection.Indexes.CreateOneAsync(new CreateIndexModel<TEntity>("{ \"" + field + "\": 1 }", new CreateIndexOptions { Unique = true }), null, cancellationToken);
             }
         }
     }

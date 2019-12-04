@@ -1,19 +1,33 @@
 ﻿using System.Threading.Tasks;
 using Backend.Core.Entities;
+using Backend.Core.Framework;
 using Backend.Infrastructure.Abstraction.Persistence;
-using Silverback.Messaging.Subscribers;
+using Microsoft.Extensions.Logging;
 
 namespace Backend.Core.Features.UserManagement.Queries
 {
-    internal class EmailRegisteredQueryHandler : ISubscriber
+    internal class EmailRegisteredQueryHandler : QueryHandler<EmailRegisteredQueryResult, EmailRegisteredQuery>
     {
-        private readonly IReader _reader;
-
-        public EmailRegisteredQueryHandler(IReader reader) => _reader = reader;
-
-        public async Task<EmailRegisteredQueryResult> ExecuteAsync(EmailRegisteredQuery query)
+        public EmailRegisteredQueryHandler(IReader reader, ILogger<EmailRegisteredQueryHandler> logger)
+            : base(reader, logger)
         {
-            long count = await _reader.CountAsync<User>(u => u.Email == query.Email.ToLowerInvariant());
+        }
+
+        public override async Task<EmailRegisteredQueryResult> ExecuteAsync(EmailRegisteredQuery query)
+        {
+            Logger.ExecuteEmailRegisteredQueryHandler(query.Email);
+
+            long count = await Reader.CountAsync<User>(u => u.Email == query.Email.ToLowerInvariant());
+
+            if (count == 0)
+            {
+                Logger.NoUserWithThisEmailFound(query.Email);
+            }
+            else
+            {
+                Logger.FoundAlreadyRegisteredUsers(query.Email, count);
+            }
+
             return new EmailRegisteredQueryResult { IsRegistered = count > 0 };
         }
     }

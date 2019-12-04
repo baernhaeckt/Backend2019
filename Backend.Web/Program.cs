@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
 namespace Backend.Web
@@ -17,7 +16,6 @@ namespace Backend.Web
                 .ConfigureWebHostDefaults(webHost =>
                 {
                     webHost
-                        .UseSetting(WebHostDefaults.SuppressStatusMessagesKey, true.ToString(CultureInfo.InvariantCulture))
                         .UseStartup<Startup>();
                 });
         }

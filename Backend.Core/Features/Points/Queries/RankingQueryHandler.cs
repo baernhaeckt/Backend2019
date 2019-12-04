@@ -4,16 +4,18 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
+using Backend.Core.Framework;
 using Backend.Infrastructure.Abstraction.Persistence;
-using Backend.Infrastructure.Abstraction.Security;
+using Microsoft.Extensions.Logging;
 
 namespace Backend.Core.Features.Points.Queries
 {
-    internal class RankingQueryHandler : ISubscriber
+    internal class RankingQueryHandler : QueryHandler<RankingSummaryQueryResult, RankingSummaryQuery>
     {
-        private const int MaxResults = 100;
-
-        public RankingQueryHandler(IReader reader) => _reader = reader;
+        public RankingQueryHandler(IReader reader, ILogger<RankingQueryHandler> logger)
+            : base(reader, logger)
+        {
+        }
 
         public Task<IEnumerable<RankingQueryResult>> ExecuteAsync(RankingQuery query) => Task.FromResult(Ranking().AsEnumerable());
 
@@ -32,18 +34,18 @@ namespace Backend.Core.Features.Points.Queries
 
         public Task<IEnumerable<RankingQueryResult>> ExecuteAsync(RankingForUserFriendsQuery query) => Task.FromResult(Ranking(u => u.Friends.Contains(query.Id)).AsEnumerable());
 
-        public async Task<RankingSummaryQueryResult> ExecuteAsync(RankingSummaryQuery query)
+        public override async Task<RankingSummaryQueryResult> ExecuteAsync(RankingSummaryQuery query)
         {
-            RankingSummaryUserProjection userInformation = await _reader.GetByIdOrThrowAsync<User, RankingSummaryUserProjection>(query.Id, u => new RankingSummaryUserProjection(u.PointHistory.Sum(pa => pa.Point), u.Location.PostalCode));
-            long globalRank = await _reader.CountAsync<User>(u => u.Points > userInformation.Points);
-            long localRank = await _reader.CountAsync<User>(u => u.Location.PostalCode == userInformation.Zip && u.Points > userInformation.Points);
-            long friendRank = await _reader.CountAsync<User>(u => u.Friends.Contains(query.Id) && u.Points > userInformation.Points);
+            RankingSummaryUserProjection userInformation = await Reader.GetByIdOrThrowAsync<User, RankingSummaryUserProjection>(query.Id, u => new RankingSummaryUserProjection(u.PointHistory.Sum(pa => pa.Point), u.Location.PostalCode));
+            long globalRank = await Reader.CountAsync<User>(u => u.Points > userInformation.Points);
+            long localRank = await Reader.CountAsync<User>(u => u.Location.PostalCode == userInformation.Zip && u.Points > userInformation.Points);
+            long friendRank = await Reader.CountAsync<User>(u => u.Friends.Contains(query.Id) && u.Points > userInformation.Points);
             return new RankingSummaryQueryResult(localRank + 1, globalRank + 1, friendRank + 1);
         }
 
         private IQueryable<RankingQueryResult> Ranking(Expression<Func<User, bool>>? filter = null)
         {
-            IQueryable<User> queryable = _reader.GetQueryable<User>();
+            IQueryable<User> queryable = Reader.GetQueryable<User>();
             if (filter != null)
             {
                 queryable = queryable.Where(filter);

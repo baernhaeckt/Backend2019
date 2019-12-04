@@ -1,34 +1,38 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
+using Backend.Core.Framework;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Backend.Infrastructure.Abstraction.Security;
-using Silverback.Messaging.Subscribers;
+using Microsoft.Extensions.Logging;
 
 namespace Backend.Core.Features.UserManagement.Commands
 {
-    internal class ChangePasswordCommandHandler : ISubscriber
+    internal class ChangePasswordCommandHandler : CommandHandler<ChangePasswordCommand>
     {
         private readonly IPasswordStorage _passwordStorage;
 
-        private readonly IUnitOfWork _unitOfWork;
-
-        public ChangePasswordCommandHandler(IUnitOfWork unitOfWork, IPasswordStorage passwordStorage)
+        public ChangePasswordCommandHandler(IUnitOfWork unitOfWork, ILogger<ChangePasswordCommandHandler> logger, IPasswordStorage passwordStorage)
+            : base(unitOfWork, logger)
         {
-            _unitOfWork = unitOfWork;
             _passwordStorage = passwordStorage;
         }
 
-        public async Task ExecuteAsync(ChangePasswordCommand command)
+        public override async Task ExecuteAsync(ChangePasswordCommand command)
         {
-            string passwordHash = await _unitOfWork.GetByIdOrThrowAsync<User, string>(command.UserId, u => u.PasswordHash);
+            Logger.UserPasswordChangeInitiated(command.UserId);
+
+            string passwordHash = await UnitOfWork.GetByIdOrThrowAsync<User, string>(command.UserId, u => u.PasswordHash);
             if (!_passwordStorage.Match(command.OldPassword, passwordHash))
             {
+                Logger.UserPasswordChangeOldPasswordNotMatched(command.UserId);
                 throw new ValidationException("Incorrect password.");
             }
 
             object definition = new { PasswordHash = _passwordStorage.Create(command.NewPassword) };
-            await _unitOfWork.UpdateAsync<User>(command.UserId, definition);
+            await UnitOfWork.UpdateAsync<User>(command.UserId, definition);
+
+            Logger.UserPasswordChangeChangeSuccessful(command.UserId);
         }
     }
 }

@@ -1,43 +1,37 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
+using Backend.Core.Framework;
 using Backend.Infrastructure.Abstraction.Geolocation;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.Extensions.Logging;
-using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Features.UserManagement.Commands
 {
-    internal class UpdateProfileCommandHandler : ISubscriber
+    internal class UpdateProfileCommandHandler : CommandHandler<UpdateProfileCommand>
     {
         private readonly IGeocodingService _geocodingService;
 
-        private readonly ILogger<UpdateProfileCommandHandler> _logger;
+        public UpdateProfileCommandHandler(IUnitOfWork unitOfWork, ILogger<UpdateProfileCommandHandler> logger, IGeocodingService geocodingService)
+            : base(unitOfWork, logger) => _geocodingService = geocodingService;
 
-        private readonly IUnitOfWork _unitOfWork;
-
-        public UpdateProfileCommandHandler(IUnitOfWork unitOfWork, IGeocodingService geocodingService, ILogger<UpdateProfileCommandHandler> logger)
+        public override async Task ExecuteAsync(UpdateProfileCommand command)
         {
-            _unitOfWork = unitOfWork;
-            _geocodingService = geocodingService;
-            _logger = logger;
-        }
+            Logger.UserInitiateProfileUpdate(command);
 
-        public async Task ExecuteAsync(UpdateProfileCommand command)
-        {
             LookupResult result = await _geocodingService.LookupAsync(command.PostalCode, command.City, command.Street);
 
             if (result.Failed)
             {
                 // Save all other infos than location, also if the location couldn't be resolved
-                await _unitOfWork.UpdateAsync<User>(command.Id, new { command.DisplayName });
+                await UnitOfWork.UpdateAsync<User>(command.Id, new { command.DisplayName });
 
-                _logger.UnableToLookupAddress(command.City, command.Street, command.PostalCode);
+                Logger.UserUnableToLookupAddress(command.City, command.Street, command.PostalCode);
 
                 throw new ValidationException("Address lookup failed.");
             }
 
-            await _unitOfWork.UpdateAsync<User>(command.Id, new
+            await UnitOfWork.UpdateAsync<User>(command.Id, new
             {
                 command.DisplayName,
                 Location = new Location
@@ -49,6 +43,8 @@ namespace Backend.Core.Features.UserManagement.Commands
                     Latitude = result.Latitude
                 }
             });
+
+            Logger.UserProfileUpdateSuccessful(command.Id);
         }
     }
 }
