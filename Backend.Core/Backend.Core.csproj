@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bogus" Version="28.4.1" />
-    <PackageReference Include="Bogus.Locations" Version="28.4.1" />
-    <PackageReference Include="Silverback.Core" Version="1.0.2" />
-    <PackageReference Include="Silverback.Core.Model" Version="1.0.2" />
+    <PackageReference Include="Bogus" Version="28.4.3" />
+    <PackageReference Include="Bogus.Locations" Version="28.4.3" />
+    <PackageReference Include="Silverback.Core" Version="1.0.4" />
+    <PackageReference Include="Silverback.Core.Model" Version="1.0.4" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
