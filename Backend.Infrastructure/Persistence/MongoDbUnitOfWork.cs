@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using Backend.Infrastructure.Abstraction.Persistence;
@@ -76,8 +77,6 @@ namespace Backend.Infrastructure.Persistence
         public virtual async Task UpdateAsync<TEntity>(Guid id, object definition)
             where TEntity : IEntity, new()
         {
-            DbContext dbContext = DbContextFactory.Create();
-
             IList<UpdateDefinition<TEntity>> updateDefinitions = new List<UpdateDefinition<TEntity>>();
             foreach (PropertyInfo property in definition.GetType().GetProperties())
             {
@@ -106,7 +105,18 @@ namespace Backend.Infrastructure.Persistence
 
             UpdateDefinition<TEntity> updateDefinition = Builders<TEntity>.Update.Combine(updateDefinitions);
             FilterDefinition<TEntity> filter = Builders<TEntity>.Filter.Eq(nameof(IEntity.Id), id);
+
+            DbContext dbContext = DbContextFactory.Create();
             UpdateResult result = await dbContext.GetCollection<TEntity>().UpdateOneAsync(filter, updateDefinition);
+        }
+
+        public virtual async Task UpdatePullAsync<TEntity, TItem>(Guid id, Expression<Func<TEntity, IEnumerable<TItem>>> field, TItem valueToPull)
+            where TEntity : IEntity, new()
+        {
+            UpdateDefinition<TEntity> updateDefinition = Builders<TEntity>.Update.Pull(field, valueToPull);
+            FilterDefinition<TEntity> filter = Builders<TEntity>.Filter.Eq(nameof(IEntity.Id), id);
+            DbContext dbContext = DbContextFactory.Create();
+            await dbContext.GetCollection<TEntity>().FindOneAndUpdateAsync(filter, updateDefinition);
         }
     }
 }

@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using Backend.Infrastructure.Abstraction.Persistence;
+using Backend.Tests.Integration.Utilities.Extensions;
 
 namespace Backend.Tests.Integration.Utilities
 {
@@ -87,6 +89,23 @@ namespace Backend.Tests.Integration.Utilities
         {
             await DeleteAsync<TEntity>(record.Id);
             await InsertAsync(record);
+        }
+
+        public Task UpdatePullAsync<TEntity, TItem>(Guid id, Expression<Func<TEntity, IEnumerable<TItem>>> field, TItem valueToPull)
+            where TEntity : IEntity, new()
+        {
+            TEntity record = Entities[typeof(TEntity)].Cast<TEntity>().Single(e => e.Id == id);
+            List<TItem> currentItems = field.Compile().Invoke(record).ToList();
+            currentItems.Remove(valueToPull);
+            string? propertyName = field.GetPropertyName();
+            if (propertyName == null)
+            {
+                throw new NotSupportedException();
+            }
+
+            record.GetType().GetProperty(propertyName)?.GetSetMethod()?.Invoke(record, new object[] { currentItems });
+
+            return Task.CompletedTask;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Backend.Core.Extensions;
+using Backend.Core.Features.Friendship.Commands;
 using Backend.Core.Features.Friendship.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,15 +15,12 @@ namespace Backend.Core.Features.Friendship.Controllers
     [ApiController]
     public class FriendsController : ControllerBase
     {
-        private readonly FriendsService _friendService;
-
         private readonly IQueryPublisher _queryPublisher;
 
         private readonly ICommandPublisher _commandPublisher;
 
-        public FriendsController(FriendsService friendService, IQueryPublisher queryPublisher, ICommandPublisher commandPublisher)
+        public FriendsController(IQueryPublisher queryPublisher, ICommandPublisher commandPublisher)
         {
-            _friendService = friendService;
             _queryPublisher = queryPublisher;
             _commandPublisher = commandPublisher;
         }
@@ -31,15 +29,9 @@ namespace Backend.Core.Features.Friendship.Controllers
         public async Task<IEnumerable<FriendsQueryResult>> Get() => await _queryPublisher.ExecuteAsync(new FriendsQuery(User.Id()));
 
         [HttpPost]
-        public async Task Add(string friendEmail)
-        {
-            await _friendService.AddFriend(friendEmail);
-        }
+        public async Task Add(string friendEmail) => await _commandPublisher.ExecuteAsync(new AddFriendCommand(User.Id(), friendEmail));
 
         [HttpDelete]
-        public async Task Delete(Guid friendUserId)
-        {
-            await _friendService.RemoveFriend(friendUserId);
-        }
+        public async Task Delete(Guid friendUserId) => await _commandPublisher.ExecuteAsync(new RemoveFriendCommand(User.Id(), friendUserId));
     }
 }

@@ -1,4 +1,5 @@
-﻿using Backend.Core.Features.Friendship.Controllers;
+﻿using Backend.Core.Features.Friendship.Commands;
+using Backend.Core.Features.Friendship.Controllers;
 using Backend.Core.Features.Friendship.Queries;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,7 +13,8 @@ namespace Backend.Core.Features.Friendship
             services.AddScoped<FriendsController>();
 
             // CommandHandlers
-            services.AddScoped<FriendsService>();
+            services.AddScopedSubscriber<AddFriendCommandHandler>();
+            services.AddScopedSubscriber<RemoveFriendCommandCommandHandler>();
 
             // QueryHandlers
             services.AddScopedSubscriber<FriendsQueryHandler>();
