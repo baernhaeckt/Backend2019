@@ -4,9 +4,9 @@ using Backend.Core.Framework;
 using Backend.Infrastructure.Abstraction.Email;
 using Microsoft.Extensions.Logging;
 
-namespace Backend.Core.Features.UserManagement.EventSubscriber
+namespace Backend.Core.Features.UserManagement.EventSubscribers
 {
-    public class UserRegisteredEventSubscriber : EventHandler<UserRegisteredEvent>
+    public class UserRegisteredEventSubscriber : EventSubscriber<UserRegisteredEvent>
     {
         private readonly IEmailService _emailService;
 
@@ -15,11 +15,11 @@ namespace Backend.Core.Features.UserManagement.EventSubscriber
 
         public override async Task ExecuteAsync(UserRegisteredEvent @event)
         {
-            Logger.UserHandleUserRegisteredEvent(@event.User.Id);
+            Logger.HandleUserRegisteredEvent(@event.User.Id);
 
             await _emailService.Send("Password", "Your password: " + @event.PlainTextPassword, @event.User.Email);
 
-            Logger.UserHandleUserRegisteredEventSuccessful(@event.User.Id);
+            Logger.HandleUserRegisteredEventSuccessful(@event.User.Id);
         }
     }
 }

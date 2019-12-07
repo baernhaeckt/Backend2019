@@ -24,7 +24,7 @@ namespace Backend.Core.Features.UserManagement.Queries
 
         public override async Task<SignInQueryResult> ExecuteAsync(SignInQuery query)
         {
-            Logger.UserSignInInitiated(query.Email);
+            Logger.ExecuteUserSignIn(query.Email);
 
             Tuple<Guid, string, string, IEnumerable<string>>? userByEmail = await Reader.SingleOrDefaultAsync<User, Tuple<Guid, string, string, IEnumerable<string>>>(
                 u => u.Email == query.Email.ToLowerInvariant(),
@@ -46,7 +46,7 @@ namespace Backend.Core.Features.UserManagement.Queries
             string token = _securityTokenFactory.Create(userByEmail.Item1, userByEmail.Item3, userByEmail.Item4);
             var result = new SignInQueryResult(false, false, token);
 
-            Logger.UserSignInSuccessful(query.Email);
+            Logger.ExecuteUserSignInSuccessful(query.Email);
             return result;
         }
     }

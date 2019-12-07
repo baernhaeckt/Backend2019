@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -20,30 +21,61 @@ namespace Backend.Core.Features.Points.Queries
         {
         }
 
-        public Task<IEnumerable<RankingQueryResult>> ExecuteAsync(RankingQuery query) => Task.FromResult(Ranking().AsEnumerable());
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Framework demand.")]
+        public Task<IEnumerable<RankingQueryResult>> ExecuteAsync(RankingQuery query)
+        {
+            Logger.RetrieveRanking();
+
+            Task<IEnumerable<RankingQueryResult>> result = Task.FromResult(Ranking().AsEnumerable());
+
+            Logger.RetrieveRankingSuccessful();
+
+            return result;
+        }
 
         public Task<IEnumerable<RankingQueryResult>> ExecuteAsync(RankingByZipQuery query)
         {
-            if (int.TryParse(query.Zip, out int result))
+            Logger.RetrieveRankingForZip(query.Zip);
+
+            if (int.TryParse(query.Zip, out int parsedZip))
             {
-                if (result >= 1000 && result < 9999)
+                if (parsedZip >= 1000 && parsedZip < 9999)
                 {
                     return Task.FromResult(Ranking(u => u.Location.PostalCode == query.Zip).AsEnumerable());
                 }
             }
 
-            return Task.FromResult(Enumerable.Empty<RankingQueryResult>());
+            Task<IEnumerable<RankingQueryResult>> result = Task.FromResult(Enumerable.Empty<RankingQueryResult>());
+
+            Logger.RetrieveRankingForZipSuccessful(query.Zip);
+
+            return result;
         }
 
-        public Task<IEnumerable<RankingQueryResult>> ExecuteAsync(RankingForUserFriendsQuery query) => Task.FromResult(Ranking(u => u.Friends.Contains(query.Id)).AsEnumerable());
+        public Task<IEnumerable<RankingQueryResult>> ExecuteAsync(RankingForUserFriendsQuery query)
+        {
+            Logger.RetrieveRankingForUserFriends(query.Id);
+
+            Task<IEnumerable<RankingQueryResult>> result = Task.FromResult(Ranking(u => u.Friends.Contains(query.Id)).AsEnumerable());
+
+            Logger.RetrieveRankingForUserFriendsSuccessful(query.Id);
+
+            return result;
+        }
 
         public override async Task<RankingSummaryQueryResult> ExecuteAsync(RankingSummaryQuery query)
         {
+            Logger.RetrieveRankingSummary(query.Id);
+
             RankingSummaryUserProjection userInformation = await Reader.GetByIdOrThrowAsync<User, RankingSummaryUserProjection>(query.Id, u => new RankingSummaryUserProjection(u.PointHistory.Sum(pa => pa.Point), u.Location.PostalCode));
             long globalRank = await Reader.CountAsync<User>(u => u.Points > userInformation.Points);
             long localRank = await Reader.CountAsync<User>(u => u.Location.PostalCode == userInformation.Zip && u.Points > userInformation.Points);
             long friendRank = await Reader.CountAsync<User>(u => u.Friends.Contains(query.Id) && u.Points > userInformation.Points);
-            return new RankingSummaryQueryResult(localRank + 1, globalRank + 1, friendRank + 1);
+            var result = new RankingSummaryQueryResult(localRank + 1, globalRank + 1, friendRank + 1);
+
+            Logger.RetrieveRankingSummarySuccessful(query.Id);
+
+            return result;
         }
 
         private IQueryable<RankingQueryResult> Ranking(Expression<Func<User, bool>>? filter = null)

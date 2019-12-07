@@ -9,15 +9,15 @@ using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.Extensions.Logging;
 using Silverback.Messaging.Publishing;
 
-namespace Backend.Core.Features.Awards.EventHandler
+namespace Backend.Core.Features.Awards.EventSubscribers
 {
-    internal class UserNewPointsEventHandler : Framework.EventHandler<UserNewPointsEvent>
+    internal class UserNewPointsEventSubscriber : Framework.EventSubscriber<UserNewPointsEvent>
     {
         private readonly IEventPublisher _eventPublisher;
 
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserNewPointsEventHandler(IUnitOfWork unitOfWork, ILogger<UserNewPointsEventHandler> logger, IEventPublisher eventPublisher)
+        public UserNewPointsEventSubscriber(IUnitOfWork unitOfWork, ILogger<UserNewPointsEventSubscriber> logger, IEventPublisher eventPublisher)
             : base(logger)
         {
             _unitOfWork = unitOfWork;
@@ -26,7 +26,7 @@ namespace Backend.Core.Features.Awards.EventHandler
 
         public override async Task ExecuteAsync(UserNewPointsEvent @event)
         {
-            Logger.CheckUserForNewAwards(@event.User.Id);
+            Logger.HandleUserNewPointsEvent(@event.User.Id);
 
             IList<Award> newAwards = new List<Award>();
             if (@event.User.PointHistory.Count >= 1
@@ -57,6 +57,8 @@ namespace Backend.Core.Features.Awards.EventHandler
                     await _eventPublisher.PublishAsync(new UserNewAwardEvent(@event.User, newAward));
                 }
             }
+
+            Logger.HandleUserNewPointsEventSuccessful(@event.User.Id, newAwards.Count);
         }
     }
 }

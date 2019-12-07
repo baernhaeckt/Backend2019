@@ -5,10 +5,10 @@ using Silverback.Messaging.Subscribers;
 
 namespace Backend.Core.Framework
 {
-    public abstract class EventHandler<TEvent> : ISubscriber
+    public abstract class EventSubscriber<TEvent> : ISubscriber
         where TEvent : IEvent
     {
-        protected EventHandler(ILogger logger) => Logger = logger;
+        protected EventSubscriber(ILogger logger) => Logger = logger;
 
         protected ILogger Logger { get; }
 

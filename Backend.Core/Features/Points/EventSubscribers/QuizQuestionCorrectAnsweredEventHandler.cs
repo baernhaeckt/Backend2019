@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Silverback.Messaging.Publishing;
 using Silverback.Messaging.Subscribers;
 
-namespace Backend.Core.Features.Points.EventHandler
+namespace Backend.Core.Features.Points.EventSubscribers
 {
     internal class QuizQuestionCorrectAnsweredEventHandler : ISubscriber
     {
@@ -28,7 +28,7 @@ namespace Backend.Core.Features.Points.EventHandler
 
         public async Task ExecuteAsync(QuizQuestionCorrectAnsweredEvent @event)
         {
-            _logger.PartnerInitiateGrantPointsForCorrectQuizAnswer(@event.UserId, @event.QuestionPoints);
+            _logger.HandleQuizQuestionCorrectAnsweredEvent(@event.UserId, @event.QuestionPoints);
 
             (Guid id, int points) = await _unitOfWork.GetByIdOrThrowAsync<User, Tuple<Guid, int>>(@event.UserId, u => new Tuple<Guid, int>(u.Id, u.PointHistory.Sum(pa => pa.Point)));
 
@@ -55,7 +55,7 @@ namespace Backend.Core.Features.Points.EventHandler
             User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(@event.UserId);
             await _eventPublisher.PublishAsync(new UserNewPointsEvent(user, @event.QuestionPoints, 0));
 
-            _logger.PartnerSuccessfulGrantPointsForCorrectQuizAnswer(@event.UserId, @event.QuestionPoints);
+            _logger.HandleQuizQuestionCorrectAnsweredEventSuccessful(@event.UserId, @event.QuestionPoints);
         }
     }
 }

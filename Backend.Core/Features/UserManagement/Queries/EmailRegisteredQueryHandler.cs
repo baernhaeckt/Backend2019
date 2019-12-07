@@ -15,20 +15,14 @@ namespace Backend.Core.Features.UserManagement.Queries
 
         public override async Task<EmailRegisteredQueryResult> ExecuteAsync(EmailRegisteredQuery query)
         {
-            Logger.ExecuteEmailRegisteredQueryHandler(query.Email);
+            Logger.RetrieveEmailAlreadyRegistered(query.Email);
 
             long count = await Reader.CountAsync<User>(u => u.Email == query.Email.ToLowerInvariant());
+            var result = new EmailRegisteredQueryResult { IsRegistered = count > 0 };
 
-            if (count == 0)
-            {
-                Logger.NoUserWithThisEmailFound(query.Email);
-            }
-            else
-            {
-                Logger.FoundAlreadyRegisteredUsers(query.Email, count);
-            }
+            Logger.RetrieveEmailAlreadyRegisteredSuccessful(query.Email, result.IsRegistered);
 
-            return new EmailRegisteredQueryResult { IsRegistered = count > 0 };
+            return result;
         }
     }
 }

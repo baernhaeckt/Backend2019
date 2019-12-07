@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{E4B345
 		Directory.Build.props = Directory.Build.props
 		Global.ruleset = Global.ruleset
 		GlobalTest.ruleset = GlobalTest.ruleset
+		README.md = README.md
 		stylecop.json = stylecop.json
 	EndProjectSection
 EndProject
@@ -26,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Infrastructure", "B
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{9AF8A082-11AD-4067-AB29-D4ED6CDFE689}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Infrastructure.Abstraction", "Backend.Infrastructure.Abstraction\Backend.Infrastructure.Abstraction.csproj", "{91004A64-6BF1-4365-862B-F0576E72AFE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Infrastructure.Abstraction", "Backend.Infrastructure.Abstraction\Backend.Infrastructure.Abstraction.csproj", "{91004A64-6BF1-4365-862B-F0576E72AFE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

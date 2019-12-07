@@ -16,11 +16,15 @@ namespace Backend.Core.Features.UserManagement.Queries
 
         public override async Task<UserProfileQueryResult> ExecuteAsync(UserProfileQuery query)
         {
-            Logger.ExecuteUserProfileQuery(query.Id);
+            Logger.RetrieveUserProfile(query.Id);
 
-            return await Reader.SingleAsync<User, UserProfileQueryResult>(
+            UserProfileQueryResult result = await Reader.SingleAsync<User, UserProfileQueryResult>(
                 u => u.Id == query.Id,
                 u => new UserProfileQueryResult(u.DisplayName, u.PointHistory.Sum(pa => pa.Point), u.Email, u.Location.Latitude, u.Location.Longitude, u.Location.City, u.Location.Street, u.Location.PostalCode));
+
+            Logger.RetrieveUserProfileSuccessful(query.Id);
+
+            return result;
         }
     }
 }

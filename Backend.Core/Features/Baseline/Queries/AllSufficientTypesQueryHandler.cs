@@ -14,6 +14,15 @@ namespace Backend.Core.Features.Baseline.Queries
         {
         }
 
-        public override async Task<IEnumerable<SufficientType>> ExecuteAsync(AllSufficientTypesQuery query) => await Reader.GetAllAsync<SufficientType>();
+        public override async Task<IEnumerable<SufficientType>> ExecuteAsync(AllSufficientTypesQuery query)
+        {
+            Logger.RetrieveAllSufficientTypes();
+
+            IEnumerable<SufficientType> result = await Reader.GetAllAsync<SufficientType>();
+
+            Logger.RetrieveAllSufficientTypesSuccessful();
+
+            return result;
+        }
     }
 }

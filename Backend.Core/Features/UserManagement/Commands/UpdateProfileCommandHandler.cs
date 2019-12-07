@@ -17,7 +17,7 @@ namespace Backend.Core.Features.UserManagement.Commands
 
         public override async Task ExecuteAsync(UpdateProfileCommand command)
         {
-            Logger.UserInitiateProfileUpdate(command);
+            Logger.ExecuteUserProfileUpdate(command);
 
             LookupResult result = await _geocodingService.LookupAsync(command.PostalCode, command.City, command.Street);
 
@@ -44,7 +44,7 @@ namespace Backend.Core.Features.UserManagement.Commands
                 }
             });
 
-            Logger.UserProfileUpdateSuccessful(command.Id);
+            Logger.ExecuteUserProfileUpdateSuccessful(command.Id);
         }
     }
 }

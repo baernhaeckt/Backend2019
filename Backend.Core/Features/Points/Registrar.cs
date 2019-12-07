@@ -1,5 +1,5 @@
 ﻿using Backend.Core.Features.Points.Controllers;
-using Backend.Core.Features.Points.EventHandler;
+using Backend.Core.Features.Points.EventSubscribers;
 using Backend.Core.Features.Points.Queries;
 using Microsoft.Extensions.DependencyInjection;
 

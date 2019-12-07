@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
-using Backend.Core.Features.Awards;
 using Backend.Core.Framework;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.Extensions.Logging;
@@ -19,7 +18,7 @@ namespace Backend.Core.Features.Friendship.Queries
 
         public override async Task<IEnumerable<FriendsQueryResult>> ExecuteAsync(FriendsQuery query)
         {
-            Logger.ExecuteUserAwardsQuery(query.Id);
+            Logger.RetrieveFriendsOfUser(query.Id);
 
             IEnumerable<Guid> friends = await Reader.GetByIdOrThrowAsync<User, IEnumerable<Guid>>(query.Id, u => u.Friends);
             if (friends == null || !friends.Any())
@@ -27,7 +26,7 @@ namespace Backend.Core.Features.Friendship.Queries
                 return Enumerable.Empty<FriendsQueryResult>();
             }
 
-            return await Reader.WhereAsync<User, FriendsQueryResult>(u => friends.Contains(u.Id), u => new FriendsQueryResult(
+            IEnumerable<FriendsQueryResult> result = await Reader.WhereAsync<User, FriendsQueryResult>(u => friends.Contains(u.Id), u => new FriendsQueryResult(
                 u.Id,
                 u.DisplayName,
                 u.Points,
@@ -35,6 +34,11 @@ namespace Backend.Core.Features.Friendship.Queries
                 u.Email,
                 u.Location.Longitude,
                 u.Location.Latitude));
+
+            IEnumerable<FriendsQueryResult> friendsQueryResults = result.ToList();
+            Logger.RetrieveFriendsOfUserSuccessful(query.Id, friendsQueryResults.Count());
+
+            return friendsQueryResults;
         }
     }
 }

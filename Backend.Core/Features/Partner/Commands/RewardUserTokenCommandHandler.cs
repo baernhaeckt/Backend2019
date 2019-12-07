@@ -16,7 +16,7 @@ namespace Backend.Core.Features.Partner.Commands
     {
         private readonly IEventPublisher _eventPublisher;
 
-        public RewardUserTokenCommandHandler(IUnitOfWork unitOfWork, ILogger<RewardUserTokenCommandHandler> logger, IEventPublisher eventPublisher) 
+        public RewardUserTokenCommandHandler(IUnitOfWork unitOfWork, ILogger<RewardUserTokenCommandHandler> logger, IEventPublisher eventPublisher)
             : base(unitOfWork, logger) => _eventPublisher = eventPublisher;
 
         public override async Task ExecuteAsync(RewardUserTokenCommand command)

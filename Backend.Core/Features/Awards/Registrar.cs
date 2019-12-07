@@ -1,5 +1,5 @@
 ﻿using Backend.Core.Features.Awards.Controllers;
-using Backend.Core.Features.Awards.EventHandler;
+using Backend.Core.Features.Awards.EventSubscribers;
 using Backend.Core.Features.Awards.Queries;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,7 +16,7 @@ namespace Backend.Core.Features.Awards
             services.AddScopedSubscriber<UserAwardsQueryHandler>();
 
             // EventHandlers
-            services.AddScopedSubscriber<UserNewPointsEventHandler>();
+            services.AddScopedSubscriber<UserNewPointsEventSubscriber>();
 
             return services;
         }

@@ -3,7 +3,7 @@ using Backend.Core.Features.UserManagement.Commands;
 using Backend.Core.Features.UserManagement.Controllers;
 using Backend.Core.Features.UserManagement.Data;
 using Backend.Core.Features.UserManagement.Data.Testing;
-using Backend.Core.Features.UserManagement.EventSubscriber;
+using Backend.Core.Features.UserManagement.EventSubscribers;
 using Backend.Core.Features.UserManagement.Queries;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

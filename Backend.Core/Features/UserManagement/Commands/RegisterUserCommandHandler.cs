@@ -28,7 +28,7 @@ namespace Backend.Core.Features.UserManagement.Commands
 
         public override async Task ExecuteAsync(RegisterUserCommand command)
         {
-            Logger.UserInitiateRegistration(command.Email);
+            Logger.ExecuteUserRegistration(command.Email);
 
             string newPassword = _passwordGenerator.Generate();
             var newUser = new User
@@ -47,7 +47,7 @@ namespace Backend.Core.Features.UserManagement.Commands
             };
             newUser = await UnitOfWork.InsertAsync(newUser);
 
-            Logger.UserRegistrationSuccessful(newUser.Id, command.Email);
+            Logger.ExecuteUserRegistrationSuccessful(newUser.Id, command.Email);
 
             await _eventPublisher.PublishAsync(new UserRegisteredEvent(newUser, newPassword));
         }

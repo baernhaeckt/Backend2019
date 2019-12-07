@@ -21,13 +21,16 @@ namespace Backend.Core.Features.UserManagement.Queries
 
         public override async Task<SecurityTokenForUserQueryResult> ExecuteAsync(SecurityTokenForUserQuery query)
         {
-            Logger.ExecuteSecurityTokenForUserQuery(query.Email);
+            Logger.RetrieveSecurityTokenForUser(query.Email);
 
             Tuple<Guid, string, IEnumerable<string>> result = await Reader.SingleAsync<User, Tuple<Guid, string, IEnumerable<string>>>(
                 u => u.Email == query.Email.ToLowerInvariant(),
                 u => new Tuple<Guid, string, IEnumerable<string>>(u.Id, u.Email, u.Roles));
 
             string token = _securityTokenFactory.Create(result.Item1, result.Item2, result.Item3);
+
+            Logger.RetrieveSecurityTokenForUserSuccessful(query.Email, result.Item1);
+
             return new SecurityTokenForUserQueryResult(token);
         }
     }

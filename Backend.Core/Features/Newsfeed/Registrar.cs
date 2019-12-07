@@ -1,5 +1,5 @@
 ﻿using Backend.Core.Features.Newsfeed.Abstraction;
-using Backend.Core.Features.Newsfeed.EventHandler;
+using Backend.Core.Features.Newsfeed.EventSubscribers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backend.Core.Features.Newsfeed

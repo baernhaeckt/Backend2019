@@ -19,6 +19,8 @@ namespace Backend.Core.Features.Friendship.Commands
 
         public override async Task ExecuteAsync(RemoveFriendCommand command)
         {
+            Logger.ExecuteRemoveFriend(command.UserId, command.FriendUserId);
+
             IEnumerable<Guid>? friends = await UnitOfWork.GetByIdOrThrowAsync<User, IEnumerable<Guid>>(command.UserId, u => u.Friends);
             if (!friends.Contains(command.FriendUserId))
             {
@@ -27,6 +29,8 @@ namespace Backend.Core.Features.Friendship.Commands
 
             await UnitOfWork.UpdatePullAsync<User, Guid>(command.UserId, u => u.Friends, command.FriendUserId);
             await UnitOfWork.UpdatePullAsync<User, Guid>(command.FriendUserId, u => u.Friends, command.UserId);
+
+            Logger.RemoveFriendSuccessful(command.UserId, command.FriendUserId);
         }
     }
 }

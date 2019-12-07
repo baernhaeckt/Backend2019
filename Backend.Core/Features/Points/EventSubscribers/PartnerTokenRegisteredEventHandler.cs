@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Silverback.Messaging.Publishing;
 using Silverback.Messaging.Subscribers;
 
-namespace Backend.Core.Features.Points.EventHandler
+namespace Backend.Core.Features.Points.EventSubscribers
 {
     internal class PartnerTokenRegisteredEventHandler : ISubscriber
     {
@@ -28,7 +28,7 @@ namespace Backend.Core.Features.Points.EventHandler
 
         public async Task ExecuteAsync(PartnerTokenRegisteredEvent @event)
         {
-            _logger.PartnerInitiateGrantPointsForToken(@event.UserId, @event.TokenId);
+            _logger.HandlePartnerTokenRegisteredEvent(@event.UserId, @event.TokenId);
 
             (Guid id, int points, double co2Saving) = await _unitOfWork
                 .GetByIdOrThrowAsync<User, Tuple<Guid, int, double>>(
@@ -63,7 +63,7 @@ namespace Backend.Core.Features.Points.EventHandler
             User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(@event.UserId);
             await _eventPublisher.PublishAsync(new UserNewPointsEvent(user, token.Points, token.Co2Saving));
 
-            _logger.PartnerSuccessfulGrantPointsForToken(@event.UserId, @event.TokenId);
+            _logger.HandlePartnerTokenRegisteredEventSuccessful(@event.UserId, @event.TokenId);
         }
     }
 }

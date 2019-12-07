@@ -1,55 +1,38 @@
-# TODO
+# LEAF
 
-## 1. High test coverage
+TODO: Insert description here.
 
-### int tests
+## Getting started
 
-- Backend.Core.Features.Ranking.Controllers.RankingsController
-- Backend.Core.Features.Quiz.Controllers.QuizController
-- Backend.Core.Features.PointsAndAwards.Controllers.PointsController
-- Backend.Core.Features.Newsfeed.Hubs.NewsfeedHub
-- Backend.Core.Features.Baseline.Controllers.SufficientTypeController
-- Backend.Core.Features.Newsfeed.Controllers.EventTestController
+TODO: Describe how to start the application and how to run tests, to generate test data.
 
-### Unit Tests
+## Architecture
 
-- Backend.Core.Extensions.ListExtensions
-- Backend.Core.Extensions.PrincipalExtensions
+TODO: document architecture here.
 
-## 2. Refactoring
+## Coding Guidelines
 
-### Small
+### Logging
 
-- Create configuration classes for all config settings (some are used by string)
-- Use IReader where possible instead of IUnitOfWork (will make it simpler to use queries later)
+- Do log the start and end of a command/query/eventhandler (by default use the information-level, if indicated otherwise, use the trace-level) .
+- Do not log exceptions/errors twice.
+- Do use semantic logging.
+- Do follow the guideline below for common log statements
+- Do not log for (all those exceptions are logged by a middleware):
+	- Exceptions which can not be handled
+	- ValidationExceptions
+	- EntityNotFoundExceptions
 
+For Commands:
+- Execute ...: Execute xy
+- Execute ...Successful: Executed xy
 
-### Medium
+For Queries:
+- Retrieve...: Retrieve ...
+- Retrieve...Successful: Retrieved ...
 
-- Implement EventFeed using ISubscriber
-- Introduce localization
+For EventHandlers:
+- Handle...: Handle xyEvent: Do xy zz.
+- Handle...Successful: Handled xyEvent.
 
-### Big
-
-- Replace all services with commands and queries & events
-- Introduce logging in the whole application
-
-## 3. Features / Security
-
-- Review API usage (e.g. username und pw not in query string)
-- User Sign in history
-- Password Reset
-- Polish adding of new friends
-- HealthCheck
-
-## 4. Infrastructure
-
-- Hosting (check for Domain & Certificate)
-
-## 5. Testing
-
-- Load test with 500 users
-
-## Frontend only
-
-- Remove prediction
+Remark: Manually logging is enforced to ensure that no sensitiv data is logged.

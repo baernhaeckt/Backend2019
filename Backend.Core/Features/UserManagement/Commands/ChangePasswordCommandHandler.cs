@@ -13,14 +13,11 @@ namespace Backend.Core.Features.UserManagement.Commands
         private readonly IPasswordStorage _passwordStorage;
 
         public ChangePasswordCommandHandler(IUnitOfWork unitOfWork, ILogger<ChangePasswordCommandHandler> logger, IPasswordStorage passwordStorage)
-            : base(unitOfWork, logger)
-        {
-            _passwordStorage = passwordStorage;
-        }
+            : base(unitOfWork, logger) => _passwordStorage = passwordStorage;
 
         public override async Task ExecuteAsync(ChangePasswordCommand command)
         {
-            Logger.UserPasswordChangeInitiated(command.UserId);
+            Logger.ExecuteUserPasswordChange(command.UserId);
 
             string passwordHash = await UnitOfWork.GetByIdOrThrowAsync<User, string>(command.UserId, u => u.PasswordHash);
             if (!_passwordStorage.Match(command.OldPassword, passwordHash))
@@ -32,7 +29,7 @@ namespace Backend.Core.Features.UserManagement.Commands
             object definition = new { PasswordHash = _passwordStorage.Create(command.NewPassword) };
             await UnitOfWork.UpdateAsync<User>(command.UserId, definition);
 
-            Logger.UserPasswordChangeChangeSuccessful(command.UserId);
+            Logger.ExecuteUserPasswordChangeChangeSuccessful(command.UserId);
         }
     }
 }

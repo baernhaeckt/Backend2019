@@ -17,6 +17,8 @@ namespace Backend.Core.Features.Baseline.Queries
 
         public override Task<IEnumerable<UserSufficientType>> ExecuteAsync(PointsPerSufficientTypesQuery query)
         {
+            Logger.RetrievePointsPerSufficientTypes(query.UserId);
+
             IQueryable<UserSufficientType> userSufficientTypes = Reader.GetQueryable<User>()
                 .Where(u => u.Id == query.UserId)
                 .SelectMany(u => u.PointHistory)
@@ -28,7 +30,11 @@ namespace Backend.Core.Features.Baseline.Queries
                     Co2Saving = p.Sum(c => c.Co2Saving)
                 });
 
-            return Task.FromResult(userSufficientTypes.AsEnumerable());
+            Task<IEnumerable<UserSufficientType>> result = Task.FromResult(userSufficientTypes.AsEnumerable());
+
+            Logger.RetrievePointsPerSufficientTypesSuccessful(query.UserId);
+
+            return result;
         }
     }
 }

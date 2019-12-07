@@ -20,6 +20,8 @@ namespace Backend.Core.Features.Friendship.Commands
 
         public override async Task ExecuteAsync(AddFriendCommand command)
         {
+            Logger.ExecuteAddFriend(command.UserId, command.FriendEmail);
+
             FriendUser? userToBecomeFriendWith = await UnitOfWork.SingleOrDefaultAsync<User, FriendUser>(
                 u => u.Email == command.FriendEmail.ToLowerInvariant() && u.Roles.Any(r => r == Roles.User),
                 u => new FriendUser(u.Id, u.Friends));
@@ -45,6 +47,8 @@ namespace Backend.Core.Features.Friendship.Commands
             // In the future, e.g. consider to use a appropriate data structure  (own collection) or introduce mongodb transactions.
             await UnitOfWork.UpdateAsync<User>(command.UserId, new { Friends = new List<Guid> { userToBecomeFriendWith.Id } });
             await UnitOfWork.UpdateAsync<User>(userToBecomeFriendWith.Id, new { Friends = new List<Guid> { command.UserId } });
+
+            Logger.ExecuteAddFriendSuccessful(command.UserId, command.FriendEmail, userToBecomeFriendWith.Id);
         }
 
         private class FriendUser
