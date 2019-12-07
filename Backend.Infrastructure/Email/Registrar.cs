@@ -1,4 +1,5 @@
 ﻿using Backend.Infrastructure.Abstraction.Email;
+using Backend.Infrastructure.Abstraction.Hosting;
 using Backend.Infrastructure.Email.Fakes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +13,7 @@ namespace Backend.Infrastructure.Email
         {
             services.Configure<SendGridOptions>(configuration.GetSection(nameof(SendGridOptions)));
 
-            if (hostEnvironment.IsDevelopment())
+            if (hostEnvironment.IsIntegrationTestOrDevelopment())
             {
                 services.AddSingleton<IEmailService, InMemoryEmailService>();
             }

@@ -3,6 +3,7 @@ using Backend.Core.Features.Partner.Commands;
 using Backend.Core.Features.Partner.Controllers;
 using Backend.Core.Features.Partner.Data.Testing;
 using Backend.Core.Features.Partner.Queries;
+using Backend.Core.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -22,7 +23,7 @@ namespace Backend.Core.Features.Partner
             // Queries
             services.AddScopedSubscriber<SignInQueryHandler>();
 
-            if (hostEnvironment.IsDevelopment())
+            if (hostEnvironment.IsIntegrationTestOrDevelopment())
             {
                 services.AddStartupTask<GenerateTokenIssuersStartupTask>();
             }

@@ -5,6 +5,7 @@ using Backend.Core.Features.UserManagement.Data;
 using Backend.Core.Features.UserManagement.Data.Testing;
 using Backend.Core.Features.UserManagement.EventSubscribers;
 using Backend.Core.Features.UserManagement.Queries;
+using Backend.Core.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -34,7 +35,7 @@ namespace Backend.Core.Features.UserManagement
 
             // Data setup
             services.AddStartupTask<SetIndexOnEmailStartupTask>();
-            if (hostEnvironment.IsDevelopment())
+            if (hostEnvironment.IsIntegrationTestOrDevelopment())
             {
                 services.AddStartupTask<GenerateUsersStartupTask>();
             }

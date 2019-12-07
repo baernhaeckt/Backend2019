@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Environments = Backend.Web.Environments;
 
 namespace Backend.Tests.Integration
 {
@@ -34,7 +35,7 @@ namespace Backend.Tests.Integration
 
         protected override IHost CreateHost(IHostBuilder builder)
         {
-            builder.UseEnvironment(Environments.Development);
+            builder.UseEnvironment(Environments.IntegrationTest);
 
             builder.ConfigureServices(s =>
             {

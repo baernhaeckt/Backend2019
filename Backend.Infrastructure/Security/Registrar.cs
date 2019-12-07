@@ -1,4 +1,5 @@
-﻿using Backend.Infrastructure.Abstraction.Security;
+﻿using Backend.Infrastructure.Abstraction.Hosting;
+using Backend.Infrastructure.Abstraction.Security;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -12,7 +13,7 @@ namespace Backend.Infrastructure.Security
             services.AddSingleton<IPasswordStorage, HmacSha512PasswordStorage>();
             services.AddSingleton<ISecurityTokenFactory, JwtSecurityTokenFactory>();
             services.AddSingleton<ISecurityKeyProvider, SymmetricSecurityKeyProvider>();
-            if (hostEnvironment.IsDevelopment())
+            if (hostEnvironment.IsIntegrationTestOrDevelopment())
             {
                 services.AddSingleton<IPasswordGenerator, StaticPasswordGenerator>();
             }
