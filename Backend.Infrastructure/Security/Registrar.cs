@@ -7,7 +7,7 @@ namespace Backend.Infrastructure.Security
 {
     public static class Registrar
     {
-        public static IServiceCollection AddSecurity(this IServiceCollection services, IHostEnvironment hostEnvironment)
+        public static IServiceCollection AddInfrastructureSecurity(this IServiceCollection services, IHostEnvironment hostEnvironment)
         {
             // Security Utilities
             services.AddSingleton<IPasswordStorage, HmacSha512PasswordStorage>();

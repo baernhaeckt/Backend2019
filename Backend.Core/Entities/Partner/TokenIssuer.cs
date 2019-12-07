@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Backend.Infrastructure.Abstraction.Persistence;
 
-namespace Backend.Core.Entities
+namespace Backend.Core.Entities.Partner
 {
     public class TokenIssuer : Entity
     {

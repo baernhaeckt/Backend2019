@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Backend.Core.Features.Quiz.Models
 {
@@ -8,6 +6,6 @@ namespace Backend.Core.Features.Quiz.Models
     {
         public Guid QuestionId { get; set; }
 
-        public IList<string> Answers { get; set; } = Enumerable.Empty<string>().ToList();
+        public Guid AnswerId { get; set; }
     }
 }

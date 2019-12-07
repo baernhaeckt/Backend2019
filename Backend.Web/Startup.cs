@@ -10,6 +10,7 @@ using Backend.Core.Features.Quiz;
 using Backend.Core.Features.UserManagement;
 using Backend.Infrastructure.Email;
 using Backend.Infrastructure.Geolocation;
+using Backend.Infrastructure.Hosting;
 using Backend.Infrastructure.Persistence;
 using Backend.Infrastructure.Security;
 using Backend.Web.Diagnostics;
@@ -42,18 +43,18 @@ namespace Backend.Web
             services.AddApplicationInsightsTelemetry();
 
             services.AddApiDocumentation();
-            services.AddSilverback()
-                .UseModel();
+            services.AddSilverback().UseModel();
             services.AddMvcWithCors();
             services.AddJwtAuthentication();
 
             IHealthChecksBuilder healthChecksBuilder = services.AddHealthChecks();
 
             // Infrastructure
-            services.AddMongoDbPersistence(_configuration, healthChecksBuilder);
+            services.AddInfrastructurePersistence(_configuration, healthChecksBuilder);
             services.AddInfrastructureEmail(_configuration, _hostEnvironment);
-            services.AddGeolocation(_configuration, _hostEnvironment);
-            services.AddSecurity(_hostEnvironment);
+            services.AddInfrastructureHosting();
+            services.AddInfrastructureGeolocation(_configuration, _hostEnvironment);
+            services.AddInfrastructureSecurity(_hostEnvironment);
 
             // Features
             services.AddFeatureUserManagement(_hostEnvironment);

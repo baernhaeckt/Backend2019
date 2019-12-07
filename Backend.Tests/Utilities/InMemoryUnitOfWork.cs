@@ -6,9 +6,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using Backend.Infrastructure.Abstraction.Persistence;
-using Backend.Tests.Integration.Utilities.Extensions;
+using Backend.Tests.Utilities.Extensions;
 
-namespace Backend.Tests.Integration.Utilities
+namespace Backend.Tests.Utilities
 {
     public class InMemoryUnitOfWork : InMemoryReader, IUnitOfWork
     {

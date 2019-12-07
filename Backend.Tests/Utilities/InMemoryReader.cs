@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Infrastructure.Abstraction.Persistence;
 
-namespace Backend.Tests.Integration.Utilities
+namespace Backend.Tests.Utilities
 {
     public class InMemoryReader : IReader
     {
@@ -20,7 +20,7 @@ namespace Backend.Tests.Integration.Utilities
             }
         }
 
-        protected IDictionary<Type, IList<object>> Entities { get; } = new ConcurrentDictionary<Type, IList<object>>();
+        public IDictionary<Type, IList<object>> Entities { get; } = new ConcurrentDictionary<Type, IList<object>>();
 
         public IQueryable<TEntity> GetQueryable<TEntity>()
             where TEntity : IEntity, new() =>

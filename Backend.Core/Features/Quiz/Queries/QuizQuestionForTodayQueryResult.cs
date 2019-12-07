@@ -5,7 +5,7 @@ namespace Backend.Core.Features.Quiz.Queries
 {
     public class QuizQuestionForTodayQueryResult
     {
-        public QuizQuestionForTodayQueryResult(Guid id, string question, IList<string> answers)
+        public QuizQuestionForTodayQueryResult(Guid id, string question, IEnumerable<KeyValuePair<Guid, string>> answers)
         {
             Id = id;
             Question = question;
@@ -16,6 +16,6 @@ namespace Backend.Core.Features.Quiz.Queries
 
         public string Question { get; }
 
-        public IList<string> Answers { get; }
+        public IEnumerable<KeyValuePair<Guid, string>> Answers { get; }
     }
 }

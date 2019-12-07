@@ -7,7 +7,6 @@ using Silverback.Messaging.Subscribers;
 namespace Backend.Core.Framework
 {
     public abstract class QueryHandler<TResult, TQuery> : ISubscriber
-        where TResult : class
         where TQuery : IQuery<TResult>
     {
         protected QueryHandler(IReader reader, ILogger logger)

@@ -22,6 +22,7 @@ namespace Backend.Core.Features.Quiz
 
             // StartupTasks
             services.AddStartupTask<GenerateQuizQuestionsStartupTask>();
+            services.AddStartupTask<GenerateQuizQuestionsStartupTask>();
 
             return services;
         }

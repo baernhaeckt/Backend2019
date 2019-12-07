@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Backend.Tests.Integration.Utilities.Extensions;
+using Backend.Tests.Utilities.Extensions;
 using Xunit;
 
 namespace Backend.Tests.Integration

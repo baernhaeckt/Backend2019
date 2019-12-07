@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
+using Backend.Core.Entities.Partner;
 using Backend.Infrastructure.Abstraction.Hosting;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Backend.Infrastructure.Abstraction.Security;

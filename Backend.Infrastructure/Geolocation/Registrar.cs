@@ -8,7 +8,7 @@ namespace Backend.Infrastructure.Geolocation
 {
     public static class Registrar
     {
-        public static IServiceCollection AddGeolocation(this IServiceCollection services, IConfiguration configuration, IHostEnvironment hostEnvironment)
+        public static IServiceCollection AddInfrastructureGeolocation(this IServiceCollection services, IConfiguration configuration, IHostEnvironment hostEnvironment)
         {
             services.Configure<GeocodingOptions>(configuration.GetSection(nameof(GeocodingOptions)));
 

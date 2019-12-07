@@ -9,7 +9,7 @@ namespace Backend.Core.Features.Points.Models
 
         public int Value { get; set; }
 
-        public DateTime Date { get; set; } = DateTime.Now;
+        public DateTimeOffset Date { get; set; } = DateTimeOffset.UtcNow;
 
         public double Co2Saving { get; set; }
 

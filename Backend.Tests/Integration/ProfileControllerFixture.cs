@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Backend.Core.Features.UserManagement.Models;
-using Backend.Tests.Integration.Utilities.Extensions;
+using Backend.Tests.Utilities.Extensions;
 using Xunit;
 
 namespace Backend.Tests.Integration

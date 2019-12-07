@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
+using Backend.Core.Entities.Partner;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Backend.Infrastructure.Abstraction.Security;
 using Microsoft.Extensions.Logging;

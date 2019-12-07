@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Backend.Core.Features.Quiz.Commands;
+using Backend.Core.Features.Quiz.Data;
 using Backend.Core.Features.Quiz.Models;
 using Backend.Core.Features.Quiz.Queries;
-using Backend.Tests.Integration.Utilities.Extensions;
+using Backend.Tests.Utilities.Extensions;
 using Xunit;
 
 namespace Backend.Tests.Integration
 {
+    [Collection("IntegrationTests")]
     [Trait("Category", "Integration")]
     public class QuizControllerFixture : IClassFixture<TestContext>
     {
@@ -16,21 +20,70 @@ namespace Backend.Tests.Integration
         public QuizControllerFixture(TestContext context) => _context = context;
 
         [Fact]
-        public async Task GetAndAnswer_Successful()
+        public async Task Get_Successful()
         {
             _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
             var uri = new Uri("api/quiz", UriKind.Relative);
             HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(uri);
             QuizQuestionForTodayQueryResult questionResponse = await response.OnSuccessDeserialize<QuizQuestionForTodayQueryResult>();
 
-            StringContent content = new QuestionAnswer
+            Assert.NotNull(questionResponse);
+            Assert.NotNull(questionResponse.Question);
+            Assert.NotNull(questionResponse.Answers);
+        }
+
+        [Fact]
+        public async Task Answer_GiveCorrectAnswer_Successful()
+        {
+            _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
+            var uri = new Uri("api/quiz", UriKind.Relative);
+
+            var content = new QuestionAnswer
             {
-                QuestionId = questionResponse.Id,
-                Answers = questionResponse.Answers
+                QuestionId = GenerateQuizQuestionsStartupTask.Question1.Id,
+                AnswerId = GenerateQuizQuestionsStartupTask.Question1.Answers.Single(a => a.IsCorrect).Id
             }.ToStringContent();
 
+            var response = await _context.NewTestUserHttpClient.PostAsync(uri, content);
+            var result = await response.OnSuccessDeserialize<AnswerQuizQuestionResult>();
+            Assert.True(result.IsCorrect);
+        }
+
+        [Fact]
+        public async Task Answer_GiveWrongAnswer_Successful()
+        {
+            _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
+            var uri = new Uri("api/quiz", UriKind.Relative);
+
+            var content = new QuestionAnswer
+            {
+                QuestionId = GenerateQuizQuestionsStartupTask.Question2.Id,
+                AnswerId = GenerateQuizQuestionsStartupTask.Question2.Answers.First(a => !a.IsCorrect).Id
+            }.ToStringContent();
+
+            var response = await _context.NewTestUserHttpClient.PostAsync(uri, content);
+            var result = await response.OnSuccessDeserialize<AnswerQuizQuestionResult>();
+            Assert.False(result.IsCorrect);
+        }
+
+        [Fact]
+        public async Task Answer_CannotAnswerTwoTimes_Successful()
+        {
+            _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
+            var uri = new Uri("api/quiz", UriKind.Relative);
+
+            var content = new QuestionAnswer
+            {
+                QuestionId = GenerateQuizQuestionsStartupTask.Question3.Id,
+                AnswerId = GenerateQuizQuestionsStartupTask.Question3.Answers.First(a => !a.IsCorrect).Id
+            }.ToStringContent();
+
+            var response = await _context.NewTestUserHttpClient.PostAsync(uri, content);
+            var result = await response.OnSuccessDeserialize<AnswerQuizQuestionResult>();
+            Assert.False(result.IsCorrect);
+
             response = await _context.NewTestUserHttpClient.PostAsync(uri, content);
-            response.EnsureSuccessStatusCode();
+            response.EnsureNotSuccessStatusCode();
         }
     }
 }

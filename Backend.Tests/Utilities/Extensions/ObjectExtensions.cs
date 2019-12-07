@@ -2,7 +2,7 @@
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Backend.Tests.Integration.Utilities.Extensions
+namespace Backend.Tests.Utilities.Extensions
 {
     public static class ObjectExtensions
     {

@@ -26,6 +26,6 @@ namespace Backend.Core.Features.Quiz.Controllers
         public async Task<QuizQuestionForTodayQueryResult> Get() => await _queryPublisher.ExecuteAsync(new QuizQuestionForTodayQuery(User.Id()));
 
         [HttpPost]
-        public async Task<QuestionAnswerResponse> Answer(QuestionAnswer questionAnswer) => await _commandPublisher.ExecuteAsync(new AnswerQuizQuestionCommand(User.Id(), questionAnswer));
+        public async Task<AnswerQuizQuestionResult> Answer(QuestionAnswer questionAnswer) => await _commandPublisher.ExecuteAsync(new AnswerQuizQuestionCommand(User.Id(), questionAnswer.QuestionId, questionAnswer.AnswerId));
     }
 }

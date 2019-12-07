@@ -12,7 +12,7 @@ namespace Backend.Core.Entities
 
         public string SponsorRef { get; set; } = string.Empty;
 
-        public DateTime Date { get; set; } = DateTime.Now;
+        public DateTimeOffset Date { get; set; } = DateTimeOffset.UtcNow;
 
         public UserSufficientType SufficientType { get; set; } = new UserSufficientType();
     }

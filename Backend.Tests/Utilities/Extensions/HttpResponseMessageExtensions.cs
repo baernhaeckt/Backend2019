@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Backend.Tests.Integration.Utilities.Extensions
+namespace Backend.Tests.Utilities.Extensions
 {
     public static class HttpResponseMessageExtensions
     {

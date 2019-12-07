@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Backend.Infrastructure.Abstraction.Persistence;
 
-namespace Backend.Tests.Integration.Utilities
+namespace Backend.Tests.Utilities
 {
     public class NullIndexCreator : IIndexCreator
     {

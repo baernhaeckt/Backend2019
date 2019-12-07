@@ -2,14 +2,14 @@
 using Backend.Infrastructure.Abstraction.Email;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Backend.Infrastructure.Email.Fakes;
-using Backend.Tests.Integration.Utilities;
+using Backend.Tests.Utilities;
 using Backend.Web;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-using Environments = Backend.Web.Environments;
+using Environments = Backend.Infrastructure.Abstraction.Hosting.Environments;
 
 namespace Backend.Tests.Integration
 {

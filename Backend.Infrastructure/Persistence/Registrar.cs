@@ -7,7 +7,7 @@ namespace Backend.Infrastructure.Persistence
 {
     public static class Registrar
     {
-        public static IServiceCollection AddMongoDbPersistence(this IServiceCollection services, IConfiguration configuration, IHealthChecksBuilder healthChecksBuilder)
+        public static IServiceCollection AddInfrastructurePersistence(this IServiceCollection services, IConfiguration configuration, IHealthChecksBuilder healthChecksBuilder)
         {
             services.Configure<MongoDbOptions>(configuration.GetSection(nameof(MongoDbOptions)));
             var mongoDbOptions = new MongoDbOptions();

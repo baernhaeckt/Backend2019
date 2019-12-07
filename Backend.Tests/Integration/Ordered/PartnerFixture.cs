@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Backend.Core.Features.Partner.Data.Testing;
 using Backend.Core.Features.UserManagement.Models;
-using Backend.Tests.Integration.Utilities.Extensions;
+using Backend.Tests.Utilities.Extensions;
 using Xunit;
 using Xunit.Extensions.Ordering;
 

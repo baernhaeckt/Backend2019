@@ -1,7 +1,7 @@
 ﻿using System;
 using Bogus;
 
-namespace Backend.Tests.Integration.Utilities
+namespace Backend.Tests.Utilities
 {
     public static class DataGenerator
     {

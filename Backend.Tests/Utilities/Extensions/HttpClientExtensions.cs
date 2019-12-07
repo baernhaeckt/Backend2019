@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Backend.Core.Features.UserManagement.Models;
 using Newtonsoft.Json;
 
-namespace Backend.Tests.Integration.Utilities.Extensions
+namespace Backend.Tests.Utilities.Extensions
 {
     public static class HttpClientExtensions
     {

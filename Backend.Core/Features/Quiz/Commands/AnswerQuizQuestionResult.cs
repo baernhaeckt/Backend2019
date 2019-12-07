@@ -1,6 +1,6 @@
-﻿namespace Backend.Core.Features.Quiz.Models
+﻿namespace Backend.Core.Features.Quiz.Commands
 {
-    public class QuestionAnswerResponse
+    public class AnswerQuizQuestionResult
     {
         public bool IsCorrect { get; set; }
 

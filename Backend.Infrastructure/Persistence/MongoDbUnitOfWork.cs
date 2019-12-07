@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
+using Backend.Infrastructure.Abstraction.Hosting;
 using Backend.Infrastructure.Abstraction.Persistence;
 using MongoDB.Driver;
 
@@ -12,9 +13,12 @@ namespace Backend.Infrastructure.Persistence
 {
     internal class MongoDbUnitOfWork : MongoDbReader, IUnitOfWork
     {
-        public MongoDbUnitOfWork(DbContextFactory dbContextFactory)
+        private readonly IClock _clock;
+
+        public MongoDbUnitOfWork(DbContextFactory dbContextFactory, IClock clock)
             : base(dbContextFactory)
         {
+            _clock = clock;
         }
 
         public virtual async Task<TEntity> InsertAsync<TEntity>(TEntity record)
@@ -23,7 +27,7 @@ namespace Backend.Infrastructure.Persistence
             try
             {
                 DbContext dbContext = DbContextFactory.Create();
-                record.CreatedAt = DateTime.UtcNow;
+                record.CreatedAt = _clock.Now().DateTime;
                 await dbContext.GetCollection<TEntity>().InsertOneAsync(record);
                 return record;
             }
@@ -42,7 +46,7 @@ namespace Backend.Infrastructure.Persistence
                 DbContext dbContext = DbContextFactory.Create();
                 foreach (TEntity record in records)
                 {
-                    record.CreatedAt = DateTime.UtcNow;
+                    record.CreatedAt = _clock.Now().DateTime;
                 }
 
                 await dbContext.GetCollection<TEntity>().InsertManyAsync(records);
@@ -69,7 +73,7 @@ namespace Backend.Infrastructure.Persistence
             where TEntity : IEntity, new()
         {
             DbContext dbContext = DbContextFactory.Create();
-            record.UpdatedAt = DateTime.UtcNow;
+            record.UpdatedAt = _clock.Now().DateTime;
             FilterDefinition<TEntity> filter = new ExpressionFilterDefinition<TEntity>(u => u.Id == record.Id);
             await dbContext.GetCollection<TEntity>().ReplaceOneAsync(filter, record);
         }
