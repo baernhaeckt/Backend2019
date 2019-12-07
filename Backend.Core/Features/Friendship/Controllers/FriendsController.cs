@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Backend.Core.Entities;
-using Backend.Core.Features.Friendship.Models;
+using Backend.Core.Extensions;
+using Backend.Core.Features.Friendship.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Location = Backend.Core.Features.Friendship.Models.Location;
+using Silverback.Messaging.Publishing;
 
 namespace Backend.Core.Features.Friendship.Controllers
 {
@@ -17,26 +16,19 @@ namespace Backend.Core.Features.Friendship.Controllers
     {
         private readonly FriendsService _friendService;
 
-        public FriendsController(FriendsService friendService) => _friendService = friendService;
+        private readonly IQueryPublisher _queryPublisher;
+
+        private readonly ICommandPublisher _commandPublisher;
+
+        public FriendsController(FriendsService friendService, IQueryPublisher queryPublisher, ICommandPublisher commandPublisher)
+        {
+            _friendService = friendService;
+            _queryPublisher = queryPublisher;
+            _commandPublisher = commandPublisher;
+        }
 
         [HttpGet]
-        public async Task<IEnumerable<FriendResponse>> Get()
-        {
-            IEnumerable<User> result = await _friendService.GetFriends();
-            return result.Select(u => new FriendResponse
-            {
-                Id = u.Id,
-                Email = u.Email,
-                DisplayName = u.DisplayName,
-                Location = new Location
-                {
-                    Longitude = u.Location?.Longitude ?? 0.0,
-                    Latitude = u.Location?.Latitude ?? 0.0
-                },
-                Points = u.PointHistory.Sum(p => p.Point),
-                Co2Saving = u.PointHistory.Sum(p => p.Co2Saving)
-            });
-        }
+        public async Task<IEnumerable<FriendsQueryResult>> Get() => await _queryPublisher.ExecuteAsync(new FriendsQuery(User.Id()));
 
         [HttpPost]
         public async Task Add(string friendEmail)

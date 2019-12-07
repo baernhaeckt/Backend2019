@@ -37,6 +37,10 @@ namespace Backend.Infrastructure.Abstraction.Persistence
         Task<IEnumerable<TEntity>> WhereAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
             where TEntity : IEntity, new();
 
+        Task<IEnumerable<TProjection>> WhereAsync<TEntity, TProjection>(Expression<Func<TEntity, bool>> filterPredicate, Expression<Func<TEntity, TProjection>> selectPredicate)
+            where TEntity : IEntity, new()
+            where TProjection : class;
+
         Task<TEntity> FirstOrDefaultAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
             where TEntity : IEntity, new();
 

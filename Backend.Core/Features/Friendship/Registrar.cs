@@ -1,4 +1,5 @@
 ﻿using Backend.Core.Features.Friendship.Controllers;
+using Backend.Core.Features.Friendship.Queries;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backend.Core.Features.Friendship
@@ -10,8 +11,11 @@ namespace Backend.Core.Features.Friendship
             // Controllers
             services.AddScoped<FriendsController>();
 
-            // Services
+            // CommandHandlers
             services.AddScoped<FriendsService>();
+
+            // QueryHandlers
+            services.AddScopedSubscriber<FriendsQueryHandler>();
 
             return services;
         }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Backend.Core.Features.Friendship.Models;
+using Backend.Core.Features.Friendship.Queries;
 using Backend.Core.Features.UserManagement.Data.Testing;
 using Backend.Tests.Integration.Utilities.Extensions;
 using Xunit;
@@ -26,8 +26,8 @@ namespace Backend.Tests.Integration
         public async Task FriendsList_IsEmptyAtBeginning()
         {
             HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(new Uri("api/friends", UriKind.Relative));
-            List<FriendResponse> friendResponse = await response.OnSuccessDeserialize<List<FriendResponse>>();
-            Assert.Empty(friendResponse);
+            List<FriendsQueryResult> result = await response.OnSuccessDeserialize<List<FriendsQueryResult>>();
+            Assert.Empty(result);
         }
 
         [Order(1)]
@@ -41,8 +41,8 @@ namespace Backend.Tests.Integration
             response.EnsureSuccessStatusCode();
 
             response = await _context.NewTestUserHttpClient.GetAsync(new Uri("api/friends", UriKind.Relative));
-            List<FriendResponse> friendResponse = await response.OnSuccessDeserialize<List<FriendResponse>>();
-            Assert.Equal(2, friendResponse.Count);
+            List<FriendsQueryResult> result = await response.OnSuccessDeserialize<List<FriendsQueryResult>>();
+            Assert.Equal(2, result.Count);
         }
 
         [Order(2)]
@@ -58,16 +58,16 @@ namespace Backend.Tests.Integration
         public async Task FriendsDelete_Successful()
         {
             HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(new Uri("api/friends", UriKind.Relative));
-            List<FriendResponse> friendResponse = await response.OnSuccessDeserialize<List<FriendResponse>>();
+            List<FriendsQueryResult> result = await response.OnSuccessDeserialize<List<FriendsQueryResult>>();
 
             // Remove a friend. One is left.
-            string id = friendResponse.First().Id.ToString();
+            string id = result.First().Id.ToString();
             response = await _context.NewTestUserHttpClient.DeleteAsync(new Uri("api/friends?friendUserId=" + id, UriKind.Relative));
             response.EnsureSuccessStatusCode();
 
             response = await _context.NewTestUserHttpClient.GetAsync(new Uri("api/friends", UriKind.Relative));
-            friendResponse = await response.OnSuccessDeserialize<List<FriendResponse>>();
-            Assert.Single(friendResponse);
+            result = await response.OnSuccessDeserialize<List<FriendsQueryResult>>();
+            Assert.Single(result);
         }
     }
 }

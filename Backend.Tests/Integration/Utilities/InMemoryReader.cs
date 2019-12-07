@@ -60,6 +60,11 @@ namespace Backend.Tests.Integration.Utilities
             where TEntity : IEntity, new() =>
             Task.FromResult(Entities[typeof(TEntity)].Cast<TEntity>().Where(filterPredicate.Compile()));
 
+        public Task<IEnumerable<TProjection>> WhereAsync<TEntity, TProjection>(Expression<Func<TEntity, bool>> filterPredicate, Expression<Func<TEntity, TProjection>> selectPredicate)
+            where TEntity : IEntity, new()
+            where TProjection : class =>
+            Task.FromResult(Entities[typeof(TEntity)].Cast<TEntity>().Where(filterPredicate.Compile()).Select(selectPredicate.Compile()));
+
         public Task<TEntity> FirstOrDefaultAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
             where TEntity : IEntity, new() =>
             Task.FromResult(Entities[typeof(TEntity)].Cast<TEntity>().FirstOrDefault(filterPredicate.Compile()));

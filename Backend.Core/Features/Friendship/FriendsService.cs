@@ -77,22 +77,5 @@ namespace Backend.Core.Features.Friendship
                 await _unitOfWork.UpdateAsync(exFriend);
             }
         }
-
-        public async Task<IEnumerable<User>> GetFriends()
-        {
-            User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(_principal.Id());
-            if (user.Friends == null)
-            {
-                return Enumerable.Empty<User>();
-            }
-
-            IList<User> friends = new List<User>(user.Friends.Count);
-            foreach (Guid friend in user.Friends)
-            {
-                friends.Add(await _unitOfWork.GetByIdOrDefaultAsync<User>(friend));
-            }
-
-            return friends;
-        }
     }
 }

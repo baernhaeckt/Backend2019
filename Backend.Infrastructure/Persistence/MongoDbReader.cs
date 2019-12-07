@@ -75,6 +75,15 @@ namespace Backend.Infrastructure.Persistence
             return (await dbContext.GetCollection<TEntity>().FindAsync(filter)).ToEnumerable();
         }
 
+        public async Task<IEnumerable<TProjection>> WhereAsync<TEntity, TProjection>(Expression<Func<TEntity, bool>> filterPredicate, Expression<Func<TEntity, TProjection>> selectPredicate)
+            where TEntity : IEntity, new()
+            where TProjection : class
+        {
+            DbContext dbContext = DbContextFactory.Create();
+            FilterDefinition<TEntity> filter = new ExpressionFilterDefinition<TEntity>(filterPredicate);
+            return await dbContext.GetCollection<TEntity>().Find(filter).Project(selectPredicate).ToListAsync();
+        }
+
         public async Task<TEntity> FirstOrDefaultAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
             where TEntity : IEntity, new()
         {
