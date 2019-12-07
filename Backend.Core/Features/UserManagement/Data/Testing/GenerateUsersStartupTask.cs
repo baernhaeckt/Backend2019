@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
 {
     public class GenerateUsersStartupTask : IStartupTask
     {
-        private const int SeedCount = 20;
+        private const int SeedCount = 500;
 
         private readonly IPasswordGenerator _passwordGenerator;
 
@@ -80,15 +81,17 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
 
             if (await _unitOfWork.CountAsync<User>() <= SeedCount)
             {
-                IList<string> zips = new[] { "3001", "3006", "3010", "3013", "3018", "3027", "3004", "3007", "3014" };
+                IList<string> zips = new[] { "3000", "3001", "3003", "3004", "3005", "3006", "3007", "3010", "3013", "3014", "3018", "3027", "3030" };
 
                 Faker<Location> locationFaker = new Faker<Location>()
                     .RuleFor(u => u.PostalCode, f => f.PickRandom(zips))
                     .RuleFor(u => u.City, "Bern")
-                    .RuleFor(u => u.Latitude, f => f.Location().AreaCircle(46.944699, 7.443788, 10000).Latitude)
-                    .RuleFor(u => u.Longitude, f => f.Location().AreaCircle(46.944699, 7.443788, 10000).Longitude);
+                    .RuleFor(u => u.Latitude, f => f.Location().AreaCircle(46.944699, 7.443788, 10_000).Latitude)
+                    .RuleFor(u => u.Longitude, f => f.Location().AreaCircle(46.944699, 7.443788, 10_000).Longitude);
 
-                List<Location> locations = locationFaker.Generate(100).ToList();
+                // At least 10% should share the same location.
+                // The picked locations are uniform distributed, hence just generate 10% of the seed.
+                List<Location> locations = locationFaker.Generate(SeedCount / 100 * 10).ToList();
 
                 Faker<User> faker = new Faker<User>()
                     .RuleFor(u => u.Id, f => Guid.NewGuid())
@@ -100,11 +103,14 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
 
                 List<User> fakeUsers = faker.Generate(SeedCount);
 
+                // Yes, this is expensive but we don't allow duplicated emails.
+                DeduplicateEmails(fakeUsers);
+
                 // Random generate friendships
                 var random = new Random();
                 foreach (User fakeUser in fakeUsers)
                 {
-                    for (var i = 0; i < 12; i++)
+                    for (var i = 0; i < (SeedCount / 100) * 10; i++)
                     {
                         int index = random.Next(users.Count);
                         fakeUser.Friends.Add(users[index].Id);
@@ -124,6 +130,20 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                 {
                     // The tests are executed in parallel.
                     // Just ignore.
+                }
+            }
+        }
+
+        private static void DeduplicateEmails(IEnumerable<User> fakeUsers)
+        {
+            IEnumerable<IGrouping<string, User>> duplicatedEmails = fakeUsers.GroupBy(u => u.Email, u => u);
+            foreach (IGrouping<string, User> usersWithDuplicatedEmail in duplicatedEmails)
+            {
+                short i = 0;
+                foreach (User user in usersWithDuplicatedEmail)
+                {
+                    int indexOfAt = user.Email.IndexOf("@", StringComparison.OrdinalIgnoreCase);
+                    user.Email = user.Email.Insert(indexOfAt - 1, i++.ToString(CultureInfo.InvariantCulture));
                 }
             }
         }
