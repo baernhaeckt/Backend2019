@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Backend.Core.Features.Quiz.Models;
+using Backend.Core.Features.Quiz.Queries;
 using Backend.Tests.Integration.Utilities.Extensions;
 using Xunit;
 
@@ -20,7 +21,7 @@ namespace Backend.Tests.Integration
             _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
             var uri = new Uri("api/quiz", UriKind.Relative);
             HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(uri);
-            QuestionResponse questionResponse = await response.OnSuccessDeserialize<QuestionResponse>();
+            QuizQuestionForTodayQueryResult questionResponse = await response.OnSuccessDeserialize<QuizQuestionForTodayQueryResult>();
 
             StringContent content = new QuestionAnswer
             {

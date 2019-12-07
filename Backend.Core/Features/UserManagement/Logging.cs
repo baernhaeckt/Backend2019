@@ -103,7 +103,7 @@ namespace Backend.Core.Features.UserManagement
 
         public static void RetrieveEmailAlreadyRegisteredSuccessful(this ILogger logger, string email, bool alreadyRegistered)
         {
-            logger.LogInformation(new EventId(20, typeof(Logging).Namespace), "Retrieve if there is already a user with this email. Email: {email}, AlreadyRegistered: {alreadyRegistered}", email, alreadyRegistered);
+            logger.LogInformation(new EventId(20, typeof(Logging).Namespace), "Retrieved if there is already a user with this email. Email: {email}, AlreadyRegistered: {alreadyRegistered}", email, alreadyRegistered);
         }
     }
 }

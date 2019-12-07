@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backend.Core.Features.Partner.Commands
 {
-    public class CreateNewTokenCommandHandler : CommandHandlerWithReturnValue<CreateNewTokenCommand, Guid>
+    public class CreateNewTokenCommandHandler : CommandHandler<CreateNewTokenCommand, Guid>
     {
         public CreateNewTokenCommandHandler(IUnitOfWork unitOfWork, ILogger<CreateNewTokenCommandHandler> logger)
             : base(unitOfWork, logger)
