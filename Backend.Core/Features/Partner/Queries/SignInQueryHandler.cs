@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Backend.Core.Entities;
 using Backend.Core.Entities.Partner;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Backend.Infrastructure.Abstraction.Security;
@@ -11,13 +10,13 @@ namespace Backend.Core.Features.Partner.Queries
 {
     internal class SignInQueryHandler : ISubscriber
     {
+        private readonly ILogger<SignInQueryHandler> _logger;
+
         private readonly IPasswordStorage _passwordStorage;
 
         private readonly IReader _reader;
 
         private readonly ISecurityTokenFactory _securityTokenFactory;
-
-        private readonly ILogger<SignInQueryHandler> _logger;
 
         public SignInQueryHandler(IReader reader, IPasswordStorage passwordStorage, ISecurityTokenFactory securityTokenFactory, ILogger<SignInQueryHandler> logger)
         {

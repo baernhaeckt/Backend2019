@@ -15,9 +15,9 @@ namespace Backend.Core.Features.Friendship.Controllers
     [ApiController]
     public class FriendsController : ControllerBase
     {
-        private readonly IQueryPublisher _queryPublisher;
-
         private readonly ICommandPublisher _commandPublisher;
+
+        private readonly IQueryPublisher _queryPublisher;
 
         public FriendsController(IQueryPublisher queryPublisher, ICommandPublisher commandPublisher)
         {

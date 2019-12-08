@@ -84,7 +84,7 @@ namespace Backend.Tests.Utilities
             }
 
             TProjection? projection = selectPredicate.Compile().Invoke(queryResult);
-            return Task.FromResult<TProjection?>(projection);
+            return Task.FromResult(projection);
         }
 
         public Task<TEntity> SingleAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)

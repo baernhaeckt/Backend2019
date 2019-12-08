@@ -110,7 +110,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                 var random = new Random();
                 foreach (User fakeUser in fakeUsers)
                 {
-                    for (var i = 0; i < (SeedCount / 100) * 10; i++)
+                    for (var i = 0; i < SeedCount / 100 * 10; i++)
                     {
                         int index = random.Next(users.Count);
                         fakeUser.Friends.Add(users[index].Id);

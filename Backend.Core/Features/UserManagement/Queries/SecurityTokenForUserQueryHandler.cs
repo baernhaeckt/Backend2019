@@ -14,10 +14,7 @@ namespace Backend.Core.Features.UserManagement.Queries
         private readonly ISecurityTokenFactory _securityTokenFactory;
 
         public SecurityTokenForUserQueryHandler(IReader reader, ILogger<SecurityTokenForUserQueryHandler> logger, ISecurityTokenFactory securityTokenFactory)
-            : base(reader, logger)
-        {
-            _securityTokenFactory = securityTokenFactory;
-        }
+            : base(reader, logger) => _securityTokenFactory = securityTokenFactory;
 
         public override async Task<SecurityTokenForUserQueryResult> ExecuteAsync(SecurityTokenForUserQuery query)
         {

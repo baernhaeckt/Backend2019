@@ -16,10 +16,7 @@ namespace Backend.Web
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webHost =>
-                {
-                    webHost.UseStartup<Startup>();
-                });
+                .ConfigureWebHostDefaults(webHost => { webHost.UseStartup<Startup>(); });
         }
     }
 }

@@ -5,10 +5,7 @@ namespace Backend.Tests.Integration
 {
     public class OrderedTestContext : TestContext
     {
-        public OrderedTestContext()
-        {
-            PartnerHttpClient = CreateClient();
-        }
+        public OrderedTestContext() => PartnerHttpClient = CreateClient();
 
         public HttpClient PartnerHttpClient { get; }
 

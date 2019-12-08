@@ -24,6 +24,8 @@ namespace Backend.Core.Entities.Partner
 
         public IList<Guid> UsedBy { get; set; } = Enumerable.Empty<Guid>().ToList();
 
+        public object Clone() => MemberwiseClone();
+
         public Token CreateFromPrototype()
         {
             var newToken = (Token)MemberwiseClone();
@@ -33,7 +35,5 @@ namespace Backend.Core.Entities.Partner
             newToken.SufficientType = (SufficientType)SufficientType.Clone();
             return newToken;
         }
-
-        public object Clone() => MemberwiseClone();
     }
 }

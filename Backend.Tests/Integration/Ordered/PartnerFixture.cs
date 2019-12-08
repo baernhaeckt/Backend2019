@@ -108,7 +108,7 @@ namespace Backend.Tests.Integration
             response.EnsureSuccessStatusCode();
             string tokenValue = await response.Content.ReadAsStringAsync();
 
-            for (int i = 0; i < 2; i++)
+            for (var i = 0; i < 2; i++)
             {
                 await UseMultiuseToken(_context.NewTestUserHttpClient, tokenValue);
             }
@@ -116,7 +116,7 @@ namespace Backend.Tests.Integration
             // Will be used to test the ranking.
             // Prepare some users and use tokens to get them points.
             // One of them hasn't the same Zip and one is not friend.
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 await CreateUserMakeFriendWithTestUserAndUseToken("4000", tokenValue, i);
             }
@@ -127,7 +127,7 @@ namespace Backend.Tests.Integration
 
         private async Task CreateUserMakeFriendWithTestUserAndUseToken(string zip, string tokenValue, int numberOfTokenUse)
         {
-            var newHttpClient = _context.CreateNewHttpClient();
+            HttpClient newHttpClient = _context.CreateNewHttpClient();
             string newUserEmail = await newHttpClient.CreateUserAndSignIn();
 
             var url = new Uri("api/profile", UriKind.Relative);
@@ -135,7 +135,7 @@ namespace Backend.Tests.Integration
             HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(url, content);
             response.EnsureSuccessStatusCode();
 
-            for (int i = 0; i < numberOfTokenUse; i++)
+            for (var i = 0; i < numberOfTokenUse; i++)
             {
                 await UseMultiuseToken(newHttpClient, tokenValue);
             }

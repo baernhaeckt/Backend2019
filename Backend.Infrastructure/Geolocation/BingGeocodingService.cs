@@ -11,9 +11,9 @@ namespace Backend.Infrastructure.Geolocation
 {
     internal class BingGeocodingService : IGeocodingService
     {
-        private readonly IOptions<GeocodingOptions> _options;
-
         private readonly ILogger<BingGeocodingService> _logger;
+
+        private readonly IOptions<GeocodingOptions> _options;
 
         public BingGeocodingService(IOptions<GeocodingOptions> options, ILogger<BingGeocodingService> logger)
         {
