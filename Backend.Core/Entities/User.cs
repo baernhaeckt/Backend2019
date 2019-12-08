@@ -17,10 +17,22 @@ namespace Backend.Core.Entities
 
         public IList<Guid> Friends { get; set; } = Enumerable.Empty<Guid>().ToList();
 
-        [Obsolete("Calculate using the point history.")]
+        /// <summary>
+        ///     Gets or sets the total points earned by this user.
+        ///     <remarks>
+        ///         This can also be calculated using the PointHistory, should always be the same as the sum of all points in the
+        ///         history.
+        ///     </remarks>
+        /// </summary>
         public int Points { get; set; }
 
-        [Obsolete("Calculate using the point history.")]
+        /// <summary>
+        ///     Gets or sets the total amount of saved CO2 by this user.
+        ///     <remarks>
+        ///         This can also be calculated using the PointHistory, should always be the same as the sum of all points in the
+        ///         history.
+        ///     </remarks>
+        /// </summary>
         public double Co2Saving { get; set; }
 
         public IList<PointAction> PointHistory { get; set; } = Enumerable.Empty<PointAction>().ToList();
