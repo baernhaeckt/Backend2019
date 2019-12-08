@@ -15,6 +15,7 @@ namespace Backend.Core.Features.Points
 
             // QueryHandlers
             services.AddScopedSubscriber<RankingQueryHandler>();
+            services.AddScopedSubscriber<PointHistoryForUserQueryHandler>();
 
             // EventHandlers
             services.AddScopedSubscriber<PartnerTokenRegisteredEventHandler>();

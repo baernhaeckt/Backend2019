@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Backend.Core.Features.Points.Models;
+using Backend.Core.Features.Points.Queries;
 using Backend.Tests.Utilities.Extensions;
 using Xunit;
 using Xunit.Extensions.Ordering;
@@ -24,7 +25,7 @@ namespace Backend.Tests.Integration
         {
             var url = new Uri("api/points", UriKind.Relative);
             HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
-            IEnumerable<PointResponse> pointResponse = await response.OnSuccessDeserialize<IEnumerable<PointResponse>>();
+            IEnumerable<PointHistoryForUserQueryResult> pointResponse = await response.OnSuccessDeserialize<IEnumerable<PointHistoryForUserQueryResult>>();
             Assert.Equal(7, pointResponse.Count());
         }
 
