@@ -31,7 +31,6 @@ namespace Backend.Infrastructure.Email
 
             _logger.SendEmail(subject, text, receiver);
 
-            // TODO: This shall be saved to the database and processed async.
             Response response = await client.SendEmailAsync(mail);
             if (response.StatusCode != HttpStatusCode.Accepted)
             {
