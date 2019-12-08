@@ -1,21 +1,24 @@
-﻿using Backend.Core.Entities;
+﻿using System;
 using Silverback.Messaging.Messages;
 
 namespace Backend.Core.Events
 {
     public class UserNewPointsEvent : IEvent
     {
-        public UserNewPointsEvent(User user, int points, double co2Saving)
+        public UserNewPointsEvent(Guid userId, int points, double co2Saving, string userDisplayName)
         {
-            User = user;
+            UserId = userId;
             Points = points;
             Co2Saving = co2Saving;
+            UserDisplayName = userDisplayName;
         }
 
-        public User User { get; }
+        public Guid UserId { get; }
 
         public int Points { get; }
 
         public double Co2Saving { get; }
+
+        public string UserDisplayName { get; }
     }
 }

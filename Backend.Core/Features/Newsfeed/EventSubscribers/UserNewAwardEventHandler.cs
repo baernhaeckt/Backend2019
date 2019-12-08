@@ -1,8 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Backend.Core.Entities;
 using Backend.Core.Events;
 using Backend.Core.Features.Newsfeed.Abstraction;
 using Backend.Core.Features.Newsfeed.Events;
 using Backend.Core.Framework;
+using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.Extensions.Logging;
 
 namespace Backend.Core.Features.Newsfeed.EventSubscribers
@@ -11,18 +15,25 @@ namespace Backend.Core.Features.Newsfeed.EventSubscribers
     {
         private readonly IEventFeed _eventFeed;
 
-        public UserNewAwardEventHandler(IEventFeed eventFeed, ILogger<UserNewAwardEventHandler> logger)
-            : base(logger) => _eventFeed = eventFeed;
+        private readonly IReader _reader;
+
+        public UserNewAwardEventHandler(IEventFeed eventFeed, ILogger<UserNewAwardEventHandler> logger, IReader reader)
+            : base(logger)
+        {
+            _eventFeed = eventFeed;
+            _reader = reader;
+        }
 
         public override async Task ExecuteAsync(UserNewAwardEvent @event)
         {
-            Logger.HandleNewAwardEvent(@event.User.Id, @event.Award.Kind);
+            Logger.HandleNewAwardEvent(@event.UserId, @event.AwardName);
 
-            // TODO: This should be non-blocking..
-            await _eventFeed.PublishAsync(new AwardReceivedNewsfeedEvent(@event.User, @event.Award));
-            await _eventFeed.PublishAsync(new FriendNewsfeedAwardReceivedEvent(@event.User, @event.Award));
+            IEnumerable<Guid> friends = await _reader.GetByIdOrThrowAsync<User, IEnumerable<Guid>>(@event.UserId, user => user.Friends);
 
-            Logger.HandleNewAwardEventSuccessful(@event.User.Id, @event.Award.Kind);
+            await _eventFeed.PublishAsync(new AwardReceivedNewsfeedEvent(@event.UserId, @event.AwardName));
+            await _eventFeed.PublishAsync(new FriendNewsfeedAwardReceivedEvent(@event.UserDisplayName, friends, @event.AwardName));
+
+            Logger.HandleNewAwardEventSuccessful(@event.UserId, @event.AwardName);
         }
     }
 }

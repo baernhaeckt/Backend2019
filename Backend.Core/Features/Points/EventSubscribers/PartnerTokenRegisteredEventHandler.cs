@@ -31,9 +31,9 @@ namespace Backend.Core.Features.Points.EventSubscribers
         {
             _logger.HandlePartnerTokenRegisteredEvent(@event.UserId, @event.TokenId);
 
-            (Guid id, int points, double co2Saving) = await _unitOfWork
-                .GetByIdOrThrowAsync<User, Tuple<Guid, int, double>>(
-                    @event.UserId, u => new Tuple<Guid, int, double>(u.Id, u.PointHistory.Sum(pa => pa.Point), u.PointHistory.Sum(pa => pa.Co2Saving)));
+            (Guid id, int points, double co2Saving, string displayName) = await _unitOfWork
+                .GetByIdOrThrowAsync<User, Tuple<Guid, int, double, string>>(
+                    @event.UserId, u => new Tuple<Guid, int, double, string>(u.Id, u.PointHistory.Sum(pa => pa.Point), u.PointHistory.Sum(pa => pa.Co2Saving), u.DisplayName));
 
             Token token = await _unitOfWork.GetByIdOrThrowAsync<Token>(@event.TokenId);
 
@@ -60,9 +60,7 @@ namespace Backend.Core.Features.Points.EventSubscribers
             _logger.PartnerGrantPointsForTokenUpdateUser(updateObject);
             await _unitOfWork.UpdateAsync<User>(id, updateObject);
 
-            // TODO: Refactor for performance reasons.
-            User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(@event.UserId);
-            await _eventPublisher.PublishAsync(new UserNewPointsEvent(user, token.Points, token.Co2Saving));
+            await _eventPublisher.PublishAsync(new UserNewPointsEvent(id, token.Points, token.Co2Saving, displayName));
 
             _logger.HandlePartnerTokenRegisteredEventSuccessful(@event.UserId, @event.TokenId);
         }

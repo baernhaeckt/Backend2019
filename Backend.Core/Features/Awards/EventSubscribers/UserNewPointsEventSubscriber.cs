@@ -27,39 +27,46 @@ namespace Backend.Core.Features.Awards.EventSubscribers
 
         public override async Task ExecuteAsync(UserNewPointsEvent @event)
         {
-            Logger.HandleUserNewPointsEvent(@event.User.Id);
+            Logger.HandleUserNewPointsEvent(@event.UserId);
+
+            User user = await _unitOfWork.GetByIdOrThrowAsync<User, User>(@event.UserId, user => new User
+            {
+                DisplayName = user.DisplayName,
+                PointHistory = user.PointHistory,
+                Awards = user.Awards
+            });
 
             IList<Award> newAwards = new List<Award>();
-            if (@event.User.PointHistory.Count >= 1
-                && @event.User.Awards.All(a => !(a is OnBoardingAward)))
+            if (user.PointHistory.Count >= 1
+                && user.Awards.All(a => !(a is OnBoardingAward)))
             {
                 // This is the first token the user gets, so this is worth an award.
                 var award = new OnBoardingAward();
                 newAwards.Add(award);
 
-                Logger.GrantAward(@event.User.Id, award.Kind);
+                Logger.GrantAward(@event.UserId, award.Kind);
             }
 
-            if (@event.User.PointHistory.Count(t => string.Equals(t.SufficientType.Title, "Verpackung", StringComparison.OrdinalIgnoreCase)) >= 2
-                && @event.User.Awards.All(a => !(a is TrashHeroAward)))
+            if (user.PointHistory.Count(t => string.Equals(t.SufficientType.Title, "Verpackung", StringComparison.OrdinalIgnoreCase)) >= 2
+                && user.Awards.All(a => !(a is TrashHeroAward)))
             {
                 var award = new TrashHeroAward();
                 newAwards.Add(award);
 
-                Logger.GrantAward(@event.User.Id, award.Kind);
+                Logger.GrantAward(@event.UserId, award.Kind);
             }
 
             if (newAwards.Any())
             {
-                await _unitOfWork.UpdateAsync<User>(@event.User.Id, new { Awards = newAwards });
+                await _unitOfWork.UpdateAsync<User>(@event.UserId, new { Awards = newAwards });
 
                 foreach (Award newAward in newAwards)
                 {
-                    await _eventPublisher.PublishAsync(new UserNewAwardEvent(@event.User, newAward));
+                    await _eventPublisher.PublishAsync(new UserNewAwardEvent(@event.UserId, user.DisplayName, newAward.Title));
                 }
             }
 
-            Logger.HandleUserNewPointsEventSuccessful(@event.User.Id, newAwards.Count);
+            Logger.HandleUserNewPointsEventSuccessful(@event.UserId, newAwards.Count);
         }
     }
 }

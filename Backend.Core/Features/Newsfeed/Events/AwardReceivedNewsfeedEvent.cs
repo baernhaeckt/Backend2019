@@ -1,15 +1,14 @@
-﻿using Backend.Core.Entities;
-using Backend.Core.Entities.Awards;
+﻿using System;
 
 namespace Backend.Core.Features.Newsfeed.Events
 {
     public class AwardReceivedNewsfeedEvent : OwnNewsfeedEvent
     {
-        public AwardReceivedNewsfeedEvent(User user, Award award)
-            : base(user)
+        public AwardReceivedNewsfeedEvent(Guid userId, string awardName)
+            : base(userId)
         {
             Title = "Award erhalten";
-            Message = "Gratulation, du hast den Award '" + award.Name + "' erhalten!";
+            Message = "Gratulation, du hast den Award '" + awardName + "' erhalten!";
         }
     }
 }

@@ -11,14 +11,14 @@ namespace Backend.Core.Features.Newsfeed
             logger.LogInformation(new EventId(1, typeof(Logging).Namespace), "Publish new event to signalR newsfeed. Title: {title}, Audience: {audience}", @event.Title, string.Join(',', @event.Audience));
         }
 
-        public static void HandleNewAwardEvent(this ILogger logger, Guid userId, string awardKind)
+        public static void HandleNewAwardEvent(this ILogger logger, Guid userId, string awardName)
         {
-            logger.LogTrace(new EventId(2, typeof(Logging).Namespace), "Handle NewAwardEvent: Publish to newsfeed. UserId: {userId}, AwardKind: {awardKind}", userId, awardKind);
+            logger.LogTrace(new EventId(2, typeof(Logging).Namespace), "Handle NewAwardEvent: Publish to newsfeed. UserId: {userId}, AwardName: {awardName}", userId, awardName);
         }
 
-        public static void HandleNewAwardEventSuccessful(this ILogger logger, Guid userId, string awardKind)
+        public static void HandleNewAwardEventSuccessful(this ILogger logger, Guid userId, string awardName)
         {
-            logger.LogTrace(new EventId(2, typeof(Logging).Namespace), "Handled NewAwardEvent. {userId}, AwardKind: {awardKind}", userId, awardKind);
+            logger.LogTrace(new EventId(2, typeof(Logging).Namespace), "Handled NewAwardEvent. {userId}, AwardName: {awardName}", userId, awardName);
         }
 
         public static void HandleUserNewPointsEvent(this ILogger logger, Guid userId, int points, double co2Savings)

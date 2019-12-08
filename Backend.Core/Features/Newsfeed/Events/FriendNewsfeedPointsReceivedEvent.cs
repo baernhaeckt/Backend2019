@@ -1,14 +1,15 @@
-﻿using Backend.Core.Entities;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Backend.Core.Features.Newsfeed.Events
 {
     public class FriendNewsfeedPointsReceivedEvent : FriendNewsfeedEvent
     {
-        public FriendNewsfeedPointsReceivedEvent(User user, int points)
-            : base(user)
+        public FriendNewsfeedPointsReceivedEvent(string displayName, IEnumerable<Guid> friends, int points)
+            : base(friends)
         {
             Title = "Neue Punkte";
-            Message = "Dein Freund " + user.DisplayName + " hat " + points + " Suffizienz Punkte erhalten!";
+            Message = "Dein Freund " + displayName + " hat " + points + " Suffizienz Punkte erhalten!";
         }
     }
 }

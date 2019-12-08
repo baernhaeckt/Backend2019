@@ -30,7 +30,7 @@ namespace Backend.Core.Features.Points.EventSubscribers
         {
             _logger.HandleQuizQuestionCorrectAnsweredEvent(@event.UserId, @event.QuestionPoints);
 
-            (Guid id, int points) = await _unitOfWork.GetByIdOrThrowAsync<User, Tuple<Guid, int>>(@event.UserId, u => new Tuple<Guid, int>(u.Id, u.PointHistory.Sum(pa => pa.Point)));
+            (Guid id, string displayName, int points) = await _unitOfWork.GetByIdOrThrowAsync<User, Tuple<Guid, string, int>>(@event.UserId, u => new Tuple<Guid, string, int>(u.Id, u.DisplayName, u.PointHistory.Sum(pa => pa.Point)));
 
             var updateObject = new
             {
@@ -51,9 +51,7 @@ namespace Backend.Core.Features.Points.EventSubscribers
             _logger.PartnerGrantPointsForCorrectQuizAnswerUpdateUser(updateObject);
             await _unitOfWork.UpdateAsync<User>(id, updateObject);
 
-            // TODO: Refactor this for performance reasons.
-            User user = await _unitOfWork.GetByIdOrDefaultAsync<User>(@event.UserId);
-            await _eventPublisher.PublishAsync(new UserNewPointsEvent(user, @event.QuestionPoints, 0));
+            await _eventPublisher.PublishAsync(new UserNewPointsEvent(@event.UserId, @event.QuestionPoints, 0, displayName));
 
             _logger.HandleQuizQuestionCorrectAnsweredEventSuccessful(@event.UserId, @event.QuestionPoints);
         }

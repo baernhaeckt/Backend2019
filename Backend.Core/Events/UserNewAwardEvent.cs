@@ -1,19 +1,21 @@
-﻿using Backend.Core.Entities;
-using Backend.Core.Entities.Awards;
+﻿using System;
 using Silverback.Messaging.Messages;
 
 namespace Backend.Core.Events
 {
     public class UserNewAwardEvent : IEvent
     {
-        public UserNewAwardEvent(User user, Award award)
+        public UserNewAwardEvent(Guid userId, string userDisplayName, string awardName)
         {
-            User = user;
-            Award = award;
+            UserId = userId;
+            UserDisplayName = userDisplayName;
+            AwardName = awardName;
         }
 
-        public User User { get; }
+        public Guid UserId { get; }
 
-        public Award Award { get; }
+        public string UserDisplayName { get; }
+
+        public string AwardName { get; }
     }
 }

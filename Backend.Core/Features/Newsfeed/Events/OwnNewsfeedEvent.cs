@@ -1,12 +1,12 @@
-﻿using Backend.Core.Entities;
+﻿using System;
 
 namespace Backend.Core.Features.Newsfeed.Events
 {
     public abstract class OwnNewsfeedEvent : NewsfeedEvent
     {
-        protected OwnNewsfeedEvent(User user)
+        protected OwnNewsfeedEvent(Guid userId)
         {
-            Audience.Add(user.Id);
+            Audience.Add(userId);
             Variant = "success";
         }
     }

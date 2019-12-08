@@ -1,15 +1,15 @@
-﻿using Backend.Core.Entities;
-using Backend.Core.Entities.Awards;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Backend.Core.Features.Newsfeed.Events
 {
     public class FriendNewsfeedAwardReceivedEvent : FriendNewsfeedEvent
     {
-        public FriendNewsfeedAwardReceivedEvent(User user, Award award)
-            : base(user)
+        public FriendNewsfeedAwardReceivedEvent(string displayName, IEnumerable<Guid> friends, string awardName)
+            : base(friends)
         {
             Title = "Neuer Award";
-            Message = "Dein Freund " + user.DisplayName + " hat den Award '" + award.Name + "' erhalten!";
+            Message = "Dein Freund " + displayName + " hat den Award '" + awardName + "' erhalten!";
         }
     }
 }

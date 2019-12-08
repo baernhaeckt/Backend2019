@@ -1,8 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Backend.Core.Entities;
 using Backend.Core.Events;
 using Backend.Core.Features.Newsfeed.Abstraction;
 using Backend.Core.Features.Newsfeed.Events;
 using Backend.Core.Framework;
+using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.Extensions.Logging;
 
 namespace Backend.Core.Features.Newsfeed.EventSubscribers
@@ -11,18 +15,25 @@ namespace Backend.Core.Features.Newsfeed.EventSubscribers
     {
         private readonly IEventFeed _eventFeed;
 
-        public UserNewPointsEventHandler(IEventFeed eventFeed, ILogger<UserNewPointsEventHandler> logger)
-            : base(logger) => _eventFeed = eventFeed;
+        private readonly IReader _reader;
+
+        public UserNewPointsEventHandler(IEventFeed eventFeed, ILogger<UserNewPointsEventHandler> logger, IReader reader)
+            : base(logger)
+        {
+            _eventFeed = eventFeed;
+            _reader = reader;
+        }
 
         public override async Task ExecuteAsync(UserNewPointsEvent @event)
         {
-            Logger.HandleUserNewPointsEvent(@event.User.Id, @event.Points, @event.Co2Saving);
+            Logger.HandleUserNewPointsEvent(@event.UserId, @event.Points, @event.Co2Saving);
 
-            // TODO: This should be non-blocking..
-            await _eventFeed.PublishAsync(new PointsReceivedNewsfeedEvent(@event.User, @event.Points));
-            await _eventFeed.PublishAsync(new FriendNewsfeedPointsReceivedEvent(@event.User, @event.Points));
+            IEnumerable<Guid> friends = await _reader.GetByIdOrThrowAsync<User, IEnumerable<Guid>>(@event.UserId, user => user.Friends);
 
-            Logger.HandleUserNewPointsEventSuccessful(@event.User.Id, @event.Points, @event.Co2Saving);
+            await _eventFeed.PublishAsync(new PointsReceivedNewsfeedEvent(@event.UserId, @event.Points));
+            await _eventFeed.PublishAsync(new FriendNewsfeedPointsReceivedEvent(@event.UserDisplayName, friends, @event.Points));
+
+            Logger.HandleUserNewPointsEventSuccessful(@event.UserId, @event.Points, @event.Co2Saving);
         }
     }
 }

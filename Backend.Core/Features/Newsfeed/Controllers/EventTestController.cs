@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Entities.Awards;
-using Backend.Core.Extensions;
 using Backend.Core.Features.Newsfeed.Abstraction;
 using Backend.Core.Features.Newsfeed.Events;
 using Backend.Infrastructure.Abstraction.Persistence;
@@ -27,31 +27,31 @@ namespace Backend.Core.Features.Newsfeed.Controllers
         }
 
         [HttpGet(nameof(PointsReceived))]
-        public async Task PointsReceived()
+        public async Task PointsReceived(Guid userId)
         {
-            User user = await _reader.GetByIdOrThrowAsync<User>(HttpContext.User.Id());
-            await _eventFeed.PublishAsync(new PointsReceivedNewsfeedEvent(user, 5));
+            User user = await _reader.GetByIdOrThrowAsync<User>(userId);
+            await _eventFeed.PublishAsync(new PointsReceivedNewsfeedEvent(user.Id, 5));
         }
 
         [HttpGet(nameof(BadgeReceived))]
-        public async Task BadgeReceived()
+        public async Task BadgeReceived(Guid userId)
         {
-            User user = await _reader.GetByIdOrThrowAsync<User>(HttpContext.User.Id());
-            await _eventFeed.PublishAsync(new AwardReceivedNewsfeedEvent(user, new TrashHeroAward()));
+            User user = await _reader.GetByIdOrThrowAsync<User>(userId);
+            await _eventFeed.PublishAsync(new AwardReceivedNewsfeedEvent(user.Id, new TrashHeroAward().Title));
         }
 
         [HttpGet(nameof(FriendBadgeReceived))]
-        public async Task FriendBadgeReceived()
+        public async Task FriendBadgeReceived(Guid userId)
         {
-            User user = await _reader.GetByIdOrThrowAsync<User>(HttpContext.User.Id());
-            await _eventFeed.PublishAsync(new FriendNewsfeedAwardReceivedEvent(user, new TrashHeroAward()));
+            User user = await _reader.GetByIdOrThrowAsync<User>(userId);
+            await _eventFeed.PublishAsync(new FriendNewsfeedAwardReceivedEvent(user.DisplayName, user.Friends, new TrashHeroAward().Title));
         }
 
         [HttpGet(nameof(FriendPointsReceived))]
-        public async Task FriendPointsReceived()
+        public async Task FriendPointsReceived(Guid userId)
         {
-            User user = await _reader.GetByIdOrThrowAsync<User>(HttpContext.User.Id());
-            await _eventFeed.PublishAsync(new FriendNewsfeedPointsReceivedEvent(user, 5));
+            User user = await _reader.GetByIdOrThrowAsync<User>(userId);
+            await _eventFeed.PublishAsync(new FriendNewsfeedPointsReceivedEvent(user.DisplayName, user.Friends, 5));
         }
     }
 }
