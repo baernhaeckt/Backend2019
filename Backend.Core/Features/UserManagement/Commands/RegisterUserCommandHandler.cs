@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Events;
@@ -30,10 +32,15 @@ namespace Backend.Core.Features.UserManagement.Commands
         {
             Logger.ExecuteUserRegistration(command.Email);
 
+            if (!IsValidEmail(command.Email))
+            {
+                throw new ValidationException("Email address is not valid.");
+            }
+
             string newPassword = _passwordGenerator.Generate();
             var newUser = new User
             {
-                Email = command.Email.ToLowerInvariant(), // TODO: Validate E-Mail Address
+                Email = command.Email.ToLowerInvariant(),
                 PasswordHash = _passwordStorage.Create(newPassword),
                 DisplayName = "Newby",
                 Roles = new List<string> { Roles.User },
@@ -50,6 +57,20 @@ namespace Backend.Core.Features.UserManagement.Commands
             Logger.ExecuteUserRegistrationSuccessful(newUser.Id, command.Email);
 
             await _eventPublisher.PublishAsync(new UserRegisteredEvent(newUser, newPassword));
+        }
+
+        [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Must not throw.")]
+        private static bool IsValidEmail(string email)
+        {
+            try
+            {
+                var mailAddress = new System.Net.Mail.MailAddress(email);
+                return mailAddress.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
