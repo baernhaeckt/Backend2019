@@ -5,7 +5,7 @@ using Backend.Core.Features.UserManagement.Data;
 using Backend.Core.Features.UserManagement.Data.Testing;
 using Backend.Core.Features.UserManagement.EventSubscribers;
 using Backend.Core.Features.UserManagement.Queries;
-using Backend.Core.Hosting;
+using Backend.Infrastructure.Abstraction.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
