@@ -1,4 +1,5 @@
 ﻿using System;
+using Backend.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
@@ -10,7 +11,7 @@ namespace Backend.Web.Setup
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Leaf" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = Metadata.ApplicationName });
                 c.AddSecurityDefinition(
                     "bearer",
                     new OpenApiSecurityScheme

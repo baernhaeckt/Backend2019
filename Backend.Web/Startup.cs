@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Backend.Core;
 using Backend.Core.Features.Awards;
 using Backend.Core.Features.Baseline;
 using Backend.Core.Features.Friendship;
@@ -18,6 +19,7 @@ using Backend.Web.Middleware;
 using Backend.Web.Setup;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -79,8 +81,15 @@ namespace Backend.Web
 
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(Localization.DefaultCultureInfo.TwoLetterISOLanguageName),
+                SupportedCultures = Localization.SupportedCultures, // Formatting numbers, dates, etc.
+                SupportedUICultures = Localization.SupportedCultures // UI strings that are localized.
+            });
+
             app.UseSwagger();
-            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Leaf API V1"); });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{Metadata.ApplicationName} API V1"); });
 
             app.UseCors(x =>
                 x.AllowAnyMethod()
