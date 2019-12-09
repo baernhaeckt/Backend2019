@@ -31,8 +31,8 @@ namespace Backend.Core.Features.Points.EventSubscribers
         {
             _logger.HandlePartnerTokenRegisteredEvent(@event.UserId, @event.TokenId);
 
-            (Guid id, int points, double co2Saving, string displayName) = await _unitOfWork
-                .GetByIdOrThrowAsync<User, Tuple<Guid, int, double, string>>(
+            // Use PointHistory to get the current points/Co2Savings and take this as a chance to sync, if there is a mismatch between those values and the PointHistory.
+            (Guid id, int points, double co2Saving, string displayName) = await _unitOfWork.GetByIdOrThrowAsync<User, Tuple<Guid, int, double, string>>(
                     @event.UserId, u => new Tuple<Guid, int, double, string>(u.Id, u.PointHistory.Sum(pa => pa.Point), u.PointHistory.Sum(pa => pa.Co2Saving), u.DisplayName));
 
             Token token = await _unitOfWork.GetByIdOrThrowAsync<Token>(@event.TokenId);

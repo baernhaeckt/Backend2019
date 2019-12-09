@@ -67,7 +67,7 @@ namespace Backend.Core.Features.Points.Queries
         {
             Logger.RetrieveRankingSummary(query.Id);
 
-            RankingSummaryUserProjection userInformation = await Reader.GetByIdOrThrowAsync<User, RankingSummaryUserProjection>(query.Id, u => new RankingSummaryUserProjection(u.PointHistory.Sum(pa => pa.Point), u.Location.PostalCode));
+            RankingSummaryUserProjection userInformation = await Reader.GetByIdOrThrowAsync<User, RankingSummaryUserProjection>(query.Id, u => new RankingSummaryUserProjection(u.Points, u.Location.PostalCode));
             long globalRank = await Reader.CountAsync<User>(u => u.Points > userInformation.Points);
             long localRank = await Reader.CountAsync<User>(u => u.Location.PostalCode == userInformation.Zip && u.Points > userInformation.Points);
             long friendRank = await Reader.CountAsync<User>(u => u.Friends.Contains(query.Id) && u.Points > userInformation.Points);
@@ -88,7 +88,8 @@ namespace Backend.Core.Features.Points.Queries
 
             queryable = queryable.Where(u => !u.Roles.Contains(Roles.Administrator));
 
-            return queryable.Select(u => new RankingQueryResult(u.Id, u.DisplayName, u.PointHistory.Sum(pa => pa.Point)))
+            return queryable
+                .Select(u => new RankingQueryResult(u.Id, u.DisplayName, u.Points))
                 .OrderByDescending(u => u.Points)
                 .Take(MaxResults);
         }
