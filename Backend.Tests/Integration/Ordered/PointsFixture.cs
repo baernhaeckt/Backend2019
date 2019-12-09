@@ -27,6 +27,7 @@ namespace Backend.Tests.Integration
             HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
             IEnumerable<PointHistoryForUserQueryResult> pointResponse = await response.OnSuccessDeserialize<IEnumerable<PointHistoryForUserQueryResult>>();
             Assert.Equal(7, pointResponse.Count());
+            Assert.True(pointResponse.First().Date > pointResponse.Last().Date); // Order by Descending
         }
 
         [Fact]

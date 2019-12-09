@@ -74,5 +74,15 @@ namespace Backend.Core.Features.Points
         {
             logger.LogInformation(new EventId(14, typeof(Logging).Namespace), "Retrieved ranking.");
         }
+
+        public static void RetrievePointHistoryForUser(this ILogger logger, Guid userId)
+        {
+            logger.LogInformation(new EventId(15, typeof(Logging).Namespace), "Retrieve point history for user. UserId: {userId}", userId);
+        }
+
+        public static void RetrievePointHistoryForUserSuccessful(this ILogger logger, Guid userId)
+        {
+            logger.LogInformation(new EventId(16, typeof(Logging).Namespace), "Retrieved point history for user. UserId: {userId}", userId);
+        }
     }
 }

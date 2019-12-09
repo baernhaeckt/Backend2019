@@ -17,15 +17,22 @@ namespace Backend.Core.Features.Points.Queries
         {
         }
 
-        public override async Task<IEnumerable<PointHistoryForUserQueryResult>> ExecuteAsync(PointHistoryForUserQuery query)
+        public override Task<IEnumerable<PointHistoryForUserQueryResult>> ExecuteAsync(PointHistoryForUserQuery query)
         {
-            IEnumerable<PointAction> pointList = await Reader.GetByIdOrThrowAsync<User, IEnumerable<PointAction>>(query.Id, u => u.PointHistory.Take(MaxPointActionRecordsCount));
-            return pointList.OrderByDescending(p => p.Date).Select(p => new PointHistoryForUserQueryResult(
-                p.Date,
-                p.Action,
-                p.Point,
-                p.Co2Saving,
-                p.SufficientType)).ToList();
+            Logger.RetrievePointHistoryForUser(query.Id);
+
+            IQueryable<User> queryable = Reader.GetQueryable<User>();
+
+            IQueryable<PointHistoryForUserQueryResult> result = queryable
+                .Where(u => u.Id == query.Id)
+                .SelectMany(u => u.PointHistory)
+                .OrderByDescending(p => p.Date)
+                .Select(p => new PointHistoryForUserQueryResult(p.Date, p.Action, p.Point, p.Co2Saving, p.SufficientType))
+                .Take(MaxPointActionRecordsCount);
+
+            Logger.RetrievePointHistoryForUserSuccessful(query.Id);
+
+            return Task.FromResult(result.AsEnumerable());
         }
     }
 }
