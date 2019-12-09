@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Backend.Core.Extensions;
 using Backend.Core.Features.Friendship.Commands;
+using Backend.Core.Features.Friendship.Models;
 using Backend.Core.Features.Friendship.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,9 +30,9 @@ namespace Backend.Core.Features.Friendship.Controllers
         public async Task<IEnumerable<FriendsQueryResult>> Get() => await _queryPublisher.ExecuteAsync(new FriendsQuery(User.Id()));
 
         [HttpPost]
-        public async Task Add(string friendEmail) => await _commandPublisher.ExecuteAsync(new AddFriendCommand(User.Id(), friendEmail));
+        public async Task Add([FromBody] AddFriendRequest request) => await _commandPublisher.ExecuteAsync(new AddFriendCommand(User.Id(), request.Email));
 
         [HttpDelete]
-        public async Task Delete(Guid friendUserId) => await _commandPublisher.ExecuteAsync(new RemoveFriendCommand(User.Id(), friendUserId));
+        public async Task Delete([FromQuery] Guid friendUserId) => await _commandPublisher.ExecuteAsync(new RemoveFriendCommand(User.Id(), friendUserId));
     }
 }

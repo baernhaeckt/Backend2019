@@ -2,7 +2,7 @@
 
 namespace Backend.Core.Features.UserManagement.Models
 {
-    public class ChangePasswordModel
+    public class ChangePasswordRequest
     {
         [Required]
         [MaxLength(100)]

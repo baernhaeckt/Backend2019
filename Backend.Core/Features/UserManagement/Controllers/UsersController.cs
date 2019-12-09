@@ -24,24 +24,24 @@ namespace Backend.Core.Features.UserManagement.Controllers
 
         [HttpPost(nameof(Register))]
         [AllowAnonymous]
-        public async Task<ActionResult<LoginResponse>> Register(string email)
+        public async Task<ActionResult<UserLoginResponse>> Register([FromBody] RegisterUserRequest request)
         {
-            EmailRegisteredQueryResult result = await _queryPublisher.ExecuteAsync(new EmailRegisteredQuery(email));
+            EmailRegisteredQueryResult result = await _queryPublisher.ExecuteAsync(new EmailRegisteredQuery(request.Email));
             if (!result.IsRegistered)
             {
-                await _commandPublisher.ExecuteAsync(new RegisterUserCommand(email));
-                SecurityTokenForUserQueryResult tokenResult = await _queryPublisher.ExecuteAsync(new SecurityTokenForUserQuery(email));
-                return new LoginResponse { Token = tokenResult.Token };
+                await _commandPublisher.ExecuteAsync(new RegisterUserCommand(request.Email));
+                SecurityTokenForUserQueryResult tokenResult = await _queryPublisher.ExecuteAsync(new SecurityTokenForUserQuery(request.Email));
+                return new UserLoginResponse { Token = tokenResult.Token };
             }
 
-            return new LoginResponse();
+            return new UserLoginResponse();
         }
 
         [HttpPost(nameof(Login))]
         [AllowAnonymous]
-        public async Task<ActionResult<LoginResponse>> Login(string email, string password)
+        public async Task<ActionResult<UserLoginResponse>> Login([FromBody] UserLoginRequest request)
         {
-            SignInQueryResult result = await _queryPublisher.ExecuteAsync(new SignInQuery(email, password));
+            SignInQueryResult result = await _queryPublisher.ExecuteAsync(new SignInQuery(request.Email, request.Password));
             if (result.UserNotFound)
             {
                 return NotFound();
@@ -52,7 +52,7 @@ namespace Backend.Core.Features.UserManagement.Controllers
                 return Forbid();
             }
 
-            return new ActionResult<LoginResponse>(new LoginResponse { Token = result.Token });
+            return new ActionResult<UserLoginResponse>(new UserLoginResponse { Token = result.Token });
         }
     }
 }

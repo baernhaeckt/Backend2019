@@ -2,7 +2,9 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Backend.Core.Features.Friendship.Models;
 using Backend.Core.Features.Partner.Data.Testing;
+using Backend.Core.Features.Partner.Models;
 using Backend.Core.Features.UserManagement.Models;
 using Backend.Tests.Utilities.Extensions;
 using Xunit;
@@ -76,8 +78,9 @@ namespace Backend.Tests.Integration
         {
             foreach (string tokenValue in _context.PartnerGeneratedTokens)
             {
-                var url = new Uri("api/tokens?tokenGuid=" + tokenValue, UriKind.Relative);
-                HttpResponseMessage response = await _context.NewTestUserHttpClient.PostAsync(url, null);
+                var url = new Uri("api/tokens", UriKind.Relative);
+                StringContent content = new RegisterUserTokenRequest { TokenId = Guid.Parse(tokenValue) }.ToStringContent();
+                HttpResponseMessage response = await _context.NewTestUserHttpClient.PostAsync(url, content);
                 response.EnsureSuccessStatusCode();
             }
         }
@@ -91,11 +94,12 @@ namespace Backend.Tests.Integration
             response.EnsureSuccessStatusCode();
             string tokenValue = await response.Content.ReadAsStringAsync();
 
-            var url = new Uri("api/tokens?tokenGuid=" + tokenValue, UriKind.Relative);
-            response = await _context.NewTestUserHttpClient.PostAsync(url, null);
+            var url = new Uri("api/tokens", UriKind.Relative);
+            StringContent content = new RegisterUserTokenRequest { TokenId = Guid.Parse(tokenValue) }.ToStringContent();
+            response = await _context.NewTestUserHttpClient.PostAsync(url, content);
             response.EnsureSuccessStatusCode();
 
-            response = await _context.NewTestUserHttpClient.PostAsync(url, null);
+            response = await _context.NewTestUserHttpClient.PostAsync(url, content);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
@@ -131,7 +135,7 @@ namespace Backend.Tests.Integration
             string newUserEmail = await newHttpClient.CreateUserAndSignIn();
 
             var url = new Uri("api/profile", UriKind.Relative);
-            StringContent content = new UpdateProfileModel { DisplayName = "abc1", Street = "Abc", City = "Abc", PostalCode = zip }.ToStringContent();
+            StringContent content = new UpdateProfileRequest { DisplayName = "abc1", Street = "Abc", City = "Abc", PostalCode = zip }.ToStringContent();
             HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(url, content);
             response.EnsureSuccessStatusCode();
 
@@ -140,14 +144,16 @@ namespace Backend.Tests.Integration
                 await UseMultiuseToken(newHttpClient, tokenValue);
             }
 
-            response = await _context.NewTestUserHttpClient.PostAsync(new Uri($"api/friends?friendEmail={newUserEmail}", UriKind.Relative), null);
+            content = new AddFriendRequest { Email = newUserEmail }.ToStringContent();
+            response = await _context.NewTestUserHttpClient.PostAsync(new Uri("api/friends", UriKind.Relative), content);
             response.EnsureSuccessStatusCode();
         }
 
         private static async Task UseMultiuseToken(HttpClient client, string tokenValue)
         {
-            var url = new Uri("api/tokens?tokenGuid=" + tokenValue, UriKind.Relative);
-            HttpResponseMessage response = await client.PostAsync(url, null);
+            var url = new Uri("api/tokens", UriKind.Relative);
+            StringContent content = new RegisterUserTokenRequest { TokenId = Guid.Parse(tokenValue) }.ToStringContent();
+            HttpResponseMessage response = await client.PostAsync(url, content);
             response.EnsureSuccessStatusCode();
         }
     }

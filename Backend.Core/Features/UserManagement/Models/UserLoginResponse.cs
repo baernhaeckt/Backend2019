@@ -1,6 +1,6 @@
 ﻿namespace Backend.Core.Features.UserManagement.Models
 {
-    public class LoginResponse
+    public class UserLoginResponse
     {
         public string Token { get; set; } = string.Empty;
     }

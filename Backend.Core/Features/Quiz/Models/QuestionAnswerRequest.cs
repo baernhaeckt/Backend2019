@@ -2,7 +2,7 @@
 
 namespace Backend.Core.Features.Quiz.Models
 {
-    public class QuestionAnswer
+    public class QuestionAnswerRequest
     {
         public Guid QuestionId { get; set; }
 

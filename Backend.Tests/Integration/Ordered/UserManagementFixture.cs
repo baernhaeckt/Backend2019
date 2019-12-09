@@ -37,8 +37,9 @@ namespace Backend.Tests.Integration
 
             _context.NewTestUser = newUserEmail;
 
-            var url = new Uri("api/users/Register?email=" + newUserEmail, UriKind.Relative);
-            HttpResponseMessage response = await _context.AnonymousHttpClient.PostAsync(url, null);
+            var url = new Uri("api/users/Register", UriKind.Relative);
+            StringContent content = new RegisterUserRequest { Email = newUserEmail }.ToStringContent();
+            HttpResponseMessage response = await _context.AnonymousHttpClient.PostAsync(url, content);
             response.EnsureSuccessStatusCode();
 
             Assert.Single(_context.EmailService.Messages);
@@ -71,7 +72,7 @@ namespace Backend.Tests.Integration
         {
             _output.WriteLine("Update profile of user: " + _context.NewTestUser);
             var url = new Uri("api/profile", UriKind.Relative);
-            StringContent content = new UpdateProfileModel { DisplayName = "abc", Street = "Abc", City = "Abc", PostalCode = "3032" }.ToStringContent();
+            StringContent content = new UpdateProfileRequest { DisplayName = "abc", Street = "Abc", City = "Abc", PostalCode = "3032" }.ToStringContent();
             HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(url, content);
             response.EnsureSuccessStatusCode();
         }
@@ -81,7 +82,7 @@ namespace Backend.Tests.Integration
         public async Task ProfilePasswordChange_Successful()
         {
             _output.WriteLine("Change password of user: " + _context.NewTestUser);
-            StringContent content = new ChangePasswordModel { OldPassword = "1234", NewPassword = "12345678" }.ToStringContent();
+            StringContent content = new ChangePasswordRequest { OldPassword = "1234", NewPassword = "12345678" }.ToStringContent();
             var url = new Uri("api/profile/password", UriKind.Relative);
             HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(url, content);
             response.EnsureSuccessStatusCode();
@@ -91,8 +92,9 @@ namespace Backend.Tests.Integration
         [Order(5)]
         public async Task UsersLogin_WrongPassword_NOk()
         {
-            var url = new Uri($"api/users/Login?email={_context.NewTestUser}&password=12345", UriKind.Relative);
-            HttpResponseMessage responseWithJwt = await _context.AnonymousHttpClient.PostAsync(url, null);
+            var url = new Uri($"api/users/Login", UriKind.Relative);
+            StringContent content = new UserLoginRequest { Email = _context.NewTestUser, Password = "12345" }.ToStringContent();
+            HttpResponseMessage responseWithJwt = await _context.AnonymousHttpClient.PostAsync(url, content);
             Assert.Equal(HttpStatusCode.Forbidden, responseWithJwt.StatusCode);
         }
 
@@ -100,8 +102,9 @@ namespace Backend.Tests.Integration
         [Order(6)]
         public async Task UsersLogin_WrongUsername_NOk()
         {
-            var url = new Uri("api/users/Login?email=bla@bla.ch&password=12345", UriKind.Relative);
-            HttpResponseMessage responseWithJwt = await _context.AnonymousHttpClient.PostAsync(url, null);
+            var url = new Uri("api/users/Login", UriKind.Relative);
+            StringContent content = new UserLoginRequest { Email = "bla@bla.ch", Password = "12345" }.ToStringContent();
+            HttpResponseMessage responseWithJwt = await _context.AnonymousHttpClient.PostAsync(url, content);
             Assert.Equal(HttpStatusCode.NotFound, responseWithJwt.StatusCode);
         }
     }

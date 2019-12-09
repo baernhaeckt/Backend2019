@@ -1,5 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Backend.Core.Features.Partner.Models;
 using Backend.Core.Features.Partner.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +17,9 @@ namespace Backend.Core.Features.Partner.Controllers
 
         [HttpPost(nameof(Login))]
         [AllowAnonymous]
-        public async Task<string> Login(Guid id, string secret)
+        public async Task<string> Login([FromBody] PartnerLoginRequest request)
         {
-            SignInQueryResult result = await _queryPublisher.ExecuteAsync(new SignInQuery(id, secret));
+            SignInQueryResult result = await _queryPublisher.ExecuteAsync(new SignInQuery(request.PartnerId, request.Secret));
             return result.Token;
         }
     }

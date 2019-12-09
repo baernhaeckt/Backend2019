@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Backend.Core.Features.Friendship.Models;
 using Backend.Core.Features.Friendship.Queries;
 using Backend.Core.Features.UserManagement.Data.Testing;
 using Backend.Tests.Utilities.Extensions;
@@ -34,10 +35,12 @@ namespace Backend.Tests.Integration
         [Fact]
         public async Task FriendsAdd_Successful()
         {
-            HttpResponseMessage response = await _context.NewTestUserHttpClient.PostAsync(new Uri($"api/friends?friendEmail={TestCredentials.User2}", UriKind.Relative), null);
+            StringContent content = new AddFriendRequest { Email = TestCredentials.User2 }.ToStringContent();
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.PostAsync(new Uri("api/friends", UriKind.Relative), content);
             response.EnsureSuccessStatusCode();
 
-            response = await _context.NewTestUserHttpClient.PostAsync(new Uri($"api/friends?friendEmail={TestCredentials.User3}", UriKind.Relative), null);
+            content = new AddFriendRequest { Email = TestCredentials.User3 }.ToStringContent();
+            response = await _context.NewTestUserHttpClient.PostAsync(new Uri("api/friends", UriKind.Relative), content);
             response.EnsureSuccessStatusCode();
 
             response = await _context.NewTestUserHttpClient.GetAsync(new Uri("api/friends", UriKind.Relative));
@@ -49,7 +52,8 @@ namespace Backend.Tests.Integration
         [Fact]
         public async Task FriendsAddTwice_NotSuccessful()
         {
-            HttpResponseMessage response = await _context.NewTestUserHttpClient.PostAsync(new Uri($"api/friends?friendEmail={TestCredentials.User2}", UriKind.Relative), null);
+            StringContent content = new AddFriendRequest { Email = TestCredentials.User2 }.ToStringContent();
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.PostAsync(new Uri("api/friends", UriKind.Relative), content);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 

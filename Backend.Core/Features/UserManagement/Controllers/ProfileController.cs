@@ -26,14 +26,14 @@ namespace Backend.Core.Features.UserManagement.Controllers
         public async Task<UserProfileQueryResult> Get() => await _queryPublisher.ExecuteAsync(new UserProfileQuery(HttpContext.User.Id()));
 
         [HttpPatch]
-        public async Task Update([FromBody] UpdateProfileModel model)
+        public async Task Update([FromBody] UpdateProfileRequest request)
         {
-            var command = new UpdateProfileCommand(HttpContext.User.Id(), model.DisplayName, model.City, model.Street, model.PostalCode);
+            var command = new UpdateProfileCommand(HttpContext.User.Id(), request.DisplayName, request.City, request.Street, request.PostalCode);
             await _commandPublisher.ExecuteAsync(command);
         }
 
         [HttpPatch("password")]
-        public async Task ChangePassword([FromBody] ChangePasswordModel model)
+        public async Task ChangePassword([FromBody] ChangePasswordRequest model)
         {
             var command = new ChangePasswordCommand(HttpContext.User.Id(), model.NewPassword, model.OldPassword);
             await _commandPublisher.ExecuteAsync(command);

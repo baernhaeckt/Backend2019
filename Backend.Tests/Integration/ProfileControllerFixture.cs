@@ -21,7 +21,7 @@ namespace Backend.Tests.Integration
             _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
 
             var uri = new Uri("api/profile", UriKind.Relative);
-            StringContent content = new UpdateProfileModel
+            StringContent content = new UpdateProfileRequest
             {
                 DisplayName = "test1234",
                 PostalCode = "3032",
@@ -48,7 +48,7 @@ namespace Backend.Tests.Integration
             _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
 
             var uri = new Uri("api/profile/password", UriKind.Relative);
-            StringContent content = new ChangePasswordModel { OldPassword = "1234", NewPassword = "12345678" }.ToStringContent();
+            StringContent content = new ChangePasswordRequest { OldPassword = "1234", NewPassword = "12345678" }.ToStringContent();
             HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(uri, content);
             response.EnsureSuccessStatusCode();
         }
@@ -59,7 +59,7 @@ namespace Backend.Tests.Integration
             _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
 
             var uri = new Uri("api/profile/password", UriKind.Relative);
-            StringContent content = new ChangePasswordModel { OldPassword = "12345", NewPassword = "12345678" }.ToStringContent();
+            StringContent content = new ChangePasswordRequest { OldPassword = "12345", NewPassword = "12345678" }.ToStringContent();
             HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(uri, content);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -70,7 +70,7 @@ namespace Backend.Tests.Integration
             _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
 
             var uri = new Uri("api/profile/password", UriKind.Relative);
-            StringContent content = new ChangePasswordModel { OldPassword = "1234", NewPassword = "1234567" }.ToStringContent();
+            StringContent content = new ChangePasswordRequest { OldPassword = "1234", NewPassword = "1234567" }.ToStringContent();
             HttpResponseMessage response = await _context.NewTestUserHttpClient.PatchAsync(uri, content);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }

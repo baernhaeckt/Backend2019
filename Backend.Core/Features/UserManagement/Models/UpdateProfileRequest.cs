@@ -2,7 +2,7 @@
 
 namespace Backend.Core.Features.UserManagement.Models
 {
-    public class UpdateProfileModel
+    public class UpdateProfileRequest
     {
         [Required]
         public string DisplayName { get; set; } = string.Empty;

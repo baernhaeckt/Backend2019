@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Backend.Core.Extensions;
 using Backend.Core.Features.Partner.Commands;
+using Backend.Core.Features.Partner.Models;
 using Backend.Infrastructure.Abstraction.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,9 +27,9 @@ namespace Backend.Core.Features.Partner.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.User)]
-        public async Task PostAsync(Guid tokenGuid)
+        public async Task PostAsync([FromBody] RegisterUserTokenRequest request)
         {
-            var command = new RewardUserTokenCommand(tokenGuid, HttpContext.User.Id());
+            var command = new RewardUserTokenCommand(request.TokenId, HttpContext.User.Id());
             await _commandPublisher.ExecuteAsync(command);
         }
     }
