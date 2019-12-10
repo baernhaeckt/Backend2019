@@ -6,7 +6,7 @@ namespace Backend.Core.Entities.Partner
 {
     public class Token : Entity, ICloneable
     {
-        public string Text { get; set; } = string.Empty;
+        public LocalizedField Text { get; set; } = LocalizedField.Empty;
 
         public int Points { get; set; }
 

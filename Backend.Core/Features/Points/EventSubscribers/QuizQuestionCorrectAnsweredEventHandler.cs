@@ -37,16 +37,7 @@ namespace Backend.Core.Features.Points.EventSubscribers
             var updateObject = new
             {
                 Points = points + @event.QuestionPoints,
-                PointHistory = new List<PointAction>
-                {
-                    new PointAction
-                    {
-                        Action = "Hat eine korrekte Quizantwort gegeben.",
-                        Co2Saving = 0.0,
-                        Point = @event.QuestionPoints,
-                        Type = SufficientType.Knowledge
-                    }
-                }
+                PointHistory = new List<PointAction> { new QuizAnswerPointAction(@event.QuestionPoints) }
             };
 
             _logger.PartnerGrantPointsForCorrectQuizAnswerUpdateUser(updateObject);

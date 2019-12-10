@@ -47,7 +47,7 @@ namespace Backend.Core.Features.Points.EventSubscribers
                     new PointAction
                     {
                         Point = token.Points,
-                        Action = token.Text,
+                        Action = token.Text.GetForCurrentCulture(),
                         Co2Saving = token.Co2Saving,
                         TokenId = @event.TokenId,
                         Type = token.SufficientType

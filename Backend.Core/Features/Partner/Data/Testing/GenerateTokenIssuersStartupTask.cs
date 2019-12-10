@@ -40,7 +40,13 @@ namespace Backend.Core.Features.Partner.Data.Testing
                         {
                             Points = 10,
                             Co2Saving = 1,
-                            Text = "Einkauf in der Palette",
+                            Text = new LocalizedField
+                            {
+                                new KeyValuePair<string, string>("de", "Einkauf in der Palette"),
+                                new KeyValuePair<string, string>("en", "Purchasing in Palette"),
+                                new KeyValuePair<string, string>("it", "Acquisto in Palette"),
+                                new KeyValuePair<string, string>("fr", "Achats en Palette")
+                            },
                             Id = Guid.Empty,
                             TokenType = "verpackung",
                             IsSingleUse = true,
@@ -60,7 +66,13 @@ namespace Backend.Core.Features.Partner.Data.Testing
                         {
                             Points = 5,
                             Co2Saving = 0.1,
-                            Text = "Nachbar über Suffizienz aufgeklärt",
+                            Text = new LocalizedField
+                            {
+                                new KeyValuePair<string, string>("de", "Nachbar über Suffizienz aufgeklärt"),
+                                new KeyValuePair<string, string>("en", "Neighbour informed about sufficiency"),
+                                new KeyValuePair<string, string>("it", "Vicino informato sulla sufficienza"),
+                                new KeyValuePair<string, string>("fr", "Voisin informé de la suffisance")
+                            },
                             Id = Guid.Empty,
                             TokenType = "wissen",
                             IsSingleUse = true,
@@ -80,7 +92,13 @@ namespace Backend.Core.Features.Partner.Data.Testing
                         {
                             Points = 15,
                             Co2Saving = 2,
-                            Text = "Du Teilst deine Auto mit deiner Schwester",
+                            Text = new LocalizedField
+                            {
+                                new KeyValuePair<string, string>("de", "Du Teilst deine Auto mit deiner Schwester"),
+                                new KeyValuePair<string, string>("en", "You share your car with your sister"),
+                                new KeyValuePair<string, string>("it", "Condividi la macchina con tua sorella"),
+                                new KeyValuePair<string, string>("fr", "Tu partages ta voiture avec ta soeur")
+                            },
                             Id = Guid.Empty,
                             TokenType = "teilen",
                             IsSingleUse = true,
@@ -90,7 +108,13 @@ namespace Backend.Core.Features.Partner.Data.Testing
                         {
                             Points = 10,
                             Co2Saving = 1,
-                            Text = "Bla",
+                            Text = new LocalizedField
+                            {
+                                new KeyValuePair<string, string>("de", "Nur für testing"),
+                                new KeyValuePair<string, string>("en", "Only for testing"),
+                                new KeyValuePair<string, string>("it", "Solo per i test"),
+                                new KeyValuePair<string, string>("fr", "Uniquement pour les tests")
+                            },
                             Id = Guid.Empty,
                             TokenType = "multiuse",
                             IsSingleUse = false,
