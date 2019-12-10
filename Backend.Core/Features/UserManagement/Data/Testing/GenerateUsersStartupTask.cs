@@ -39,6 +39,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
             {
                 users.Add(new User
                 {
+                    Id = Guid.NewGuid(),
                     Email = TestCredentials.User1,
                     Roles = new List<string> { Roles.User },
                     PasswordHash = _passwordStorage.Create(TestCredentials.User1Password)
@@ -49,6 +50,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
             {
                 users.Add(new User
                 {
+                    Id = Guid.NewGuid(),
                     Email = TestCredentials.User2,
                     Roles = new List<string> { Roles.User },
                     PasswordHash = _passwordStorage.Create(TestCredentials.User2Password),
@@ -66,6 +68,7 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
             {
                 users.Add(new User
                 {
+                    Id = Guid.NewGuid(),
                     Email = TestCredentials.User3,
                     Roles = new List<string> { Roles.User },
                     PasswordHash = _passwordStorage.Create(TestCredentials.User3Password),
@@ -112,8 +115,8 @@ namespace Backend.Core.Features.UserManagement.Data.Testing
                 {
                     for (var i = 0; i < SeedCount / 100 * 10; i++)
                     {
-                        int index = random.Next(users.Count);
-                        fakeUser.Friends.Add(users[index].Id);
+                        int index = random.Next(fakeUsers.Count);
+                        fakeUser.Friends.Add(fakeUsers[index].Id);
                     }
                 }
 
