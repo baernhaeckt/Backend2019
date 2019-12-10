@@ -2,7 +2,7 @@
 {
     public class Award
     {
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; protected set; } = string.Empty;
 
         public string Title { get; protected set; } = string.Empty;
 
