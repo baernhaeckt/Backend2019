@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Entities.Partner;
 using Backend.Core.Events;
-using Backend.Infrastructure.Abstraction.Hosting;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.Extensions.Logging;
 using Silverback.Messaging.Publishing;
@@ -34,7 +33,7 @@ namespace Backend.Core.Features.Points.EventSubscribers
 
             // Use PointHistory to get the current points/Co2Savings and take this as a chance to sync, if there is a mismatch between those values and the PointHistory.
             (Guid id, int points, double co2Saving, string displayName) = await _unitOfWork.GetByIdOrThrowAsync<User, Tuple<Guid, int, double, string>>(
-                    @event.UserId, u => new Tuple<Guid, int, double, string>(u.Id, u.PointHistory.Sum(pa => pa.Point), u.PointHistory.Sum(pa => pa.Co2Saving), u.DisplayName));
+                @event.UserId, u => new Tuple<Guid, int, double, string>(u.Id, u.PointHistory.Sum(pa => pa.Point), u.PointHistory.Sum(pa => pa.Co2Saving), u.DisplayName));
 
             Token token = await _unitOfWork.GetByIdOrThrowAsync<Token>(@event.TokenId);
 

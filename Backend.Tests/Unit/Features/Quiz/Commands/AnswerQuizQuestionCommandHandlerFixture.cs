@@ -29,7 +29,7 @@ namespace Backend.Tests.Unit.Features.Quiz.Commands
             // Arrange
             var inMemoryUnitOfWork = new InMemoryUnitOfWork();
             ILogger<AnswerQuizQuestionCommandHandler> logger = _testOutputHelper.BuildLoggerFor<AnswerQuizQuestionCommandHandler>();
-            IEventPublisher eventPublisher = Substitute.For<IEventPublisher>();
+            var eventPublisher = Substitute.For<IEventPublisher>();
             IClock clock = new AdjustableClock();
             var commandHandler = new AnswerQuizQuestionCommandHandler(inMemoryUnitOfWork, logger, eventPublisher, clock);
 
@@ -53,7 +53,7 @@ namespace Backend.Tests.Unit.Features.Quiz.Commands
             // Arrange
             var inMemoryUnitOfWork = new InMemoryUnitOfWork();
             ILogger<AnswerQuizQuestionCommandHandler> logger = _testOutputHelper.BuildLoggerFor<AnswerQuizQuestionCommandHandler>();
-            IEventPublisher eventPublisher = Substitute.For<IEventPublisher>();
+            var eventPublisher = Substitute.For<IEventPublisher>();
             IClock clock = new AdjustableClock();
             var commandHandler = new AnswerQuizQuestionCommandHandler(inMemoryUnitOfWork, logger, eventPublisher, clock);
 
@@ -77,7 +77,7 @@ namespace Backend.Tests.Unit.Features.Quiz.Commands
             // Arrange
             var inMemoryUnitOfWork = new InMemoryUnitOfWork();
             ILogger<AnswerQuizQuestionCommandHandler> logger = _testOutputHelper.BuildLoggerFor<AnswerQuizQuestionCommandHandler>();
-            IEventPublisher eventPublisher = Substitute.For<IEventPublisher>();
+            var eventPublisher = Substitute.For<IEventPublisher>();
             IClock clock = new AdjustableClock();
             var commandHandler = new AnswerQuizQuestionCommandHandler(inMemoryUnitOfWork, logger, eventPublisher, clock);
 
@@ -101,7 +101,7 @@ namespace Backend.Tests.Unit.Features.Quiz.Commands
             // Arrange
             var inMemoryUnitOfWork = new InMemoryUnitOfWork();
             ILogger<AnswerQuizQuestionCommandHandler> logger = _testOutputHelper.BuildLoggerFor<AnswerQuizQuestionCommandHandler>();
-            IEventPublisher eventPublisher = Substitute.For<IEventPublisher>();
+            var eventPublisher = Substitute.For<IEventPublisher>();
             IClock clock = new AdjustableClock();
             var commandHandler = new AnswerQuizQuestionCommandHandler(inMemoryUnitOfWork, logger, eventPublisher, clock);
 

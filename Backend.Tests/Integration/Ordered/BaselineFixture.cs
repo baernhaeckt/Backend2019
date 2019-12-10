@@ -25,7 +25,7 @@ namespace Backend.Tests.Integration
         {
             var url = new Uri("api/SufficientType/baseline", UriKind.Relative);
             HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
-            var result = response.OnSuccessDeserialize<IEnumerable<SufficientTypesQueryResult>>();
+            Task<IEnumerable<SufficientTypesQueryResult>> result = response.OnSuccessDeserialize<IEnumerable<SufficientTypesQueryResult>>();
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace Backend.Tests.Integration
         {
             var url = new Uri("api/SufficientType/user", UriKind.Relative);
             HttpResponseMessage response = await _context.NewTestUserHttpClient.GetAsync(url);
-            var result = (await response.OnSuccessDeserialize<IEnumerable<SufficientTypesQueryResult>>()).ToList();
+            List<SufficientTypesQueryResult> result = (await response.OnSuccessDeserialize<IEnumerable<SufficientTypesQueryResult>>()).ToList();
             Assert.Equal(30, result.Single(r => r.Type == SufficientType.FoodWaste).Points);
             Assert.Equal(3, result.Single(r => r.Type == SufficientType.FoodWaste).Co2Savings);
             Assert.Equal(30, result.Single(r => r.Type == SufficientType.Share).Points);

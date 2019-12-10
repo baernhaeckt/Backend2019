@@ -18,10 +18,7 @@ namespace Backend.Core.Features.Quiz.Queries
         private readonly IClock _clock;
 
         public QuizQuestionForTodayQueryHandler(IReader reader, ILogger<QuizQuestionForTodayQueryHandler> logger, IClock clock)
-            : base(reader, logger)
-        {
-            _clock = clock;
-        }
+            : base(reader, logger) => _clock = clock;
 
         [SuppressMessage("ReSharper", "SimplifyLinqExpression", Justification = "MongoDb driver doesn't support 'All'.")]
         public override async Task<QuizQuestionForTodayQueryResult?> ExecuteAsync(QuizQuestionForTodayQuery query)

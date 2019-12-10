@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Events;
@@ -64,7 +65,7 @@ namespace Backend.Core.Features.UserManagement.Commands
         {
             try
             {
-                var mailAddress = new System.Net.Mail.MailAddress(email);
+                var mailAddress = new MailAddress(email);
                 return mailAddress.Address == email;
             }
             catch

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Framework;
 using Backend.Infrastructure.Abstraction.Persistence;

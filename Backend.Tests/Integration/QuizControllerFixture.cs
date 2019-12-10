@@ -38,14 +38,14 @@ namespace Backend.Tests.Integration
             _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
             var uri = new Uri("api/quiz", UriKind.Relative);
 
-            var content = new QuestionAnswerRequest
+            StringContent content = new QuestionAnswerRequest
             {
                 QuestionId = GenerateQuizQuestionsStartupTask.Question1.Id,
                 AnswerId = GenerateQuizQuestionsStartupTask.Question1.Answers.Single(a => a.IsCorrect).Id
             }.ToStringContent();
 
-            var response = await _context.NewTestUserHttpClient.PostAsync(uri, content);
-            var result = await response.OnSuccessDeserialize<AnswerQuizQuestionResult>();
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.PostAsync(uri, content);
+            AnswerQuizQuestionResult result = await response.OnSuccessDeserialize<AnswerQuizQuestionResult>();
             Assert.True(result.IsCorrect);
         }
 
@@ -55,14 +55,14 @@ namespace Backend.Tests.Integration
             _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
             var uri = new Uri("api/quiz", UriKind.Relative);
 
-            var content = new QuestionAnswerRequest
+            StringContent content = new QuestionAnswerRequest
             {
                 QuestionId = GenerateQuizQuestionsStartupTask.Question2.Id,
                 AnswerId = GenerateQuizQuestionsStartupTask.Question2.Answers.First(a => !a.IsCorrect).Id
             }.ToStringContent();
 
-            var response = await _context.NewTestUserHttpClient.PostAsync(uri, content);
-            var result = await response.OnSuccessDeserialize<AnswerQuizQuestionResult>();
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.PostAsync(uri, content);
+            AnswerQuizQuestionResult result = await response.OnSuccessDeserialize<AnswerQuizQuestionResult>();
             Assert.False(result.IsCorrect);
         }
 
@@ -72,14 +72,14 @@ namespace Backend.Tests.Integration
             _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
             var uri = new Uri("api/quiz", UriKind.Relative);
 
-            var content = new QuestionAnswerRequest
+            StringContent content = new QuestionAnswerRequest
             {
                 QuestionId = GenerateQuizQuestionsStartupTask.Question3.Id,
                 AnswerId = GenerateQuizQuestionsStartupTask.Question3.Answers.First(a => !a.IsCorrect).Id
             }.ToStringContent();
 
-            var response = await _context.NewTestUserHttpClient.PostAsync(uri, content);
-            var result = await response.OnSuccessDeserialize<AnswerQuizQuestionResult>();
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.PostAsync(uri, content);
+            AnswerQuizQuestionResult result = await response.OnSuccessDeserialize<AnswerQuizQuestionResult>();
             Assert.False(result.IsCorrect);
 
             response = await _context.NewTestUserHttpClient.PostAsync(uri, content);

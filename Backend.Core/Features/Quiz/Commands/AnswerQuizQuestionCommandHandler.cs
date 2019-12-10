@@ -15,9 +15,9 @@ namespace Backend.Core.Features.Quiz.Commands
 {
     public class AnswerQuizQuestionCommandHandler : CommandHandler<AnswerQuizQuestionCommand, AnswerQuizQuestionResult>
     {
-        private readonly IEventPublisher _eventPublisher;
-
         private readonly IClock _clock;
+
+        private readonly IEventPublisher _eventPublisher;
 
         public AnswerQuizQuestionCommandHandler(IUnitOfWork unitOfWork, ILogger<AnswerQuizQuestionCommandHandler> logger, IEventPublisher eventPublisher, IClock clock)
             : base(unitOfWork, logger)
@@ -42,7 +42,7 @@ namespace Backend.Core.Features.Quiz.Commands
                 throw new ValidationException("Question has already been answered.");
             }
 
-            var question = await UnitOfWork.GetByIdOrThrowAsync<Question, Question>(command.QuestionId, q => new Question
+            Question question = await UnitOfWork.GetByIdOrThrowAsync<Question, Question>(command.QuestionId, q => new Question
             {
                 Answers = q.Answers,
                 ExplanationText = q.ExplanationText,

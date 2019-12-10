@@ -5,9 +5,9 @@ namespace Backend.Core
 {
     public static class Localization
     {
-        public static readonly CultureInfo DefaultCultureInfo = new CultureInfo(DefaultCulture);
-
         private const string DefaultCulture = "de";
+
+        public static readonly CultureInfo DefaultCultureInfo = new CultureInfo(DefaultCulture);
 
         public static IList<CultureInfo> SupportedCultures { get; } = new[]
         {

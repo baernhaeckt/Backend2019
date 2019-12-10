@@ -92,7 +92,7 @@ namespace Backend.Tests.Integration
         [Order(5)]
         public async Task UsersLogin_WrongPassword_NOk()
         {
-            var url = new Uri($"api/users/Login", UriKind.Relative);
+            var url = new Uri("api/users/Login", UriKind.Relative);
             StringContent content = new UserLoginRequest { Email = _context.NewTestUser, Password = "12345" }.ToStringContent();
             HttpResponseMessage responseWithJwt = await _context.AnonymousHttpClient.PostAsync(url, content);
             Assert.Equal(HttpStatusCode.Forbidden, responseWithJwt.StatusCode);

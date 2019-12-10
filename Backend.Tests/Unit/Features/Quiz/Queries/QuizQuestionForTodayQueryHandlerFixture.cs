@@ -8,7 +8,6 @@ using Backend.Core.Features.Quiz.Common;
 using Backend.Core.Features.Quiz.Data;
 using Backend.Core.Features.Quiz.Queries;
 using Backend.Infrastructure.Abstraction.Hosting;
-using Backend.Infrastructure.Hosting;
 using Backend.Tests.Utilities;
 using Divergic.Logging.Xunit;
 using NSubstitute;

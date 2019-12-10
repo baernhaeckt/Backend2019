@@ -13,9 +13,9 @@ namespace Backend.Infrastructure.Security
 {
     public class JwtSecurityTokenFactory : ISecurityTokenFactory
     {
-        private readonly ISecurityKeyProvider _securityKeyProvider;
-
         private readonly IClock _clock;
+
+        private readonly ISecurityKeyProvider _securityKeyProvider;
 
         public JwtSecurityTokenFactory(ISecurityKeyProvider securityKeyProvider, IClock clock)
         {
