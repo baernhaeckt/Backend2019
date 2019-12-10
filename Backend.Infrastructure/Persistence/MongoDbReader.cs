@@ -67,21 +67,21 @@ namespace Backend.Infrastructure.Persistence
             return await dbContext.GetCollection<TEntity>().CountDocumentsAsync(FilterDefinition<TEntity>.Empty);
         }
 
-        public async Task<IEnumerable<TEntity>> WhereAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
+        public async Task<IEnumerable<TEntity>> WhereAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate, int? take = null)
             where TEntity : IEntity, new()
         {
             DbContext dbContext = DbContextFactory.Create();
             FilterDefinition<TEntity> filter = new ExpressionFilterDefinition<TEntity>(filterPredicate);
-            return (await dbContext.GetCollection<TEntity>().FindAsync(filter)).ToEnumerable();
+            return await dbContext.GetCollection<TEntity>().Find(filter).Limit(take).ToListAsync();
         }
 
-        public async Task<IEnumerable<TProjection>> WhereAsync<TEntity, TProjection>(Expression<Func<TEntity, bool>> filterPredicate, Expression<Func<TEntity, TProjection>> selectPredicate)
+        public async Task<IEnumerable<TProjection>> WhereAsync<TEntity, TProjection>(Expression<Func<TEntity, bool>> filterPredicate, Expression<Func<TEntity, TProjection>> selectPredicate, int? take = null)
             where TEntity : IEntity, new()
             where TProjection : class
         {
             DbContext dbContext = DbContextFactory.Create();
             FilterDefinition<TEntity> filter = new ExpressionFilterDefinition<TEntity>(filterPredicate);
-            return await dbContext.GetCollection<TEntity>().Find(filter).Project(selectPredicate).ToListAsync();
+            return await dbContext.GetCollection<TEntity>().Find(filter).Project(selectPredicate).Limit(take).ToListAsync();
         }
 
         public async Task<TEntity> FirstOrDefaultAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
@@ -89,7 +89,7 @@ namespace Backend.Infrastructure.Persistence
         {
             DbContext dbContext = DbContextFactory.Create();
             FilterDefinition<TEntity> filter = new ExpressionFilterDefinition<TEntity>(filterPredicate);
-            return await (await dbContext.GetCollection<TEntity>().FindAsync(filter)).FirstOrDefaultAsync();
+            return await dbContext.GetCollection<TEntity>().Find(filter).FirstOrDefaultAsync();
         }
 
         public async Task<TEntity> SingleOrDefaultAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
@@ -97,7 +97,7 @@ namespace Backend.Infrastructure.Persistence
         {
             DbContext dbContext = DbContextFactory.Create();
             FilterDefinition<TEntity> filter = new ExpressionFilterDefinition<TEntity>(filterPredicate);
-            return await (await dbContext.GetCollection<TEntity>().FindAsync(filter)).FirstOrDefaultAsync();
+            return await dbContext.GetCollection<TEntity>().Find(filter).SingleOrDefaultAsync();
         }
 
         public async Task<TEntity> SingleAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
@@ -121,8 +121,7 @@ namespace Backend.Infrastructure.Persistence
         {
             DbContext dbContext = DbContextFactory.Create();
             FilterDefinition<TEntity> filter = new ExpressionFilterDefinition<TEntity>(filterPredicate);
-            List<TProjection> resultList = await dbContext.GetCollection<TEntity>().Find(filter).Project(selectPredicate).ToListAsync();
-            return resultList.SingleOrDefault();
+            return await dbContext.GetCollection<TEntity>().Find(filter).Project(selectPredicate).SingleOrDefaultAsync();
         }
     }
 }

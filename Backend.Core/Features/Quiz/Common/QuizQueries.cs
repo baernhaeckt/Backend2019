@@ -14,6 +14,9 @@ namespace Backend.Core.Features.Quiz.Common
             DateTimeOffset now = clock.Now();
             var start = new DateTimeOffset(now.Year, now.Month, now.Day, 0, 0, 0, 0, new TimeSpan(0));
             var end = new DateTimeOffset(now.Year, now.Month, now.Day, 23, 59, 59, 999, new TimeSpan(0));
+
+            // Possible performance optimization: Return after reaching the max count.
+            // That way not every question has to be searched.
             return await reader.CountAsync<Question>(q => q.AnsweredBy.Any(a => a.UserId == userId && a.AnsweredAt <= end && a.AnsweredAt >= start));
         }
     }

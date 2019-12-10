@@ -56,14 +56,14 @@ namespace Backend.Tests.Utilities
             where TProjection : class =>
             Task.FromResult(selectPredicate.Compile().Invoke(Entities[typeof(TEntity)].Cast<TEntity>().Single(e => e.Id == id)));
 
-        public Task<IEnumerable<TEntity>> WhereAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
+        public Task<IEnumerable<TEntity>> WhereAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate, int? take = null)
             where TEntity : IEntity, new() =>
-            Task.FromResult(Entities[typeof(TEntity)].Cast<TEntity>().Where(filterPredicate.Compile()));
+            Task.FromResult(Entities[typeof(TEntity)].Cast<TEntity>().Where(filterPredicate.Compile()).Take(take ?? int.MaxValue));
 
-        public Task<IEnumerable<TProjection>> WhereAsync<TEntity, TProjection>(Expression<Func<TEntity, bool>> filterPredicate, Expression<Func<TEntity, TProjection>> selectPredicate)
+        public Task<IEnumerable<TProjection>> WhereAsync<TEntity, TProjection>(Expression<Func<TEntity, bool>> filterPredicate, Expression<Func<TEntity, TProjection>> selectPredicate, int? take = null)
             where TEntity : IEntity, new()
             where TProjection : class =>
-            Task.FromResult(Entities[typeof(TEntity)].Cast<TEntity>().Where(filterPredicate.Compile()).Select(selectPredicate.Compile()));
+            Task.FromResult(Entities[typeof(TEntity)].Cast<TEntity>().Where(filterPredicate.Compile()).Take(take ?? int.MaxValue).Select(selectPredicate.Compile()));
 
         public Task<TEntity> FirstOrDefaultAsync<TEntity>(Expression<Func<TEntity, bool>> filterPredicate)
             where TEntity : IEntity, new() =>

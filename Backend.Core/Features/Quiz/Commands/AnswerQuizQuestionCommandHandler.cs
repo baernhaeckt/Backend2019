@@ -42,7 +42,7 @@ namespace Backend.Core.Features.Quiz.Commands
                 throw new ValidationException("Question has already been answered.");
             }
 
-            var question = await UnitOfWork.SingleAsync<Question, Question>(q => q.Id == command.QuestionId, q => new Question
+            var question = await UnitOfWork.GetByIdOrThrowAsync<Question, Question>(command.QuestionId, q => new Question
             {
                 Answers = q.Answers,
                 ExplanationText = q.ExplanationText,

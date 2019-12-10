@@ -27,23 +27,23 @@ namespace Backend.Core.Features.Quiz.Queries
         public override async Task<QuizQuestionForTodayQueryResult?> ExecuteAsync(QuizQuestionForTodayQuery query)
         {
             Logger.RetrieveQuizQuestionForToday(query.UserId);
-
-            // For the future: Maybe firs t limit by time (e.g. only look at questions created in the past few weeks)
-            // Maybe retrieve and cache top(x) where x is the questions answerable by day, as we suppose that the user will answer them in a row.
-            IEnumerable<Question> questions = await Reader.WhereAsync<Question, Question>(
-                q => !q.AnsweredBy.Any(a => a.UserId == query.UserId),
-                q => new Question
-                {
-                    Id = q.Id,
-                    Answers = q.Answers,
-                    QuestionText = q.QuestionText
-                });
+            QuizQuestionForTodayQueryResult? result = null;
 
             long answeredToday = await QuizQueries.GetAnsweredToday(Reader, query.UserId, _clock);
 
-            QuizQuestionForTodayQueryResult? result = null;
             if (answeredToday < Constants.MaxQuestionsPerDay)
             {
+                // Performance: Retrieve and cache top(x) where x is the questions answerable by day, as we suppose that the user will answer them in a row..
+                // Performance: Consider index on Question.AnsweredBy.UserId
+                IEnumerable<Question> questions = await Reader.WhereAsync<Question, Question>(
+                    q => !q.AnsweredBy.Any(a => a.UserId == query.UserId),
+                    q => new Question
+                    {
+                        Id = q.Id,
+                        Answers = q.Answers,
+                        QuestionText = q.QuestionText
+                    });
+
                 Question question = questions.Shuffle().First();
                 IEnumerable<KeyValuePair<Guid, string>> answers = question.Answers.Select(a => new KeyValuePair<Guid, string>(a.Id, a.AnswerText.GetForCurrentCulture())).Shuffle();
                 result = new QuizQuestionForTodayQueryResult(question.Id, question.QuestionText.GetForCurrentCulture(), answers);

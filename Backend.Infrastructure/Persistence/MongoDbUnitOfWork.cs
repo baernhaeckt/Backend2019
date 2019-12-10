@@ -16,10 +16,7 @@ namespace Backend.Infrastructure.Persistence
         private readonly IClock _clock;
 
         public MongoDbUnitOfWork(DbContextFactory dbContextFactory, IClock clock)
-            : base(dbContextFactory)
-        {
-            _clock = clock;
-        }
+            : base(dbContextFactory) => _clock = clock;
 
         public virtual async Task<TEntity> InsertAsync<TEntity>(TEntity record)
             where TEntity : IEntity, new()
@@ -82,6 +79,7 @@ namespace Backend.Infrastructure.Persistence
             where TEntity : IEntity, new()
         {
             IList<UpdateDefinition<TEntity>> updateDefinitions = new List<UpdateDefinition<TEntity>>();
+            updateDefinitions.Add(Builders<TEntity>.Update.Set(e => e.UpdatedAt, _clock.Now().DateTime));
             foreach (PropertyInfo property in definition.GetType().GetProperties())
             {
                 UpdateDefinitionBuilder<TEntity> builder = Builders<TEntity>.Update;
@@ -117,8 +115,13 @@ namespace Backend.Infrastructure.Persistence
         public virtual async Task UpdatePullAsync<TEntity, TItem>(Guid id, Expression<Func<TEntity, IEnumerable<TItem>>> field, TItem valueToPull)
             where TEntity : IEntity, new()
         {
-            UpdateDefinition<TEntity> updateDefinition = Builders<TEntity>.Update.Pull(field, valueToPull);
+            IList<UpdateDefinition<TEntity>> updateDefinitions = new List<UpdateDefinition<TEntity>>();
+            updateDefinitions.Add(Builders<TEntity>.Update.Set(e => e.UpdatedAt, _clock.Now().DateTime));
+
+            updateDefinitions.Add(Builders<TEntity>.Update.Pull(field, valueToPull));
             FilterDefinition<TEntity> filter = Builders<TEntity>.Filter.Eq(nameof(IEntity.Id), id);
+
+            UpdateDefinition<TEntity> updateDefinition = Builders<TEntity>.Update.Combine(updateDefinitions);
             DbContext dbContext = DbContextFactory.Create();
             await dbContext.GetCollection<TEntity>().FindOneAndUpdateAsync(filter, updateDefinition);
         }
