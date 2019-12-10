@@ -10,7 +10,7 @@ namespace Backend.Core.Entities
 
         public string Action { get; set; } = string.Empty;
 
-        public string SponsorRef { get; set; } = string.Empty;
+        public Guid? TokenId { get; set; }
 
         public DateTimeOffset Date { get; set; } = DateTimeOffset.UtcNow;
 

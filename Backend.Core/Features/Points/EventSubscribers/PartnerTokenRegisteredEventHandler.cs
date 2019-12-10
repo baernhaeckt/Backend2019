@@ -49,8 +49,8 @@ namespace Backend.Core.Features.Points.EventSubscribers
                         Point = token.Points,
                         Action = token.Text,
                         Co2Saving = token.Co2Saving,
-                        SponsorRef = token.Name,
-                        Type = token.SufficientType,
+                        TokenId = @event.TokenId,
+                        Type = token.SufficientType
                     }
                 }
             };

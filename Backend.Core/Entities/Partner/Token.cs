@@ -16,8 +16,6 @@ namespace Backend.Core.Entities.Partner
 
         public SufficientType SufficientType { get; set; }
 
-        public string Name { get; set; } = string.Empty;
-
         public string TokenType { get; set; } = string.Empty;
 
         public bool IsSingleUse { get; set; } = true;
