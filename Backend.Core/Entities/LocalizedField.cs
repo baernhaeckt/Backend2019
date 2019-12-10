@@ -15,7 +15,7 @@ namespace Backend.Core.Entities
         public string GetFor(CultureInfo? cultureInfo)
         {
             string key = cultureInfo?.TwoLetterISOLanguageName ?? Localization.DefaultCultureInfo.TwoLetterISOLanguageName;
-            return this.Single(k => k.Key == key).Value;
+            return this.SingleOrDefault(k => k.Key == key).Value ?? this.Single(k => k.Key == Localization.DefaultCultureInfo.TwoLetterISOLanguageName).Value;
         }
     }
 }
