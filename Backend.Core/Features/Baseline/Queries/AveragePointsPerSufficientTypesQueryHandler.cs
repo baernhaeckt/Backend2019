@@ -8,29 +8,28 @@ using Microsoft.Extensions.Logging;
 
 namespace Backend.Core.Features.Baseline.Queries
 {
-    internal class PointsPerSufficientTypesQueryHandler : QueryHandler<IEnumerable<SufficientTypesQueryResult>, PointsPerSufficientTypesQuery>
+    internal class AveragePointsPerSufficientTypesQueryHandler : QueryHandler<IEnumerable<SufficientTypesQueryResult>, AveragePointsPerSufficientTypesQuery>
     {
-        public PointsPerSufficientTypesQueryHandler(IReader reader, ILogger<PointsPerSufficientTypesQueryHandler> logger)
+        public AveragePointsPerSufficientTypesQueryHandler(IReader reader, ILogger<AveragePointsPerSufficientTypesQueryHandler> logger)
             : base(reader, logger)
         {
         }
 
-        public override Task<IEnumerable<SufficientTypesQueryResult>> ExecuteAsync(PointsPerSufficientTypesQuery query)
+        public override Task<IEnumerable<SufficientTypesQueryResult>> ExecuteAsync(AveragePointsPerSufficientTypesQuery query)
         {
-            Logger.RetrievePointsPerSufficientTypes(query.UserId);
+            Logger.RetrieveAllSufficientTypes();
 
             IQueryable<SufficientTypesQueryResult> queryResult = Reader.GetQueryable<User>()
-                .Where(u => u.Id == query.UserId)
                 .SelectMany(u => u.PointHistory)
                 .GroupBy(p => p.Type)
                 .Select(p => new SufficientTypesQueryResult(
                     p.Key,
-                    p.Sum(o => o.Point),
-                    p.Sum(c => c.Co2Saving)));
+                    p.Average(o => o.Point),
+                    p.Average(c => c.Co2Saving)));
 
             Task<IEnumerable<SufficientTypesQueryResult>> result = Task.FromResult(queryResult.AsEnumerable());
 
-            Logger.RetrievePointsPerSufficientTypesSuccessful(query.UserId);
+            Logger.RetrieveAllSufficientTypesSuccessful();
 
             return result;
         }

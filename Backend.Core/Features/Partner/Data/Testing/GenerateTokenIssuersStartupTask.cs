@@ -44,7 +44,7 @@ namespace Backend.Core.Features.Partner.Data.Testing
                             Id = Guid.Empty,
                             TokenType = "verpackung",
                             IsSingleUse = true,
-                            SufficientType = new SufficientType { Title = "Verpackung", Description = "Du hast Verpackungslos eingekauft." }
+                            SufficientType = SufficientType.Packing
                         }
                     }
                 });
@@ -64,7 +64,7 @@ namespace Backend.Core.Features.Partner.Data.Testing
                             Id = Guid.Empty,
                             TokenType = "wissen",
                             IsSingleUse = true,
-                            SufficientType = new SufficientType { Title = "Wissen", Description = "Du hast dein Suffizienz mit anderen geteilt." }
+                            SufficientType = SufficientType.Knowledge
                         }
                     }
                 });
@@ -84,17 +84,17 @@ namespace Backend.Core.Features.Partner.Data.Testing
                             Id = Guid.Empty,
                             TokenType = "teilen",
                             IsSingleUse = true,
-                            SufficientType = new SufficientType { Title = "Teilen", Description = "Du hast deinen Besitz mit anderen geteilt." }
+                            SufficientType = SufficientType.Share
                         },
                         new Token
                         {
                             Points = 10,
-                            Co2Saving = 0.1,
+                            Co2Saving = 1,
                             Text = "Bla",
                             Id = Guid.Empty,
                             TokenType = "multiuse",
                             IsSingleUse = false,
-                            SufficientType = new SufficientType { Title = "X", Description = "Y." }
+                            SufficientType = SufficientType.FoodWaste
                         }
                     }
                 });

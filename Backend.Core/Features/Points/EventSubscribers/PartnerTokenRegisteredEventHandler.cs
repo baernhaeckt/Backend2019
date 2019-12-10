@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Entities.Partner;
 using Backend.Core.Events;
+using Backend.Infrastructure.Abstraction.Hosting;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.Extensions.Logging;
 using Silverback.Messaging.Publishing;
@@ -49,10 +50,7 @@ namespace Backend.Core.Features.Points.EventSubscribers
                         Action = token.Text,
                         Co2Saving = token.Co2Saving,
                         SponsorRef = token.Name,
-                        SufficientType = new UserSufficientType
-                        {
-                            Title = token.SufficientType.Title
-                        }
+                        Type = token.SufficientType,
                     }
                 }
             };

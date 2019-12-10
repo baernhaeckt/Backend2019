@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
@@ -47,7 +46,7 @@ namespace Backend.Core.Features.Awards.EventSubscribers
                 Logger.GrantAward(@event.UserId, award.Kind);
             }
 
-            if (user.PointHistory.Count(t => string.Equals(t.SufficientType.Title, "Verpackung", StringComparison.OrdinalIgnoreCase)) >= 2
+            if (user.PointHistory.Count(t => t.Type == SufficientType.Packing) >= 2
                 && user.Awards.All(a => !(a is TrashHeroAward)))
             {
                 var award = new TrashHeroAward();

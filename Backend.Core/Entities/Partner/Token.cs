@@ -14,7 +14,7 @@ namespace Backend.Core.Entities.Partner
 
         public Guid PartnerId { get; set; }
 
-        public SufficientType SufficientType { get; set; } = new SufficientType();
+        public SufficientType SufficientType { get; set; }
 
         public string Name { get; set; } = string.Empty;
 
@@ -32,7 +32,6 @@ namespace Backend.Core.Entities.Partner
             newToken.Id = Guid.Empty;
             newToken.PartnerId = Guid.Empty;
             newToken.UsedBy = Enumerable.Empty<Guid>().ToList();
-            newToken.SufficientType = (SufficientType)SufficientType.Clone();
             return newToken;
         }
     }

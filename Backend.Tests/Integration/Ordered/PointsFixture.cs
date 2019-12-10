@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Backend.Core.Features.Points.Models;
 using Backend.Core.Features.Points.Queries;
 using Backend.Tests.Utilities.Extensions;
 using Xunit;

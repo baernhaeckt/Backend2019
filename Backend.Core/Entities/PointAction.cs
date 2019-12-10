@@ -14,6 +14,6 @@ namespace Backend.Core.Entities
 
         public DateTimeOffset Date { get; set; } = DateTimeOffset.UtcNow;
 
-        public UserSufficientType SufficientType { get; set; } = new UserSufficientType();
+        public SufficientType Type { get; set; }
     }
 }

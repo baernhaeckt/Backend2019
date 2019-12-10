@@ -27,7 +27,7 @@ namespace Backend.Core.Features.Points.Queries
                 .Where(u => u.Id == query.Id)
                 .SelectMany(u => u.PointHistory)
                 .OrderByDescending(p => p.Date)
-                .Select(p => new PointHistoryForUserQueryResult(p.Date, p.Action, p.Point, p.Co2Saving, p.SufficientType))
+                .Select(p => new PointHistoryForUserQueryResult(p.Date, p.Action, p.Point, p.Co2Saving, p.Type))
                 .Take(MaxPointActionRecordsCount);
 
             Logger.RetrievePointHistoryForUserSuccessful(query.Id);

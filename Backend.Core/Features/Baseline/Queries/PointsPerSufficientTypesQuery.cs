@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Backend.Core.Entities;
 using Silverback.Messaging.Messages;
 
 namespace Backend.Core.Features.Baseline.Queries
 {
-    public class PointsPerSufficientTypesQuery : IQuery<IEnumerable<UserSufficientType>>
+    public class PointsPerSufficientTypesQuery : IQuery<IEnumerable<SufficientTypesQueryResult>>
     {
         public PointsPerSufficientTypesQuery(Guid userId) => UserId = userId;
 

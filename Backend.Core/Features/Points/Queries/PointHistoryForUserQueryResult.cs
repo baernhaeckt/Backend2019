@@ -5,23 +5,23 @@ namespace Backend.Core.Features.Points.Queries
 {
     public class PointHistoryForUserQueryResult
     {
-        public PointHistoryForUserQueryResult(DateTimeOffset date, string text, int value, double co2Saving, UserSufficientType sufficientType)
+        public PointHistoryForUserQueryResult(DateTimeOffset date, string text, int points, double co2Saving, SufficientType type)
         {
             Date = date;
             Text = text;
-            Value = value;
+            Points = points;
             Co2Saving = co2Saving;
-            SufficientType = sufficientType;
+            Type = type;
         }
 
-        public string Text { get; set; }
+        public string Text { get; }
 
-        public int Value { get; set; }
+        public int Points { get; }
 
-        public DateTimeOffset Date { get; set; }
+        public DateTimeOffset Date { get; }
 
-        public double Co2Saving { get; set; }
+        public double Co2Saving { get; }
 
-        public UserSufficientType? SufficientType { get; set; }
+        public SufficientType Type { get; }
     }
 }

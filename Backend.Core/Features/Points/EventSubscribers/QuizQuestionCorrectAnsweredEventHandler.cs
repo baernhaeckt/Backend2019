@@ -31,8 +31,8 @@ namespace Backend.Core.Features.Points.EventSubscribers
             _logger.HandleQuizQuestionCorrectAnsweredEvent(@event.UserId, @event.QuestionPoints);
 
             // Use PointHistory to get the current points and take this as a chance to sync, if there is a mismatch between the Points and PointHistory.
-            (Guid id, string displayName, int points) = await _unitOfWork.GetByIdOrThrowAsync<User, Tuple<Guid, string, int>>
-                (@event.UserId, u => new Tuple<Guid, string, int>(u.Id, u.DisplayName, u.PointHistory.Sum(pa => pa.Point)));
+            (Guid id, string displayName, int points) = await _unitOfWork.GetByIdOrThrowAsync<User, Tuple<Guid, string, int>>(
+                @event.UserId, u => new Tuple<Guid, string, int>(u.Id, u.DisplayName, u.PointHistory.Sum(pa => pa.Point)));
 
             var updateObject = new
             {
@@ -45,7 +45,7 @@ namespace Backend.Core.Features.Points.EventSubscribers
                         Co2Saving = 0.0,
                         Point = @event.QuestionPoints,
                         SponsorRef = "Quiz",
-                        SufficientType = new UserSufficientType { Title = "Wissen" }
+                        Type = SufficientType.Knowledge,
                     }
                 }
             };

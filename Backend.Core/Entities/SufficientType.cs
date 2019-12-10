@@ -1,17 +1,19 @@
-﻿using System;
-
-namespace Backend.Core.Entities
+﻿namespace Backend.Core.Entities
 {
-    public class SufficientType : Entity, ICloneable
+    public enum SufficientType
     {
-        public string Title { get; set; } = string.Empty;
+        Empty = 0,
 
-        public string Description { get; set; } = string.Empty;
+        Knowledge = 1,
 
-        public int BaselinePoint { get; set; }
+        Energy = 2,
 
-        public double BaselineCo2Saving { get; set; }
+        Packing = 3,
 
-        public object Clone() => MemberwiseClone();
+        FoodWaste = 4,
+
+        Share = 5,
+
+        Support = 6
     }
 }

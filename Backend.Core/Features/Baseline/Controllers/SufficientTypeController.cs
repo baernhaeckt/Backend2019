@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Backend.Core.Entities;
 using Backend.Core.Extensions;
 using Backend.Core.Features.Baseline.Queries;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +16,9 @@ namespace Backend.Core.Features.Baseline.Controllers
         public SufficientTypeController(IQueryPublisher queryPublisher) => _queryPublisher = queryPublisher;
 
         [HttpGet("baseline")]
-        public async Task<IEnumerable<SufficientType>> GetBaseLinePoints() => await _queryPublisher.ExecuteAsync(new AllSufficientTypesQuery());
+        public async Task<IEnumerable<SufficientTypesQueryResult>> GetBaseLinePoints() => await _queryPublisher.ExecuteAsync(new AveragePointsPerSufficientTypesQuery());
 
         [HttpGet("user")]
-        public async Task<IEnumerable<UserSufficientType>> GetUserPoints() => await _queryPublisher.ExecuteAsync(new PointsPerSufficientTypesQuery(User.Id()));
+        public async Task<IEnumerable<SufficientTypesQueryResult>> GetUserPoints() => await _queryPublisher.ExecuteAsync(new PointsPerSufficientTypesQuery(User.Id()));
     }
 }
