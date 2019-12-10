@@ -1,7 +1,11 @@
-﻿namespace Backend.Core.Features.Friendship.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Backend.Core.Features.Friendship.Models
 {
     public class AddFriendRequest
     {
-        public string Email { get; set; }
+        [Required]
+        [MaxLength(100)]
+        public string? Email { get; set; }
     }
 }
