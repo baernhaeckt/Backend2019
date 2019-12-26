@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Backend.Core;
+using Backend.Core.Extensions;
+using Backend.Core.Features;
 using Backend.Core.Features.Awards;
 using Backend.Core.Features.Baseline;
 using Backend.Core.Features.Friendship;
@@ -67,6 +69,8 @@ namespace Backend.Web
             services.AddFeaturePoints();
             services.AddFeatureQuiz();
             services.AddFeatureAward();
+
+            services.AddStartupTask<GenerateTestData>();
 
             services.AddHostedService<StartupTaskRunner>();
         }

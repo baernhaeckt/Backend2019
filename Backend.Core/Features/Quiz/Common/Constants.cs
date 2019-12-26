@@ -2,6 +2,6 @@
 {
     public static class Constants
     {
-        public const int MaxQuestionsPerDay = 3;
+        public const int MaxQuestionsPerDay = 4;
     }
 }
