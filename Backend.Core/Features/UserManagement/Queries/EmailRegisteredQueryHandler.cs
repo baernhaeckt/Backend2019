@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Backend.Core.Entities;
-using Backend.Core.Framework;
+using Backend.Core.Framework.Cqrs;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.Extensions.Logging;
 
@@ -18,7 +18,8 @@ namespace Backend.Core.Features.UserManagement.Queries
             Logger.RetrieveEmailAlreadyRegistered(query.Email);
 
             long count = await Reader.CountAsync<User>(u => u.Email == query.Email.ToLowerInvariant());
-            var result = new EmailRegisteredQueryResult { IsRegistered = count > 0 };
+            bool isRegistered = count > 0;
+            var result = new EmailRegisteredQueryResult(isRegistered);
 
             Logger.RetrieveEmailAlreadyRegisteredSuccessful(query.Email, result.IsRegistered);
 

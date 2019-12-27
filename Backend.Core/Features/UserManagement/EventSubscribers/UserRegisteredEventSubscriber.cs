@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Backend.Core.Events;
 using Backend.Core.Framework;
+using Backend.Core.Framework.Cqrs;
 using Backend.Infrastructure.Abstraction.Email;
 using Microsoft.Extensions.Logging;
 

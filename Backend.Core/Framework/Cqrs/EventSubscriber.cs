@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Silverback.Messaging.Messages;
 using Silverback.Messaging.Subscribers;
 
-namespace Backend.Core.Framework
+namespace Backend.Core.Framework.Cqrs
 {
     public abstract class EventSubscriber<TEvent> : ISubscriber
         where TEvent : IEvent

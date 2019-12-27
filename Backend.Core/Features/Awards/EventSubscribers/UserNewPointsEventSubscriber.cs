@@ -5,6 +5,7 @@ using Backend.Core.Entities;
 using Backend.Core.Entities.Awards;
 using Backend.Core.Events;
 using Backend.Core.Framework;
+using Backend.Core.Framework.Cqrs;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.Extensions.Logging;
 using Silverback.Messaging.Publishing;

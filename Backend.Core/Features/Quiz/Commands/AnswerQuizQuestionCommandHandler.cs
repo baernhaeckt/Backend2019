@@ -6,6 +6,7 @@ using Backend.Core.Entities.Quiz;
 using Backend.Core.Events;
 using Backend.Core.Features.Quiz.Common;
 using Backend.Core.Framework;
+using Backend.Core.Framework.Cqrs;
 using Backend.Infrastructure.Abstraction.Hosting;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.Extensions.Logging;
@@ -28,7 +29,7 @@ namespace Backend.Core.Features.Quiz.Commands
 
         public override async Task<AnswerQuizQuestionResult> ExecuteAsync(AnswerQuizQuestionCommand command)
         {
-            Logger.ExecuteAnswerQuizQuestion(command.UserId, command.QuestionId);
+            Logger.ExecuteAnswerQuizQuestion(command.UserId, command.QuestionId, command.AnswerId);
 
             long answeredToday = await QuizQueries.GetAnsweredToday(UnitOfWork, command.UserId, _clock);
             if (answeredToday >= Constants.MaxQuestionsPerDay)
@@ -74,7 +75,7 @@ namespace Backend.Core.Features.Quiz.Commands
                 await _eventPublisher.PublishAsync(new QuizQuestionCorrectAnsweredEvent(command.UserId, question.Points));
             }
 
-            Logger.ExecuteAnswerQuizQuestionSuccessful(command.UserId, command.QuestionId, isCorrectAnswer, command.AnswerId);
+            Logger.ExecuteAnswerQuizQuestionSuccessful(command.UserId, command.QuestionId, command.AnswerId, isCorrectAnswer);
 
             return questionAnswerResponse;
         }

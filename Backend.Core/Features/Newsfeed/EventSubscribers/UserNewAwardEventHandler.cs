@@ -6,6 +6,7 @@ using Backend.Core.Events;
 using Backend.Core.Features.Newsfeed.Abstraction;
 using Backend.Core.Features.Newsfeed.Events;
 using Backend.Core.Framework;
+using Backend.Core.Framework.Cqrs;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.Extensions.Logging;
 

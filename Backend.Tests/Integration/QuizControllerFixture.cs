@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Backend.Core.Features.Quiz.Commands;
@@ -64,6 +65,21 @@ namespace Backend.Tests.Integration
             HttpResponseMessage response = await _context.NewTestUserHttpClient.PostAsync(uri, content);
             AnswerQuizQuestionResult result = await response.OnSuccessDeserialize<AnswerQuizQuestionResult>();
             Assert.False(result.IsCorrect);
+        }
+
+        [Fact]
+        public async Task Answer_GiveNoAnswer_ReturnsBadRequest()
+        {
+            _context.NewTestUser = await _context.NewTestUserHttpClient.CreateUserAndSignIn();
+            var uri = new Uri("api/quiz", UriKind.Relative);
+
+            StringContent content = new QuestionAnswerRequest
+            {
+                QuestionId = GenerateQuizQuestionsStartupTask.Question2.Id,
+            }.ToStringContent();
+
+            HttpResponseMessage response = await _context.NewTestUserHttpClient.PostAsync(uri, content);
+            response.EnsureStatusCode(HttpStatusCode.BadRequest);
         }
 
         [Fact]

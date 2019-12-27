@@ -7,6 +7,7 @@ using Backend.Core.Entities.Quiz;
 using Backend.Core.Extensions;
 using Backend.Core.Features.Quiz.Common;
 using Backend.Core.Framework;
+using Backend.Core.Framework.Cqrs;
 using Backend.Infrastructure.Abstraction.Hosting;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.Extensions.Logging;
