@@ -2,6 +2,8 @@
 {
     public class EmailRegisteredQueryResult
     {
-        public bool IsRegistered { get; set; }
+        public EmailRegisteredQueryResult(bool isRegistered) => IsRegistered = isRegistered;
+
+        public bool IsRegistered { get; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Core.Features.UserManagement.Models
 {
@@ -6,6 +7,6 @@ namespace Backend.Core.Features.UserManagement.Models
     {
         [Required]
         [MaxLength(100)]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
     }
 }

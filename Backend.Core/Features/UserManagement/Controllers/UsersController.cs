@@ -31,7 +31,7 @@ namespace Backend.Core.Features.UserManagement.Controllers
             {
                 await _commandPublisher.ExecuteAsync(new RegisterUserCommand(request.Email));
                 SecurityTokenForUserQueryResult tokenResult = await _queryPublisher.ExecuteAsync(new SecurityTokenForUserQuery(request.Email));
-                return new UserLoginResponse { Token = tokenResult.Token };
+                return new UserLoginResponse { Token = tokenResult.Token, RefreshToken = tokenResult.RefreshToken };
             }
 
             return new UserLoginResponse();
@@ -52,7 +52,27 @@ namespace Backend.Core.Features.UserManagement.Controllers
                 return Forbid();
             }
 
-            return new ActionResult<UserLoginResponse>(new UserLoginResponse { Token = result.Token });
+            return new ActionResult<UserLoginResponse>(new UserLoginResponse { Token = result.Token, RefreshToken = result.RefreshToken });
+        }
+
+        [HttpPost(nameof(RefreshToken))]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserLoginResponse>> RefreshToken([FromBody] UserRefreshTokenRequest request)
+        {
+            RefreshTokenCommandResult result = await _commandPublisher.ExecuteAsync(new RefreshTokenCommand(request.Token));
+            if (result.TokenNotFound)
+            {
+                return NotFound();
+            }
+
+            if (result.IsAlreadyUsed || result.IsExpired || result.IsRevoked)
+            {
+                return Forbid();
+            }
+
+            SecurityTokenForUserQueryResult securityTokenResult = await _queryPublisher.ExecuteAsync(new SecurityTokenForUserQuery(result.UserId));
+
+            return new ActionResult<UserLoginResponse>(new UserLoginResponse { Token = securityTokenResult.Token, RefreshToken = result.Token });
         }
     }
 }

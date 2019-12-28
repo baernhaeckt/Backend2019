@@ -5,5 +5,7 @@
         public SecurityTokenForUserQueryResult(string token) => Token = token;
 
         public string Token { get; }
+
+        public string RefreshToken { get; }
     }
 }

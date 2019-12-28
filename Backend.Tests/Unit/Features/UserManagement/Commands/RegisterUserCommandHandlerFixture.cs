@@ -18,7 +18,7 @@ namespace Backend.Tests.Unit.Features.UserManagement.Commands
         public RegisterUserCommandHandlerFixture(ITestOutputHelper testOutputHelper) => _testOutputHelper = testOutputHelper;
 
         [Fact]
-        public async Task ExecuteAsync_CorrectAnswer_Successful()
+        public async Task ExecuteAsync_ThrowsValidationException_IfEmailAddressIsInvalid()
         {
             // Arrange
             var inMemoryUnitOfWork = new InMemoryUnitOfWork();

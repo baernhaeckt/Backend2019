@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Backend.Core.Framework.Web
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter)]
-    public class NotEmptyAttribute : ValidationAttribute
+    public sealed class NotEmptyAttribute : ValidationAttribute
     {
         public const string DefaultErrorMessage = "The {0} field must not be empty";
 

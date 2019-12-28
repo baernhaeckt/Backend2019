@@ -14,5 +14,7 @@
         public bool PasswordNotCorrect { get; }
 
         public string Token { get; }
+
+        public string RefreshToken { get; }
     }
 }
