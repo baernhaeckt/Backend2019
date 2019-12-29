@@ -1,5 +1,8 @@
-﻿namespace Backend.Core.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace Backend.Core.Entities
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum SufficientType
     {
         Empty = 0,
