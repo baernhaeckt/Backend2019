@@ -30,10 +30,8 @@ namespace Backend.Web.Middleware
             {
                 _logger.EntityNotFound(ex.Name, ex.MethodName, ex.Filter);
 
-                string result = JsonConvert.SerializeObject(new { error = ex.Message });
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                await context.Response.WriteAsync(result);
             }
             catch (ValidationException ex)
             {
