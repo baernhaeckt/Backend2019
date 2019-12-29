@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Entities.Partner;
-using Backend.Core.Framework;
 using Backend.Core.Framework.Cqrs;
 using Backend.Infrastructure.Abstraction.Persistence;
 using Microsoft.Extensions.Logging;
