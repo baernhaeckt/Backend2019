@@ -32,8 +32,8 @@ namespace Backend.Core.Features.Friendship.Queries
                 u.Points,
                 u.Co2Saving,
                 u.Email,
-                u.Location.Longitude,
-                u.Location.Latitude));
+                u.Location.Latitude,
+                u.Location.Longitude));
 
             IEnumerable<FriendsQueryResult> friendsQueryResults = result.ToList();
             Logger.RetrieveFriendsOfUserSuccessful(query.Id, friendsQueryResults.Count());
