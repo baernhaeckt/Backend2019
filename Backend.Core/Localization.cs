@@ -7,7 +7,7 @@ namespace Backend.Core
     {
         private const string DefaultCulture = "de";
 
-        public static readonly CultureInfo DefaultCultureInfo = new CultureInfo(DefaultCulture);
+        public static CultureInfo DefaultCultureInfo { get; } = new CultureInfo(DefaultCulture);
 
         public static IList<CultureInfo> SupportedCultures { get; } = new[]
         {

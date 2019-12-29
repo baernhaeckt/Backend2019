@@ -12,6 +12,6 @@ namespace Backend.Core.Features.Partner.Models
 
         [Required]
         [MaxLength(100)]
-        public string? Secret { get; set; }
+        public string Secret { get; set; } = string.Empty;
     }
 }

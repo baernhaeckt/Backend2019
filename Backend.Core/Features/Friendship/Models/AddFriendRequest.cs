@@ -6,6 +6,6 @@ namespace Backend.Core.Features.Friendship.Models
     {
         [Required]
         [MaxLength(100)]
-        public string? Email { get; set; }
+        public string Email { get; set; } = string.Empty;
     }
 }
