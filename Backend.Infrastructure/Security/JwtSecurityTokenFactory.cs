@@ -13,6 +13,8 @@ namespace Backend.Infrastructure.Security
 {
     public class JwtSecurityTokenFactory : ISecurityTokenFactory
     {
+        private const int TokenExpirationInMinutes = 60 * 24; // Set this to 15min after refresh is implemented.
+
         private readonly IClock _clock;
 
         private readonly ISecurityKeyProvider _securityKeyProvider;
@@ -43,7 +45,7 @@ namespace Backend.Infrastructure.Security
                 "Leaf",
                 claims,
                 now,
-                now.AddMinutes(20),
+                now.AddMinutes(TokenExpirationInMinutes),
                 new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256));
 
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
