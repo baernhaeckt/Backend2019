@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Backend.Core.Entities.Partner
@@ -11,7 +10,5 @@ namespace Backend.Core.Entities.Partner
         public string SecretHash { get; set; } = string.Empty;
 
         public IList<Token> PrototypeTokens { get; set; } = Enumerable.Empty<Token>().ToList();
-
-        public IList<Guid> Users { get; set; } = Enumerable.Empty<Guid>().ToList();
     }
 }
