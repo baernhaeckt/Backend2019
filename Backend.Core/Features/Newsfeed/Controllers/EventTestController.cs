@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Backend.Core.Entities;
 using Backend.Core.Entities.Awards;
@@ -14,6 +15,7 @@ namespace Backend.Core.Features.Newsfeed.Controllers
     [Route("api/events")]
     [ApiController]
     [Authorize(Roles = Roles.Administrator)]
+    [ExcludeFromCodeCoverage]
     public class EventTestController : ControllerBase
     {
         private readonly IEventFeed _eventFeed;

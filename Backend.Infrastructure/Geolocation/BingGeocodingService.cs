@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Infrastructure.Abstraction.Geolocation;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Options;
 
 namespace Backend.Infrastructure.Geolocation
 {
+    [ExcludeFromCodeCoverage]
     internal class BingGeocodingService : IGeocodingService
     {
         private readonly ILogger<BingGeocodingService> _logger;

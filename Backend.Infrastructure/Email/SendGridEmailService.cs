@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
 using Backend.Infrastructure.Abstraction.Email;
@@ -10,6 +11,7 @@ using SendGrid.Helpers.Mail;
 
 namespace Backend.Infrastructure.Email
 {
+    [ExcludeFromCodeCoverage]
     public class SendGridEmailService : IEmailService
     {
         private readonly SendGridOptions _config;
